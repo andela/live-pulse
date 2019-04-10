@@ -16,6 +16,10 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import AddIcon from '@material-ui/icons/Add';
+import Highcharts from 'highcharts';
+import HighChartsReact from 'highcharts-react-official';
+import { employmentOption } from './HighChartSamples';
+
 // import { mainListItems, secondaryListItems } from './listItems';
 // import SimpleLineChart from './SimpleLineChart';
 // import SimpleTable from './SimpleTable';
@@ -165,7 +169,7 @@ class Dashboard extends React.Component {
           <Divider />
           <List>Menu list</List>
           <Divider />
-          <List>secondary list</List>
+          <List></List>
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
@@ -176,14 +180,8 @@ class Dashboard extends React.Component {
             </Button>
           </Typography>
           <Typography component="div" className={classes.chartContainer}>
-            line chart be here
+            <HighChartsReact highcharts={Highcharts} options={employmentOption} />  {/* Higchart component */}
           </Typography>
-          <Typography variant="h4" gutterBottom component="h2">
-            Products
-          </Typography>
-          <div className={classes.tableContainer}>
-            SimpleTable
-          </div>
         </main>
       </div>
     );
