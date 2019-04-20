@@ -2,7 +2,7 @@
   "name": "live-pulse",
   "version": "1.0.0",
   "description": "The server for Live Pulse",
-  "main": "server.js",
+  "main": "build/server.js",
   "engines": {
     "node": "9.7.1",
     "npm": "6.6.0"
