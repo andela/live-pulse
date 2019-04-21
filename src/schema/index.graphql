@@ -1,0 +1,15 @@
+type Query {
+  dashboard(id: ID!): Dashboard
+  dashboards: [Dashboard!]!
+}
+
+type Mutation {
+  createDashboard(title: String!): Dashboard!
+  deleteDashboard(id: ID!, ): Dashboard
+  updateDashboard(id: ID!, title: String): Dashboard
+}
+
+type Dashboard {
+  id: ID!
+  title: String
+}
