@@ -104,20 +104,25 @@ export type DashboardOrderByInput =
   | "id_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
+  | "icon_ASC"
+  | "icon_DESC"
+  | "publicUrl_ASC"
+  | "publicUrl_DESC"
   | "title_ASC"
   | "title_DESC"
   | "updatedAt_ASC"
-  | "updatedAt_DESC";
+  | "updatedAt_DESC"
+  | "updateInterval_ASC"
+  | "updateInterval_DESC";
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
 export interface DashboardCreateInput {
   id?: ID_Input;
-  title?: String;
-}
-
-export interface DashboardUpdateInput {
-  title?: String;
+  icon?: String;
+  publicUrl?: String;
+  title: String;
+  updateInterval: Int;
 }
 
 export interface DashboardWhereInput {
@@ -143,6 +148,34 @@ export interface DashboardWhereInput {
   createdAt_lte?: DateTimeInput;
   createdAt_gt?: DateTimeInput;
   createdAt_gte?: DateTimeInput;
+  icon?: String;
+  icon_not?: String;
+  icon_in?: String[] | String;
+  icon_not_in?: String[] | String;
+  icon_lt?: String;
+  icon_lte?: String;
+  icon_gt?: String;
+  icon_gte?: String;
+  icon_contains?: String;
+  icon_not_contains?: String;
+  icon_starts_with?: String;
+  icon_not_starts_with?: String;
+  icon_ends_with?: String;
+  icon_not_ends_with?: String;
+  publicUrl?: String;
+  publicUrl_not?: String;
+  publicUrl_in?: String[] | String;
+  publicUrl_not_in?: String[] | String;
+  publicUrl_lt?: String;
+  publicUrl_lte?: String;
+  publicUrl_gt?: String;
+  publicUrl_gte?: String;
+  publicUrl_contains?: String;
+  publicUrl_not_contains?: String;
+  publicUrl_starts_with?: String;
+  publicUrl_not_starts_with?: String;
+  publicUrl_ends_with?: String;
+  publicUrl_not_ends_with?: String;
   title?: String;
   title_not?: String;
   title_in?: String[] | String;
@@ -165,13 +198,31 @@ export interface DashboardWhereInput {
   updatedAt_lte?: DateTimeInput;
   updatedAt_gt?: DateTimeInput;
   updatedAt_gte?: DateTimeInput;
+  updateInterval?: Int;
+  updateInterval_not?: Int;
+  updateInterval_in?: Int[] | Int;
+  updateInterval_not_in?: Int[] | Int;
+  updateInterval_lt?: Int;
+  updateInterval_lte?: Int;
+  updateInterval_gt?: Int;
+  updateInterval_gte?: Int;
   AND?: DashboardWhereInput[] | DashboardWhereInput;
   OR?: DashboardWhereInput[] | DashboardWhereInput;
   NOT?: DashboardWhereInput[] | DashboardWhereInput;
 }
 
-export interface DashboardUpdateManyMutationInput {
+export interface DashboardUpdateInput {
+  icon?: String;
+  publicUrl?: String;
   title?: String;
+  updateInterval?: Int;
+}
+
+export interface DashboardUpdateManyMutationInput {
+  icon?: String;
+  publicUrl?: String;
+  title?: String;
+  updateInterval?: Int;
 }
 
 export interface DashboardSubscriptionWhereInput {
@@ -231,15 +282,21 @@ export interface BatchPayloadSubscription
 export interface Dashboard {
   id: ID_Output;
   createdAt: DateTimeOutput;
-  title?: String;
+  icon?: String;
+  publicUrl?: String;
+  title: String;
   updatedAt: DateTimeOutput;
+  updateInterval: Int;
 }
 
 export interface DashboardPromise extends Promise<Dashboard>, Fragmentable {
   id: () => Promise<ID_Output>;
   createdAt: () => Promise<DateTimeOutput>;
+  icon: () => Promise<String>;
+  publicUrl: () => Promise<String>;
   title: () => Promise<String>;
   updatedAt: () => Promise<DateTimeOutput>;
+  updateInterval: () => Promise<Int>;
 }
 
 export interface DashboardSubscription
@@ -247,8 +304,11 @@ export interface DashboardSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  icon: () => Promise<AsyncIterator<String>>;
+  publicUrl: () => Promise<AsyncIterator<String>>;
   title: () => Promise<AsyncIterator<String>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updateInterval: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface DashboardSubscriptionPayload {
@@ -339,8 +399,11 @@ export interface AggregateDashboardSubscription
 export interface DashboardPreviousValues {
   id: ID_Output;
   createdAt: DateTimeOutput;
-  title?: String;
+  icon?: String;
+  publicUrl?: String;
+  title: String;
   updatedAt: DateTimeOutput;
+  updateInterval: Int;
 }
 
 export interface DashboardPreviousValuesPromise
@@ -348,8 +411,11 @@ export interface DashboardPreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   createdAt: () => Promise<DateTimeOutput>;
+  icon: () => Promise<String>;
+  publicUrl: () => Promise<String>;
   title: () => Promise<String>;
   updatedAt: () => Promise<DateTimeOutput>;
+  updateInterval: () => Promise<Int>;
 }
 
 export interface DashboardPreviousValuesSubscription
@@ -357,8 +423,11 @@ export interface DashboardPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  icon: () => Promise<AsyncIterator<String>>;
+  publicUrl: () => Promise<AsyncIterator<String>>;
   title: () => Promise<AsyncIterator<String>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updateInterval: () => Promise<AsyncIterator<Int>>;
 }
 
 /*

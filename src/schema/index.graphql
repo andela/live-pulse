@@ -1,15 +1,18 @@
 type Query {
   dashboard(id: ID!): Dashboard
-  dashboards: [Dashboard!]!
+  dashboards(id: ID, publicUrl: String, title: String): [Dashboard!]!
 }
 
 type Mutation {
-  createDashboard(title: String!): Dashboard!
-  deleteDashboard(id: ID!, ): Dashboard
-  updateDashboard(id: ID!, title: String): Dashboard
+  createDashboard(icon: String, title: String!, updateInterval: Int): Dashboard!
+  deleteDashboard(id: ID!): Dashboard
+  updateDashboard(id: ID!, icon: String, publicUrl: String, title: String, updateInterval: Int): Dashboard
 }
 
 type Dashboard {
   id: ID!
-  title: String
+  icon: String
+  publicUrl: String
+  title: String!
+  updateInterval: Int!
 }

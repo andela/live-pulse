@@ -14,8 +14,11 @@ type BatchPayload {
 type Dashboard {
   id: ID!
   createdAt: DateTime!
-  title: String
+  icon: String
+  publicUrl: String
+  title: String!
   updatedAt: DateTime!
+  updateInterval: Int!
 }
 
 type DashboardConnection {
@@ -26,7 +29,10 @@ type DashboardConnection {
 
 input DashboardCreateInput {
   id: ID
-  title: String
+  icon: String
+  publicUrl: String
+  title: String!
+  updateInterval: Int!
 }
 
 type DashboardEdge {
@@ -39,17 +45,26 @@ enum DashboardOrderByInput {
   id_DESC
   createdAt_ASC
   createdAt_DESC
+  icon_ASC
+  icon_DESC
+  publicUrl_ASC
+  publicUrl_DESC
   title_ASC
   title_DESC
   updatedAt_ASC
   updatedAt_DESC
+  updateInterval_ASC
+  updateInterval_DESC
 }
 
 type DashboardPreviousValues {
   id: ID!
   createdAt: DateTime!
-  title: String
+  icon: String
+  publicUrl: String
+  title: String!
   updatedAt: DateTime!
+  updateInterval: Int!
 }
 
 type DashboardSubscriptionPayload {
@@ -71,11 +86,17 @@ input DashboardSubscriptionWhereInput {
 }
 
 input DashboardUpdateInput {
+  icon: String
+  publicUrl: String
   title: String
+  updateInterval: Int
 }
 
 input DashboardUpdateManyMutationInput {
+  icon: String
+  publicUrl: String
   title: String
+  updateInterval: Int
 }
 
 input DashboardWhereInput {
@@ -101,6 +122,34 @@ input DashboardWhereInput {
   createdAt_lte: DateTime
   createdAt_gt: DateTime
   createdAt_gte: DateTime
+  icon: String
+  icon_not: String
+  icon_in: [String!]
+  icon_not_in: [String!]
+  icon_lt: String
+  icon_lte: String
+  icon_gt: String
+  icon_gte: String
+  icon_contains: String
+  icon_not_contains: String
+  icon_starts_with: String
+  icon_not_starts_with: String
+  icon_ends_with: String
+  icon_not_ends_with: String
+  publicUrl: String
+  publicUrl_not: String
+  publicUrl_in: [String!]
+  publicUrl_not_in: [String!]
+  publicUrl_lt: String
+  publicUrl_lte: String
+  publicUrl_gt: String
+  publicUrl_gte: String
+  publicUrl_contains: String
+  publicUrl_not_contains: String
+  publicUrl_starts_with: String
+  publicUrl_not_starts_with: String
+  publicUrl_ends_with: String
+  publicUrl_not_ends_with: String
   title: String
   title_not: String
   title_in: [String!]
@@ -123,6 +172,14 @@ input DashboardWhereInput {
   updatedAt_lte: DateTime
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
+  updateInterval: Int
+  updateInterval_not: Int
+  updateInterval_in: [Int!]
+  updateInterval_not_in: [Int!]
+  updateInterval_lt: Int
+  updateInterval_lte: Int
+  updateInterval_gt: Int
+  updateInterval_gte: Int
   AND: [DashboardWhereInput!]
   OR: [DashboardWhereInput!]
   NOT: [DashboardWhereInput!]

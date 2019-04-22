@@ -1,4 +1,4 @@
 export default {
-  dashboard: (root, args, context, info) => context.prisma.dashboard(args),
-  dashboards: (root, args, context, info) => context.prisma.dashboards()
+  dashboard: async (root, args, context, info) => await context.prisma.dashboard(args),
+  dashboards: async (root, args, context, info) => await context.prisma.dashboards({ where: args })
 }
