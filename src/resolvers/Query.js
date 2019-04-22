@@ -1,4 +1,4 @@
 export default {
-  dashboard: () => { return { id: 1, title: `testing` }; },
-  dashboards: () => [{ id: 1, title: `dashboard 1` }, { id: 2, title: `dashboard 2` }]
+  dashboard: (root, args, context, info) => context.prisma.dashboard(args),
+  dashboards: (root, args, context, info) => context.prisma.dashboards()
 }

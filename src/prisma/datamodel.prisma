@@ -1,0 +1,6 @@
+type Dashboard {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  title: String
+  updatedAt: DateTime! @updatedAt
+}

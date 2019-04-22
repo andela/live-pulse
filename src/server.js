@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import { GraphQLServer } from 'graphql-yoga';
 
+import { prisma } from './generated/prisma-client';
 import resolvers from './resolvers';
 
 let src = 'build'
@@ -16,6 +17,7 @@ if (process.env.NODE_ENV !== 'production') {
 const server = new GraphQLServer({
   typeDefs: `./${src}/schema/index.graphql`,
   resolvers,
+  context: { prisma },
 })
 
 server.start({ port: process.env.PORT || 5000 }, (options) => console.log(`Server is running on port ${options.port}`))
