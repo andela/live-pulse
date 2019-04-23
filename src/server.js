@@ -28,7 +28,7 @@ server.start({ port: process.env.PORT || 5000 }, (options) => console.log(`Serve
 // app.use(bodyParser.json());
 
 // app.get('/', async (req, res) => {
-//   res.status(200).send("Hello World!<br /><br />Welcome to Live Pulse.");
+//   res.status(200).send(`Hello World!<br /><br />Welcome to Live Pulse from ${req.connection.remoteAddress}`);
 // });
 
 // let server = app.listen(process.env.PORT || 5000, () => {

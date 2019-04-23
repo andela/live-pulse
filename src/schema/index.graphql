@@ -1,3 +1,5 @@
+# import * from "../generated/prisma.graphql"
+
 type Query {
   dashboard(id: ID!): Dashboard
   dashboards(id: ID, publicUrl: String, title: String): [Dashboard!]!
@@ -7,12 +9,7 @@ type Mutation {
   createDashboard(icon: String, title: String!, updateInterval: Int): Dashboard!
   deleteDashboard(id: ID!): Dashboard
   updateDashboard(id: ID!, icon: String, publicUrl: String, title: String, updateInterval: Int): Dashboard
-}
 
-type Dashboard {
-  id: ID!
-  icon: String
-  publicUrl: String
-  title: String!
-  updateInterval: Int!
+  signup(email: String!, password: String!, name: String!): AuthPayload
+  login(email: String!, password: String!): AuthPayload
 }

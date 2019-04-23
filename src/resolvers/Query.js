@@ -1,4 +1,8 @@
+import Dashboard from './Dashboard';
+
+const { dashboard, dashboards } = Dashboard;
+
 export default {
-  dashboard: async (root, args, context, info) => await context.prisma.dashboard(args),
-  dashboards: async (root, args, context, info) => await context.prisma.dashboards({ where: args })
+  dashboard,
+  dashboards
 }

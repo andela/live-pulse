@@ -5,7 +5,19 @@ var typeDefs = require("./prisma-schema").typeDefs;
 
 var models = [
   {
+    name: "AuthPayload",
+    embedded: false
+  },
+  {
     name: "Dashboard",
+    embedded: false
+  },
+  {
+    name: "Graph",
+    embedded: false
+  },
+  {
+    name: "User",
     embedded: false
   }
 ];
