@@ -3,11 +3,7 @@ module.exports = {
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-/* GraphQL */ `type AggregateAuthPayload {
-  count: Int!
-}
-
-type AggregateDashboard {
+/* GraphQL */ `type AggregateDashboard {
   count: Int!
 }
 
@@ -17,79 +13,6 @@ type AggregateGraph {
 
 type AggregateUser {
   count: Int!
-}
-
-type AuthPayload {
-  token: String
-  user: User
-}
-
-type AuthPayloadConnection {
-  pageInfo: PageInfo!
-  edges: [AuthPayloadEdge]!
-  aggregate: AggregateAuthPayload!
-}
-
-input AuthPayloadCreateInput {
-  token: String
-  user: UserCreateOneInput
-}
-
-type AuthPayloadEdge {
-  node: AuthPayload!
-  cursor: String!
-}
-
-enum AuthPayloadOrderByInput {
-  token_ASC
-  token_DESC
-}
-
-type AuthPayloadPreviousValues {
-  token: String
-}
-
-type AuthPayloadSubscriptionPayload {
-  mutation: MutationType!
-  node: AuthPayload
-  updatedFields: [String!]
-  previousValues: AuthPayloadPreviousValues
-}
-
-input AuthPayloadSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: AuthPayloadWhereInput
-  AND: [AuthPayloadSubscriptionWhereInput!]
-  OR: [AuthPayloadSubscriptionWhereInput!]
-  NOT: [AuthPayloadSubscriptionWhereInput!]
-}
-
-input AuthPayloadUpdateManyMutationInput {
-  token: String
-}
-
-input AuthPayloadWhereInput {
-  token: String
-  token_not: String
-  token_in: [String!]
-  token_not_in: [String!]
-  token_lt: String
-  token_lte: String
-  token_gt: String
-  token_gte: String
-  token_contains: String
-  token_not_contains: String
-  token_starts_with: String
-  token_not_starts_with: String
-  token_ends_with: String
-  token_not_ends_with: String
-  user: UserWhereInput
-  AND: [AuthPayloadWhereInput!]
-  OR: [AuthPayloadWhereInput!]
-  NOT: [AuthPayloadWhereInput!]
 }
 
 type BatchPayload {
@@ -840,9 +763,6 @@ input GraphWhereUniqueInput {
 scalar Long
 
 type Mutation {
-  createAuthPayload(data: AuthPayloadCreateInput!): AuthPayload!
-  updateManyAuthPayloads(data: AuthPayloadUpdateManyMutationInput!, where: AuthPayloadWhereInput): BatchPayload!
-  deleteManyAuthPayloads(where: AuthPayloadWhereInput): BatchPayload!
   createDashboard(data: DashboardCreateInput!): Dashboard!
   updateDashboard(data: DashboardUpdateInput!, where: DashboardWhereUniqueInput!): Dashboard
   updateManyDashboards(data: DashboardUpdateManyMutationInput!, where: DashboardWhereInput): BatchPayload!
@@ -881,8 +801,6 @@ type PageInfo {
 }
 
 type Query {
-  authPayloads(where: AuthPayloadWhereInput, orderBy: AuthPayloadOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [AuthPayload]!
-  authPayloadsConnection(where: AuthPayloadWhereInput, orderBy: AuthPayloadOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AuthPayloadConnection!
   dashboard(where: DashboardWhereUniqueInput!): Dashboard
   dashboards(where: DashboardWhereInput, orderBy: DashboardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Dashboard]!
   dashboardsConnection(where: DashboardWhereInput, orderBy: DashboardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DashboardConnection!
@@ -896,7 +814,6 @@ type Query {
 }
 
 type Subscription {
-  authPayload(where: AuthPayloadSubscriptionWhereInput): AuthPayloadSubscriptionPayload
   dashboard(where: DashboardSubscriptionWhereInput): DashboardSubscriptionPayload
   graph(where: GraphSubscriptionWhereInput): GraphSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
@@ -926,11 +843,6 @@ input UserCreateInput {
   email: String!
   graphs: GraphCreateManyWithoutCreatedByInput
   password: String!
-}
-
-input UserCreateOneInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
 }
 
 input UserCreateOneWithoutDashboardsInput {

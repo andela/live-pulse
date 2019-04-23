@@ -10,6 +10,11 @@ type Mutation {
   deleteDashboard(id: ID!): Dashboard
   updateDashboard(id: ID!, icon: String, publicUrl: String, title: String, updateInterval: Int): Dashboard
 
-  signup(email: String!, password: String!, name: String!): AuthPayload
-  login(email: String!, password: String!): AuthPayload
+  signIn(email: String!, password: String!): AuthPayload
+  signUp(email: String!, password: String!, displayName: String!): AuthPayload
+}
+
+type AuthPayload {
+  token: String
+  user: User
 }
