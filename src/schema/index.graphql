@@ -3,15 +3,16 @@
 type Query {
   dashboard(id: ID!): Dashboard
   dashboards(id: ID, publicUrl: String, title: String): [Dashboard!]!
+  user(id: ID!): User
+  users(id: ID, displayName: String, email: String): [User!]!
 }
 
 type Mutation {
   createDashboard(icon: String, title: String!, updateInterval: Int): Dashboard!
   deleteDashboard(id: ID!): Dashboard
-  updateDashboard(id: ID!, icon: String, publicUrl: String, title: String, updateInterval: Int): Dashboard
-
   signIn(email: String!, password: String!): AuthPayload
   signUp(email: String!, password: String!, displayName: String!): AuthPayload
+  updateDashboard(id: ID!, icon: String, publicUrl: String, title: String, updateInterval: Int): Dashboard
 }
 
 type AuthPayload {

@@ -39,5 +39,7 @@ export default {
       token,
       user,
     }
-  }
+  },
+  user: async (root, args, context, info) => await context.prisma.user(args),
+  users: async (root, args, context, info) => await context.prisma.users({ where: args }),
 }
