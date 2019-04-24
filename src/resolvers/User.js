@@ -6,6 +6,7 @@ const { APP_SECRET } = utils;
 
 export default {
   dashboards: async (root, args, context, info) => await context.prisma.user({ id: root.id }).dashboards(),
+  graphs: async (root, args, context, info) => await context.prisma.user({ id: root.id }).graphs(),
   signIn: async (root, args, context, info) => {
     const user = await context.prisma.user({ email: args.email });
     if (!user) {

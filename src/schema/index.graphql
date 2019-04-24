@@ -3,16 +3,21 @@
 type Query {
   dashboard(id: ID!): Dashboard
   dashboards(id: ID, publicUrl: String, title: String): [Dashboard!]!
+  graph(id: ID!): Graph
+  graphs(id: ID, publicUrl: String, title: String): [Graph!]!
   user(id: ID!): User
   users(id: ID, displayName: String, email: String): [User!]!
 }
 
 type Mutation {
   createDashboard(icon: String, title: String!, updateInterval: Int): Dashboard!
+  createGraph(dashboard: DashboardWhereUniqueInput!, icon: String, title: String!, updateInterval: Int): Graph!
   deleteDashboard(id: ID!): Dashboard
+  deleteGraph(id: ID!): Graph
   signIn(email: String!, password: String!): AuthPayload
   signUp(email: String!, password: String!, displayName: String!): AuthPayload
-  updateDashboard(id: ID!, icon: String, publicUrl: String, title: String, updateInterval: Int): Dashboard
+  updateDashboard(data: DashboardUpdateInput!, where: DashboardWhereUniqueInput!): Dashboard
+  updateGraph(data: GraphUpdateInput!, where: GraphWhereUniqueInput!): Graph
 }
 
 type AuthPayload {
