@@ -1,4 +1,13 @@
+import Dashboard from './Dashboard';
+import Graph from './Graph';
+import User from './User';
+
 export default {
-  dashboard: async (root, args, context, info) => await context.prisma.dashboard(args),
-  dashboards: async (root, args, context, info) => await context.prisma.dashboards({ where: args })
+  dashboard: Dashboard.dashboard,
+  dashboards: Dashboard.dashboards,
+  graph: Graph.graph,
+  graphs: Graph.graphs,
+  signedInUser: User.signedInUser,
+  user: User.user,
+  users: User.users
 }

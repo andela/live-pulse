@@ -7,6 +7,14 @@ var models = [
   {
     name: "Dashboard",
     embedded: false
+  },
+  {
+    name: "Graph",
+    embedded: false
+  },
+  {
+    name: "User",
+    embedded: false
   }
 ];
 exports.Prisma = prisma_lib_1.makePrismaClientClass({

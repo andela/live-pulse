@@ -1,18 +1,27 @@
+# import * from "../generated/prisma.graphql"
+
 type Query {
   dashboard(id: ID!): Dashboard
-  dashboards(id: ID, publicUrl: String, title: String): [Dashboard!]!
+  dashboards(where: DashboardWhereInput): [Dashboard!]!
+  graph(id: ID!): Graph
+  graphs(where: GraphWhereInput): [Graph!]!
+  signedInUser: User
+  user(id: ID!): User
+  users(where: UserWhereInput): [User!]!
 }
 
 type Mutation {
-  createDashboard(icon: String, title: String!, updateInterval: Int): Dashboard!
+  createDashboard(data: DashboardUpdateInput!): Dashboard!
+  createGraph(dashboard: DashboardWhereUniqueInput!, data: GraphUpdateInput!): Graph!
   deleteDashboard(id: ID!): Dashboard
-  updateDashboard(id: ID!, icon: String, publicUrl: String, title: String, updateInterval: Int): Dashboard
+  deleteGraph(id: ID!): Graph
+  signIn(email: String!, password: String!): AuthPayload
+  signUp(email: String!, password: String!, displayName: String!): AuthPayload
+  updateDashboard(id: ID!, data: DashboardUpdateInput!): Dashboard
+  updateGraph(id: ID!, data: GraphUpdateInput!): Graph
 }
 
-type Dashboard {
-  id: ID!
-  icon: String
-  publicUrl: String
-  title: String!
-  updateInterval: Int!
+type AuthPayload {
+  token: String
+  user: User
 }

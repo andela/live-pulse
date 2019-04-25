@@ -4,10 +4,13 @@
 # Prisma Admin: https://eu1.prisma.sh/chieze-franklin-40314f/live-pulse-prisma-1/dev/_admin
 endpoint: https://eu1.prisma.sh/chieze-franklin-40314f/live-pulse-prisma-1/dev
 
-# Points to the file that contains your datamodel
-datamodel: datamodel.prisma
+# Points to the file(s) that contain(s) your datamodel(s)
+datamodel:
+  - datamodel.prisma
 
 # Specifies language & location for the generated Prisma client
 generate:
   - generator: javascript-client
     output: ../src/generated/prisma-client
+  - generator: graphql-schema
+    output: ../src/generated/prisma.graphql
