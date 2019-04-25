@@ -10,7 +10,7 @@ export default {
   createDashboard,
   createGraph,
   deleteDashboard,
-  deleteGraph, 
+  deleteGraph,
   updateDashboard,
   updateGraph,
   signIn,

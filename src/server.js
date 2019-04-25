@@ -7,6 +7,7 @@ import { GraphQLServer } from 'graphql-yoga';
 
 import { prisma } from './generated/prisma-client';
 import resolvers from './resolvers';
+import utils from './utils';
 
 let src = 'build'
 if (process.env.NODE_ENV !== 'production') {
@@ -14,15 +15,27 @@ if (process.env.NODE_ENV !== 'production') {
   src = 'src'
 }
 
+const { getUser } = utils;
+
+const authentication = async (resolve, root, args, context, info) => {
+  if (!context.user) {
+    const user = await getUser(context);
+    // TODO: delete user.password
+    context.user = user;
+  }
+  return await resolve(root, args, context, info);
+}
+
 const server = new GraphQLServer({
   typeDefs: `./${src}/schema/index.graphql`,
   resolvers,
-  context: request => {
+  context: async (request) => {
     return {
       ...request,
-      prisma
+      prisma,
     }
   },
+  middlewares: [authentication],
 })
 
 server.start({ port: process.env.PORT || 5000 }, (options) => console.log(`Server is running on port ${options.port}`))

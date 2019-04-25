@@ -2,22 +2,23 @@
 
 type Query {
   dashboard(id: ID!): Dashboard
-  dashboards(id: ID, publicUrl: String, title: String): [Dashboard!]!
+  dashboards(where: DashboardWhereInput): [Dashboard!]!
   graph(id: ID!): Graph
-  graphs(id: ID, publicUrl: String, title: String): [Graph!]!
+  graphs(where: GraphWhereInput): [Graph!]!
+  signedInUser: User
   user(id: ID!): User
-  users(id: ID, displayName: String, email: String): [User!]!
+  users(where: UserWhereInput): [User!]!
 }
 
 type Mutation {
-  createDashboard(icon: String, title: String!, updateInterval: Int): Dashboard!
-  createGraph(dashboard: DashboardWhereUniqueInput!, icon: String, title: String!, updateInterval: Int): Graph!
+  createDashboard(data: DashboardUpdateInput!): Dashboard!
+  createGraph(dashboard: DashboardWhereUniqueInput!, data: GraphUpdateInput!): Graph!
   deleteDashboard(id: ID!): Dashboard
   deleteGraph(id: ID!): Graph
   signIn(email: String!, password: String!): AuthPayload
   signUp(email: String!, password: String!, displayName: String!): AuthPayload
-  updateDashboard(data: DashboardUpdateInput!, where: DashboardWhereUniqueInput!): Dashboard
-  updateGraph(data: GraphUpdateInput!, where: GraphWhereUniqueInput!): Graph
+  updateDashboard(id: ID!, data: DashboardUpdateInput!): Dashboard
+  updateGraph(id: ID!, data: GraphUpdateInput!): Graph
 }
 
 type AuthPayload {

@@ -7,6 +7,7 @@ export default {
   dashboards: Dashboard.dashboards,
   graph: Graph.graph,
   graphs: Graph.graphs,
+  signedInUser: User.signedInUser,
   user: User.user,
   users: User.users
 }
