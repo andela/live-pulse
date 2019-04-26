@@ -31,7 +31,12 @@ export default {
   signUp: async (root, args, context, info) => {
     const password = await bcrypt.hash(args.password, 10);
 
-    const user = await context.prisma.createUser({ ...args, password });
+    const user = await context.prisma.createUser({
+      email: args.email,
+      ...args.data,
+      displayName: args.data.displayName || args.email,
+      password
+    });
 
     const token = jwt.sign({ userId: user.id }, APP_SECRET);
 

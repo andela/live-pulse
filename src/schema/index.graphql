@@ -16,7 +16,7 @@ type Mutation {
   deleteDashboard(id: ID!): Dashboard
   deleteGraph(id: ID!): Graph
   signIn(email: String!, password: String!): AuthPayload
-  signUp(email: String!, password: String!, displayName: String!): AuthPayload
+  signUp(email: String!, password: String!, data: UserUpdateInput!): AuthPayload
   updateDashboard(id: ID!, data: DashboardUpdateInput!): Dashboard
   updateGraph(id: ID!, data: GraphUpdateInput!): Graph
 }

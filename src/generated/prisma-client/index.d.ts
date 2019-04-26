@@ -177,6 +177,8 @@ export interface ClientConstructor<T> {
  * Types
  */
 
+export type Role = "ADMIN" | "MEMBER" | "SUPER_ADMIN";
+
 export type DashboardOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -220,40 +222,59 @@ export type UserOrderByInput =
   | "email_DESC"
   | "password_ASC"
   | "password_DESC"
+  | "role_ASC"
+  | "role_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export interface GraphUpdateManyWithoutCreatedByInput {
-  create?:
-    | GraphCreateWithoutCreatedByInput[]
-    | GraphCreateWithoutCreatedByInput;
-  delete?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
-  connect?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
-  set?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
-  disconnect?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
-  update?:
-    | GraphUpdateWithWhereUniqueWithoutCreatedByInput[]
-    | GraphUpdateWithWhereUniqueWithoutCreatedByInput;
-  upsert?:
-    | GraphUpsertWithWhereUniqueWithoutCreatedByInput[]
-    | GraphUpsertWithWhereUniqueWithoutCreatedByInput;
-  deleteMany?: GraphScalarWhereInput[] | GraphScalarWhereInput;
-  updateMany?:
-    | GraphUpdateManyWithWhereNestedInput[]
-    | GraphUpdateManyWithWhereNestedInput;
+export interface UserUpdateWithoutDashboardsDataInput {
+  displayName?: String;
+  email?: String;
+  graphs?: GraphUpdateManyWithoutCreatedByInput;
+  password?: String;
+  role?: Role;
 }
 
 export type DashboardWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
 
+export interface GraphCreateManyWithoutDashboardInput {
+  create?:
+    | GraphCreateWithoutDashboardInput[]
+    | GraphCreateWithoutDashboardInput;
+  connect?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
+}
+
+export interface DashboardUpdateWithoutCreatedByDataInput {
+  graphs?: GraphUpdateManyWithoutDashboardInput;
+  icon?: String;
+  publicUrl?: String;
+  title?: String;
+  updateInterval?: Int;
+}
+
+export interface GraphCreateWithoutDashboardInput {
+  id?: ID_Input;
+  createdBy: UserCreateOneWithoutGraphsInput;
+  icon?: String;
+  publicUrl?: String;
+  title: String;
+  updateInterval?: Int;
+}
+
 export interface DashboardUpdateOneRequiredWithoutGraphsInput {
   create?: DashboardCreateWithoutGraphsInput;
   update?: DashboardUpdateWithoutGraphsDataInput;
   upsert?: DashboardUpsertWithoutGraphsInput;
   connect?: DashboardWhereUniqueInput;
+}
+
+export interface UserCreateOneWithoutGraphsInput {
+  create?: UserCreateWithoutGraphsInput;
+  connect?: UserWhereUniqueInput;
 }
 
 export interface UserWhereInput {
@@ -327,6 +348,10 @@ export interface UserWhereInput {
   password_not_starts_with?: String;
   password_ends_with?: String;
   password_not_ends_with?: String;
+  role?: Role;
+  role_not?: Role;
+  role_in?: Role[] | Role;
+  role_not_in?: Role[] | Role;
   updatedAt?: DateTimeInput;
   updatedAt_not?: DateTimeInput;
   updatedAt_in?: DateTimeInput[] | DateTimeInput;
@@ -340,12 +365,152 @@ export interface UserWhereInput {
   NOT?: UserWhereInput[] | UserWhereInput;
 }
 
-export interface DashboardUpdateWithoutGraphsDataInput {
+export interface UserCreateWithoutGraphsInput {
+  id?: ID_Input;
+  dashboards?: DashboardCreateManyWithoutCreatedByInput;
+  displayName: String;
+  email: String;
+  password: String;
+  role?: Role;
+}
+
+export interface GraphSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: GraphWhereInput;
+  AND?: GraphSubscriptionWhereInput[] | GraphSubscriptionWhereInput;
+  OR?: GraphSubscriptionWhereInput[] | GraphSubscriptionWhereInput;
+  NOT?: GraphSubscriptionWhereInput[] | GraphSubscriptionWhereInput;
+}
+
+export interface DashboardCreateManyWithoutCreatedByInput {
+  create?:
+    | DashboardCreateWithoutCreatedByInput[]
+    | DashboardCreateWithoutCreatedByInput;
+  connect?: DashboardWhereUniqueInput[] | DashboardWhereUniqueInput;
+}
+
+export interface UserUpdateManyMutationInput {
+  displayName?: String;
+  email?: String;
+  password?: String;
+  role?: Role;
+}
+
+export interface DashboardCreateWithoutCreatedByInput {
+  id?: ID_Input;
+  graphs?: GraphCreateManyWithoutDashboardInput;
+  icon?: String;
+  publicUrl?: String;
+  title: String;
+  updateInterval?: Int;
+}
+
+export interface UserCreateInput {
+  id?: ID_Input;
+  dashboards?: DashboardCreateManyWithoutCreatedByInput;
+  displayName: String;
+  email: String;
+  graphs?: GraphCreateManyWithoutCreatedByInput;
+  password: String;
+  role?: Role;
+}
+
+export interface DashboardUpdateInput {
   createdBy?: UserUpdateOneRequiredWithoutDashboardsInput;
+  graphs?: GraphUpdateManyWithoutDashboardInput;
   icon?: String;
   publicUrl?: String;
   title?: String;
   updateInterval?: Int;
+}
+
+export interface GraphUpdateInput {
+  createdBy?: UserUpdateOneRequiredWithoutGraphsInput;
+  dashboard?: DashboardUpdateOneRequiredWithoutGraphsInput;
+  icon?: String;
+  publicUrl?: String;
+  title?: String;
+  updateInterval?: Int;
+}
+
+export interface UserUpdateOneRequiredWithoutDashboardsInput {
+  create?: UserCreateWithoutDashboardsInput;
+  update?: UserUpdateWithoutDashboardsDataInput;
+  upsert?: UserUpsertWithoutDashboardsInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface GraphCreateInput {
+  id?: ID_Input;
+  createdBy: UserCreateOneWithoutGraphsInput;
+  dashboard: DashboardCreateOneWithoutGraphsInput;
+  icon?: String;
+  publicUrl?: String;
+  title: String;
+  updateInterval?: Int;
+}
+
+export interface DashboardUpsertWithWhereUniqueWithoutCreatedByInput {
+  where: DashboardWhereUniqueInput;
+  update: DashboardUpdateWithoutCreatedByDataInput;
+  create: DashboardCreateWithoutCreatedByInput;
+}
+
+export interface GraphUpsertWithWhereUniqueWithoutDashboardInput {
+  where: GraphWhereUniqueInput;
+  update: GraphUpdateWithoutDashboardDataInput;
+  create: GraphCreateWithoutDashboardInput;
+}
+
+export interface GraphUpdateManyWithoutCreatedByInput {
+  create?:
+    | GraphCreateWithoutCreatedByInput[]
+    | GraphCreateWithoutCreatedByInput;
+  delete?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
+  connect?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
+  set?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
+  disconnect?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
+  update?:
+    | GraphUpdateWithWhereUniqueWithoutCreatedByInput[]
+    | GraphUpdateWithWhereUniqueWithoutCreatedByInput;
+  upsert?:
+    | GraphUpsertWithWhereUniqueWithoutCreatedByInput[]
+    | GraphUpsertWithWhereUniqueWithoutCreatedByInput;
+  deleteMany?: GraphScalarWhereInput[] | GraphScalarWhereInput;
+  updateMany?:
+    | GraphUpdateManyWithWhereNestedInput[]
+    | GraphUpdateManyWithWhereNestedInput;
+}
+
+export interface UserUpsertWithoutGraphsInput {
+  update: UserUpdateWithoutGraphsDataInput;
+  create: UserCreateWithoutGraphsInput;
+}
+
+export interface GraphUpdateWithWhereUniqueWithoutCreatedByInput {
+  where: GraphWhereUniqueInput;
+  data: GraphUpdateWithoutCreatedByDataInput;
+}
+
+export interface DashboardUpdateManyWithWhereNestedInput {
+  where: DashboardScalarWhereInput;
+  data: DashboardUpdateManyDataInput;
+}
+
+export interface GraphUpdateWithoutCreatedByDataInput {
+  dashboard?: DashboardUpdateOneRequiredWithoutGraphsInput;
+  icon?: String;
+  publicUrl?: String;
+  title?: String;
+  updateInterval?: Int;
+}
+
+export interface UserCreateOneWithoutDashboardsInput {
+  create?: UserCreateWithoutDashboardsInput;
+  connect?: UserWhereUniqueInput;
 }
 
 export interface GraphWhereInput {
@@ -436,9 +601,225 @@ export interface GraphWhereInput {
   NOT?: GraphWhereInput[] | GraphWhereInput;
 }
 
+export interface GraphCreateManyWithoutCreatedByInput {
+  create?:
+    | GraphCreateWithoutCreatedByInput[]
+    | GraphCreateWithoutCreatedByInput;
+  connect?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
+}
+
+export interface DashboardUpdateWithoutGraphsDataInput {
+  createdBy?: UserUpdateOneRequiredWithoutDashboardsInput;
+  icon?: String;
+  publicUrl?: String;
+  title?: String;
+  updateInterval?: Int;
+}
+
+export interface DashboardCreateOneWithoutGraphsInput {
+  create?: DashboardCreateWithoutGraphsInput;
+  connect?: DashboardWhereUniqueInput;
+}
+
 export interface DashboardUpsertWithoutGraphsInput {
   update: DashboardUpdateWithoutGraphsDataInput;
   create: DashboardCreateWithoutGraphsInput;
+}
+
+export interface UserSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: UserWhereInput;
+  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+}
+
+export interface GraphUpsertWithWhereUniqueWithoutCreatedByInput {
+  where: GraphWhereUniqueInput;
+  update: GraphUpdateWithoutCreatedByDataInput;
+  create: GraphCreateWithoutCreatedByInput;
+}
+
+export interface DashboardSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: DashboardWhereInput;
+  AND?: DashboardSubscriptionWhereInput[] | DashboardSubscriptionWhereInput;
+  OR?: DashboardSubscriptionWhereInput[] | DashboardSubscriptionWhereInput;
+  NOT?: DashboardSubscriptionWhereInput[] | DashboardSubscriptionWhereInput;
+}
+
+export interface GraphScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  icon?: String;
+  icon_not?: String;
+  icon_in?: String[] | String;
+  icon_not_in?: String[] | String;
+  icon_lt?: String;
+  icon_lte?: String;
+  icon_gt?: String;
+  icon_gte?: String;
+  icon_contains?: String;
+  icon_not_contains?: String;
+  icon_starts_with?: String;
+  icon_not_starts_with?: String;
+  icon_ends_with?: String;
+  icon_not_ends_with?: String;
+  publicUrl?: String;
+  publicUrl_not?: String;
+  publicUrl_in?: String[] | String;
+  publicUrl_not_in?: String[] | String;
+  publicUrl_lt?: String;
+  publicUrl_lte?: String;
+  publicUrl_gt?: String;
+  publicUrl_gte?: String;
+  publicUrl_contains?: String;
+  publicUrl_not_contains?: String;
+  publicUrl_starts_with?: String;
+  publicUrl_not_starts_with?: String;
+  publicUrl_ends_with?: String;
+  publicUrl_not_ends_with?: String;
+  title?: String;
+  title_not?: String;
+  title_in?: String[] | String;
+  title_not_in?: String[] | String;
+  title_lt?: String;
+  title_lte?: String;
+  title_gt?: String;
+  title_gte?: String;
+  title_contains?: String;
+  title_not_contains?: String;
+  title_starts_with?: String;
+  title_not_starts_with?: String;
+  title_ends_with?: String;
+  title_not_ends_with?: String;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  updateInterval?: Int;
+  updateInterval_not?: Int;
+  updateInterval_in?: Int[] | Int;
+  updateInterval_not_in?: Int[] | Int;
+  updateInterval_lt?: Int;
+  updateInterval_lte?: Int;
+  updateInterval_gt?: Int;
+  updateInterval_gte?: Int;
+  AND?: GraphScalarWhereInput[] | GraphScalarWhereInput;
+  OR?: GraphScalarWhereInput[] | GraphScalarWhereInput;
+  NOT?: GraphScalarWhereInput[] | GraphScalarWhereInput;
+}
+
+export interface GraphUpdateManyMutationInput {
+  icon?: String;
+  publicUrl?: String;
+  title?: String;
+  updateInterval?: Int;
+}
+
+export interface GraphUpdateManyWithWhereNestedInput {
+  where: GraphScalarWhereInput;
+  data: GraphUpdateManyDataInput;
+}
+
+export interface DashboardUpdateManyMutationInput {
+  icon?: String;
+  publicUrl?: String;
+  title?: String;
+  updateInterval?: Int;
+}
+
+export interface GraphUpdateManyDataInput {
+  icon?: String;
+  publicUrl?: String;
+  title?: String;
+  updateInterval?: Int;
+}
+
+export interface DashboardUpdateManyDataInput {
+  icon?: String;
+  publicUrl?: String;
+  title?: String;
+  updateInterval?: Int;
+}
+
+export interface UserUpsertWithoutDashboardsInput {
+  update: UserUpdateWithoutDashboardsDataInput;
+  create: UserCreateWithoutDashboardsInput;
+}
+
+export interface DashboardCreateInput {
+  id?: ID_Input;
+  createdBy: UserCreateOneWithoutDashboardsInput;
+  graphs?: GraphCreateManyWithoutDashboardInput;
+  icon?: String;
+  publicUrl?: String;
+  title: String;
+  updateInterval?: Int;
+}
+
+export interface GraphUpdateManyWithoutDashboardInput {
+  create?:
+    | GraphCreateWithoutDashboardInput[]
+    | GraphCreateWithoutDashboardInput;
+  delete?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
+  connect?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
+  set?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
+  disconnect?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
+  update?:
+    | GraphUpdateWithWhereUniqueWithoutDashboardInput[]
+    | GraphUpdateWithWhereUniqueWithoutDashboardInput;
+  upsert?:
+    | GraphUpsertWithWhereUniqueWithoutDashboardInput[]
+    | GraphUpsertWithWhereUniqueWithoutDashboardInput;
+  deleteMany?: GraphScalarWhereInput[] | GraphScalarWhereInput;
+  updateMany?:
+    | GraphUpdateManyWithWhereNestedInput[]
+    | GraphUpdateManyWithWhereNestedInput;
+}
+
+export interface GraphCreateWithoutCreatedByInput {
+  id?: ID_Input;
+  dashboard: DashboardCreateOneWithoutGraphsInput;
+  icon?: String;
+  publicUrl?: String;
+  title: String;
+  updateInterval?: Int;
+}
+
+export interface GraphUpdateWithWhereUniqueWithoutDashboardInput {
+  where: GraphWhereUniqueInput;
+  data: GraphUpdateWithoutDashboardDataInput;
 }
 
 export interface DashboardWhereInput {
@@ -531,76 +912,62 @@ export interface DashboardWhereInput {
   NOT?: DashboardWhereInput[] | DashboardWhereInput;
 }
 
-export interface UserCreateWithoutGraphsInput {
-  id?: ID_Input;
-  dashboards?: DashboardCreateManyWithoutCreatedByInput;
-  displayName: String;
-  email: String;
-  password: String;
-}
-
-export interface DashboardUpdateWithoutCreatedByDataInput {
-  graphs?: GraphUpdateManyWithoutDashboardInput;
+export interface GraphUpdateWithoutDashboardDataInput {
+  createdBy?: UserUpdateOneRequiredWithoutGraphsInput;
   icon?: String;
   publicUrl?: String;
   title?: String;
   updateInterval?: Int;
 }
 
-export interface DashboardCreateManyWithoutCreatedByInput {
+export type GraphWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface DashboardUpdateWithWhereUniqueWithoutCreatedByInput {
+  where: DashboardWhereUniqueInput;
+  data: DashboardUpdateWithoutCreatedByDataInput;
+}
+
+export interface DashboardUpdateManyWithoutCreatedByInput {
   create?:
     | DashboardCreateWithoutCreatedByInput[]
     | DashboardCreateWithoutCreatedByInput;
+  delete?: DashboardWhereUniqueInput[] | DashboardWhereUniqueInput;
   connect?: DashboardWhereUniqueInput[] | DashboardWhereUniqueInput;
+  set?: DashboardWhereUniqueInput[] | DashboardWhereUniqueInput;
+  disconnect?: DashboardWhereUniqueInput[] | DashboardWhereUniqueInput;
+  update?:
+    | DashboardUpdateWithWhereUniqueWithoutCreatedByInput[]
+    | DashboardUpdateWithWhereUniqueWithoutCreatedByInput;
+  upsert?:
+    | DashboardUpsertWithWhereUniqueWithoutCreatedByInput[]
+    | DashboardUpsertWithWhereUniqueWithoutCreatedByInput;
+  deleteMany?: DashboardScalarWhereInput[] | DashboardScalarWhereInput;
+  updateMany?:
+    | DashboardUpdateManyWithWhereNestedInput[]
+    | DashboardUpdateManyWithWhereNestedInput;
 }
 
-export interface GraphUpsertWithWhereUniqueWithoutCreatedByInput {
-  where: GraphWhereUniqueInput;
-  update: GraphUpdateWithoutCreatedByDataInput;
-  create: GraphCreateWithoutCreatedByInput;
-}
-
-export interface DashboardCreateWithoutCreatedByInput {
-  id?: ID_Input;
-  graphs?: GraphCreateManyWithoutDashboardInput;
-  icon?: String;
-  publicUrl?: String;
-  title: String;
-  updateInterval?: Int;
-}
-
-export interface GraphSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: GraphWhereInput;
-  AND?: GraphSubscriptionWhereInput[] | GraphSubscriptionWhereInput;
-  OR?: GraphSubscriptionWhereInput[] | GraphSubscriptionWhereInput;
-  NOT?: GraphSubscriptionWhereInput[] | GraphSubscriptionWhereInput;
-}
-
-export interface DashboardUpdateInput {
-  createdBy?: UserUpdateOneRequiredWithoutDashboardsInput;
-  graphs?: GraphUpdateManyWithoutDashboardInput;
-  icon?: String;
-  publicUrl?: String;
-  title?: String;
-  updateInterval?: Int;
-}
-
-export interface UserUpdateManyMutationInput {
+export interface UserUpdateWithoutGraphsDataInput {
+  dashboards?: DashboardUpdateManyWithoutCreatedByInput;
   displayName?: String;
   email?: String;
   password?: String;
+  role?: Role;
 }
 
-export interface UserUpdateOneRequiredWithoutDashboardsInput {
-  create?: UserCreateWithoutDashboardsInput;
-  update?: UserUpdateWithoutDashboardsDataInput;
-  upsert?: UserUpsertWithoutDashboardsInput;
+export interface UserUpdateOneRequiredWithoutGraphsInput {
+  create?: UserCreateWithoutGraphsInput;
+  update?: UserUpdateWithoutGraphsDataInput;
+  upsert?: UserUpsertWithoutGraphsInput;
   connect?: UserWhereUniqueInput;
 }
+
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  email?: String;
+}>;
 
 export interface UserUpdateInput {
   dashboards?: DashboardUpdateManyWithoutCreatedByInput;
@@ -608,83 +975,25 @@ export interface UserUpdateInput {
   email?: String;
   graphs?: GraphUpdateManyWithoutCreatedByInput;
   password?: String;
+  role?: Role;
 }
 
-export interface UserUpdateWithoutDashboardsDataInput {
-  displayName?: String;
-  email?: String;
-  graphs?: GraphUpdateManyWithoutCreatedByInput;
-  password?: String;
-}
-
-export interface GraphUpdateManyMutationInput {
+export interface DashboardCreateWithoutGraphsInput {
+  id?: ID_Input;
+  createdBy: UserCreateOneWithoutDashboardsInput;
   icon?: String;
   publicUrl?: String;
-  title?: String;
+  title: String;
   updateInterval?: Int;
 }
 
-export interface UserUpsertWithoutGraphsInput {
-  update: UserUpdateWithoutGraphsDataInput;
-  create: UserCreateWithoutGraphsInput;
-}
-
-export interface GraphUpdateInput {
-  createdBy?: UserUpdateOneRequiredWithoutGraphsInput;
-  dashboard?: DashboardUpdateOneRequiredWithoutGraphsInput;
-  icon?: String;
-  publicUrl?: String;
-  title?: String;
-  updateInterval?: Int;
-}
-
-export interface GraphUpdateWithWhereUniqueWithoutCreatedByInput {
-  where: GraphWhereUniqueInput;
-  data: GraphUpdateWithoutCreatedByDataInput;
-}
-
-export interface DashboardUpdateManyMutationInput {
-  icon?: String;
-  publicUrl?: String;
-  title?: String;
-  updateInterval?: Int;
-}
-
-export interface GraphUpdateWithoutCreatedByDataInput {
-  dashboard?: DashboardUpdateOneRequiredWithoutGraphsInput;
-  icon?: String;
-  publicUrl?: String;
-  title?: String;
-  updateInterval?: Int;
-}
-
-export interface UserCreateOneWithoutDashboardsInput {
-  create?: UserCreateWithoutDashboardsInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface DashboardUpdateManyDataInput {
-  icon?: String;
-  publicUrl?: String;
-  title?: String;
-  updateInterval?: Int;
-}
-
-export interface GraphCreateManyWithoutCreatedByInput {
-  create?:
-    | GraphCreateWithoutCreatedByInput[]
-    | GraphCreateWithoutCreatedByInput;
-  connect?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
-}
-
-export interface DashboardUpdateManyWithWhereNestedInput {
-  where: DashboardScalarWhereInput;
-  data: DashboardUpdateManyDataInput;
-}
-
-export interface DashboardCreateOneWithoutGraphsInput {
-  create?: DashboardCreateWithoutGraphsInput;
-  connect?: DashboardWhereUniqueInput;
+export interface UserCreateWithoutDashboardsInput {
+  id?: ID_Input;
+  displayName: String;
+  email: String;
+  graphs?: GraphCreateManyWithoutCreatedByInput;
+  password: String;
+  role?: Role;
 }
 
 export interface DashboardScalarWhereInput {
@@ -773,300 +1082,6 @@ export interface DashboardScalarWhereInput {
   NOT?: DashboardScalarWhereInput[] | DashboardScalarWhereInput;
 }
 
-export interface GraphCreateManyWithoutDashboardInput {
-  create?:
-    | GraphCreateWithoutDashboardInput[]
-    | GraphCreateWithoutDashboardInput;
-  connect?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
-}
-
-export interface DashboardUpsertWithWhereUniqueWithoutCreatedByInput {
-  where: DashboardWhereUniqueInput;
-  update: DashboardUpdateWithoutCreatedByDataInput;
-  create: DashboardCreateWithoutCreatedByInput;
-}
-
-export interface UserCreateOneWithoutGraphsInput {
-  create?: UserCreateWithoutGraphsInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface GraphScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  icon?: String;
-  icon_not?: String;
-  icon_in?: String[] | String;
-  icon_not_in?: String[] | String;
-  icon_lt?: String;
-  icon_lte?: String;
-  icon_gt?: String;
-  icon_gte?: String;
-  icon_contains?: String;
-  icon_not_contains?: String;
-  icon_starts_with?: String;
-  icon_not_starts_with?: String;
-  icon_ends_with?: String;
-  icon_not_ends_with?: String;
-  publicUrl?: String;
-  publicUrl_not?: String;
-  publicUrl_in?: String[] | String;
-  publicUrl_not_in?: String[] | String;
-  publicUrl_lt?: String;
-  publicUrl_lte?: String;
-  publicUrl_gt?: String;
-  publicUrl_gte?: String;
-  publicUrl_contains?: String;
-  publicUrl_not_contains?: String;
-  publicUrl_starts_with?: String;
-  publicUrl_not_starts_with?: String;
-  publicUrl_ends_with?: String;
-  publicUrl_not_ends_with?: String;
-  title?: String;
-  title_not?: String;
-  title_in?: String[] | String;
-  title_not_in?: String[] | String;
-  title_lt?: String;
-  title_lte?: String;
-  title_gt?: String;
-  title_gte?: String;
-  title_contains?: String;
-  title_not_contains?: String;
-  title_starts_with?: String;
-  title_not_starts_with?: String;
-  title_ends_with?: String;
-  title_not_ends_with?: String;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  updateInterval?: Int;
-  updateInterval_not?: Int;
-  updateInterval_in?: Int[] | Int;
-  updateInterval_not_in?: Int[] | Int;
-  updateInterval_lt?: Int;
-  updateInterval_lte?: Int;
-  updateInterval_gt?: Int;
-  updateInterval_gte?: Int;
-  AND?: GraphScalarWhereInput[] | GraphScalarWhereInput;
-  OR?: GraphScalarWhereInput[] | GraphScalarWhereInput;
-  NOT?: GraphScalarWhereInput[] | GraphScalarWhereInput;
-}
-
-export interface DashboardSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: DashboardWhereInput;
-  AND?: DashboardSubscriptionWhereInput[] | DashboardSubscriptionWhereInput;
-  OR?: DashboardSubscriptionWhereInput[] | DashboardSubscriptionWhereInput;
-  NOT?: DashboardSubscriptionWhereInput[] | DashboardSubscriptionWhereInput;
-}
-
-export interface GraphUpdateManyWithWhereNestedInput {
-  where: GraphScalarWhereInput;
-  data: GraphUpdateManyDataInput;
-}
-
-export interface UserCreateInput {
-  id?: ID_Input;
-  dashboards?: DashboardCreateManyWithoutCreatedByInput;
-  displayName: String;
-  email: String;
-  graphs?: GraphCreateManyWithoutCreatedByInput;
-  password: String;
-}
-
-export interface GraphUpdateManyDataInput {
-  icon?: String;
-  publicUrl?: String;
-  title?: String;
-  updateInterval?: Int;
-}
-
-export interface GraphCreateInput {
-  id?: ID_Input;
-  createdBy: UserCreateOneWithoutGraphsInput;
-  dashboard: DashboardCreateOneWithoutGraphsInput;
-  icon?: String;
-  publicUrl?: String;
-  title: String;
-  updateInterval?: Int;
-}
-
-export interface UserUpsertWithoutDashboardsInput {
-  update: UserUpdateWithoutDashboardsDataInput;
-  create: UserCreateWithoutDashboardsInput;
-}
-
-export interface DashboardCreateInput {
-  id?: ID_Input;
-  createdBy: UserCreateOneWithoutDashboardsInput;
-  graphs?: GraphCreateManyWithoutDashboardInput;
-  icon?: String;
-  publicUrl?: String;
-  title: String;
-  updateInterval?: Int;
-}
-
-export interface GraphUpdateManyWithoutDashboardInput {
-  create?:
-    | GraphCreateWithoutDashboardInput[]
-    | GraphCreateWithoutDashboardInput;
-  delete?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
-  connect?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
-  set?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
-  disconnect?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
-  update?:
-    | GraphUpdateWithWhereUniqueWithoutDashboardInput[]
-    | GraphUpdateWithWhereUniqueWithoutDashboardInput;
-  upsert?:
-    | GraphUpsertWithWhereUniqueWithoutDashboardInput[]
-    | GraphUpsertWithWhereUniqueWithoutDashboardInput;
-  deleteMany?: GraphScalarWhereInput[] | GraphScalarWhereInput;
-  updateMany?:
-    | GraphUpdateManyWithWhereNestedInput[]
-    | GraphUpdateManyWithWhereNestedInput;
-}
-
-export interface GraphCreateWithoutCreatedByInput {
-  id?: ID_Input;
-  dashboard: DashboardCreateOneWithoutGraphsInput;
-  icon?: String;
-  publicUrl?: String;
-  title: String;
-  updateInterval?: Int;
-}
-
-export interface GraphUpdateWithWhereUniqueWithoutDashboardInput {
-  where: GraphWhereUniqueInput;
-  data: GraphUpdateWithoutDashboardDataInput;
-}
-
-export interface GraphCreateWithoutDashboardInput {
-  id?: ID_Input;
-  createdBy: UserCreateOneWithoutGraphsInput;
-  icon?: String;
-  publicUrl?: String;
-  title: String;
-  updateInterval?: Int;
-}
-
-export interface GraphUpdateWithoutDashboardDataInput {
-  createdBy?: UserUpdateOneRequiredWithoutGraphsInput;
-  icon?: String;
-  publicUrl?: String;
-  title?: String;
-  updateInterval?: Int;
-}
-
-export type GraphWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface DashboardUpdateWithWhereUniqueWithoutCreatedByInput {
-  where: DashboardWhereUniqueInput;
-  data: DashboardUpdateWithoutCreatedByDataInput;
-}
-
-export interface DashboardUpdateManyWithoutCreatedByInput {
-  create?:
-    | DashboardCreateWithoutCreatedByInput[]
-    | DashboardCreateWithoutCreatedByInput;
-  delete?: DashboardWhereUniqueInput[] | DashboardWhereUniqueInput;
-  connect?: DashboardWhereUniqueInput[] | DashboardWhereUniqueInput;
-  set?: DashboardWhereUniqueInput[] | DashboardWhereUniqueInput;
-  disconnect?: DashboardWhereUniqueInput[] | DashboardWhereUniqueInput;
-  update?:
-    | DashboardUpdateWithWhereUniqueWithoutCreatedByInput[]
-    | DashboardUpdateWithWhereUniqueWithoutCreatedByInput;
-  upsert?:
-    | DashboardUpsertWithWhereUniqueWithoutCreatedByInput[]
-    | DashboardUpsertWithWhereUniqueWithoutCreatedByInput;
-  deleteMany?: DashboardScalarWhereInput[] | DashboardScalarWhereInput;
-  updateMany?:
-    | DashboardUpdateManyWithWhereNestedInput[]
-    | DashboardUpdateManyWithWhereNestedInput;
-}
-
-export interface UserUpdateWithoutGraphsDataInput {
-  dashboards?: DashboardUpdateManyWithoutCreatedByInput;
-  displayName?: String;
-  email?: String;
-  password?: String;
-}
-
-export interface UserUpdateOneRequiredWithoutGraphsInput {
-  create?: UserCreateWithoutGraphsInput;
-  update?: UserUpdateWithoutGraphsDataInput;
-  upsert?: UserUpsertWithoutGraphsInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  email?: String;
-}>;
-
-export interface UserSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: UserWhereInput;
-  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-}
-
-export interface DashboardCreateWithoutGraphsInput {
-  id?: ID_Input;
-  createdBy: UserCreateOneWithoutDashboardsInput;
-  icon?: String;
-  publicUrl?: String;
-  title: String;
-  updateInterval?: Int;
-}
-
-export interface UserCreateWithoutDashboardsInput {
-  id?: ID_Input;
-  displayName: String;
-  email: String;
-  graphs?: GraphCreateManyWithoutCreatedByInput;
-  password: String;
-}
-
-export interface GraphUpsertWithWhereUniqueWithoutDashboardInput {
-  where: GraphWhereUniqueInput;
-  update: GraphUpdateWithoutDashboardDataInput;
-  create: GraphCreateWithoutDashboardInput;
-}
-
 export interface NodeNode {
   id: ID_Output;
 }
@@ -1077,6 +1092,7 @@ export interface UserPreviousValues {
   displayName: String;
   email: String;
   password: String;
+  role: Role;
   updatedAt: DateTimeOutput;
 }
 
@@ -1088,6 +1104,7 @@ export interface UserPreviousValuesPromise
   displayName: () => Promise<String>;
   email: () => Promise<String>;
   password: () => Promise<String>;
+  role: () => Promise<Role>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
 
@@ -1099,24 +1116,165 @@ export interface UserPreviousValuesSubscription
   displayName: () => Promise<AsyncIterator<String>>;
   email: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
+  role: () => Promise<AsyncIterator<Role>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface GraphEdge {
-  node: Graph;
+export interface DashboardEdge {
+  node: Dashboard;
   cursor: String;
 }
 
-export interface GraphEdgePromise extends Promise<GraphEdge>, Fragmentable {
-  node: <T = GraphPromise>() => T;
+export interface DashboardEdgePromise
+  extends Promise<DashboardEdge>,
+    Fragmentable {
+  node: <T = DashboardPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface GraphEdgeSubscription
-  extends Promise<AsyncIterator<GraphEdge>>,
+export interface DashboardEdgeSubscription
+  extends Promise<AsyncIterator<DashboardEdge>>,
     Fragmentable {
-  node: <T = GraphSubscription>() => T;
+  node: <T = DashboardSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface GraphSubscriptionPayload {
+  mutation: MutationType;
+  node: Graph;
+  updatedFields: String[];
+  previousValues: GraphPreviousValues;
+}
+
+export interface GraphSubscriptionPayloadPromise
+  extends Promise<GraphSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = GraphPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = GraphPreviousValuesPromise>() => T;
+}
+
+export interface GraphSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<GraphSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = GraphSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = GraphPreviousValuesSubscription>() => T;
+}
+
+export interface AggregateUser {
+  count: Int;
+}
+
+export interface AggregateUserPromise
+  extends Promise<AggregateUser>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUser>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface UserConnection {
+  pageInfo: PageInfo;
+  edges: UserEdge[];
+}
+
+export interface UserConnectionPromise
+  extends Promise<UserConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<UserEdge>>() => T;
+  aggregate: <T = AggregateUserPromise>() => T;
+}
+
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
+}
+
+export interface PageInfo {
+  hasNextPage: Boolean;
+  hasPreviousPage: Boolean;
+  startCursor?: String;
+  endCursor?: String;
+}
+
+export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
+  hasNextPage: () => Promise<Boolean>;
+  hasPreviousPage: () => Promise<Boolean>;
+  startCursor: () => Promise<String>;
+  endCursor: () => Promise<String>;
+}
+
+export interface PageInfoSubscription
+  extends Promise<AsyncIterator<PageInfo>>,
+    Fragmentable {
+  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
+  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
+  startCursor: () => Promise<AsyncIterator<String>>;
+  endCursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateGraph {
+  count: Int;
+}
+
+export interface AggregateGraphPromise
+  extends Promise<AggregateGraph>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateGraphSubscription
+  extends Promise<AsyncIterator<AggregateGraph>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface DashboardConnection {
+  pageInfo: PageInfo;
+  edges: DashboardEdge[];
+}
+
+export interface DashboardConnectionPromise
+  extends Promise<DashboardConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<DashboardEdge>>() => T;
+  aggregate: <T = AggregateDashboardPromise>() => T;
+}
+
+export interface DashboardConnectionSubscription
+  extends Promise<AsyncIterator<DashboardConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<DashboardEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateDashboardSubscription>() => T;
+}
+
+export interface BatchPayload {
+  count: Long;
+}
+
+export interface BatchPayloadPromise
+  extends Promise<BatchPayload>,
+    Fragmentable {
+  count: () => Promise<Long>;
+}
+
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayload>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Long>>;
 }
 
 export interface Graph {
@@ -1176,33 +1334,13 @@ export interface GraphConnectionSubscription
   aggregate: <T = AggregateGraphSubscription>() => T;
 }
 
-export interface DashboardConnection {
-  pageInfo: PageInfo;
-  edges: DashboardEdge[];
-}
-
-export interface DashboardConnectionPromise
-  extends Promise<DashboardConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<DashboardEdge>>() => T;
-  aggregate: <T = AggregateDashboardPromise>() => T;
-}
-
-export interface DashboardConnectionSubscription
-  extends Promise<AsyncIterator<DashboardConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<DashboardEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateDashboardSubscription>() => T;
-}
-
 export interface User {
   id: ID_Output;
   createdAt: DateTimeOutput;
   displayName: String;
   email: String;
   password: String;
+  role: Role;
   updatedAt: DateTimeOutput;
 }
 
@@ -1230,6 +1368,7 @@ export interface UserPromise extends Promise<User>, Fragmentable {
     last?: Int;
   }) => T;
   password: () => Promise<String>;
+  role: () => Promise<Role>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
 
@@ -1259,135 +1398,8 @@ export interface UserSubscription
     last?: Int;
   }) => T;
   password: () => Promise<AsyncIterator<String>>;
+  role: () => Promise<AsyncIterator<Role>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface GraphSubscriptionPayload {
-  mutation: MutationType;
-  node: Graph;
-  updatedFields: String[];
-  previousValues: GraphPreviousValues;
-}
-
-export interface GraphSubscriptionPayloadPromise
-  extends Promise<GraphSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = GraphPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = GraphPreviousValuesPromise>() => T;
-}
-
-export interface GraphSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<GraphSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = GraphSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = GraphPreviousValuesSubscription>() => T;
-}
-
-export interface GraphPreviousValues {
-  id: ID_Output;
-  createdAt: DateTimeOutput;
-  icon?: String;
-  publicUrl?: String;
-  title: String;
-  updatedAt: DateTimeOutput;
-  updateInterval: Int;
-}
-
-export interface GraphPreviousValuesPromise
-  extends Promise<GraphPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  icon: () => Promise<String>;
-  publicUrl: () => Promise<String>;
-  title: () => Promise<String>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  updateInterval: () => Promise<Int>;
-}
-
-export interface GraphPreviousValuesSubscription
-  extends Promise<AsyncIterator<GraphPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  icon: () => Promise<AsyncIterator<String>>;
-  publicUrl: () => Promise<AsyncIterator<String>>;
-  title: () => Promise<AsyncIterator<String>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updateInterval: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface AggregateDashboard {
-  count: Int;
-}
-
-export interface AggregateDashboardPromise
-  extends Promise<AggregateDashboard>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateDashboardSubscription
-  extends Promise<AsyncIterator<AggregateDashboard>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface AggregateUser {
-  count: Int;
-}
-
-export interface AggregateUserPromise
-  extends Promise<AggregateUser>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateUserSubscription
-  extends Promise<AsyncIterator<AggregateUser>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface BatchPayload {
-  count: Long;
-}
-
-export interface BatchPayloadPromise
-  extends Promise<BatchPayload>,
-    Fragmentable {
-  count: () => Promise<Long>;
-}
-
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayload>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
-}
-
-export interface UserConnection {
-  pageInfo: PageInfo;
-  edges: UserEdge[];
-}
-
-export interface UserConnectionPromise
-  extends Promise<UserConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<UserEdge>>() => T;
-  aggregate: <T = AggregateUserPromise>() => T;
-}
-
-export interface UserConnectionSubscription
-  extends Promise<AsyncIterator<UserConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateUserSubscription>() => T;
 }
 
 export interface DashboardPreviousValues {
@@ -1501,46 +1513,71 @@ export interface DashboardSubscription
   updateInterval: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface DashboardEdge {
-  node: Dashboard;
+export interface AggregateDashboard {
+  count: Int;
+}
+
+export interface AggregateDashboardPromise
+  extends Promise<AggregateDashboard>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateDashboardSubscription
+  extends Promise<AsyncIterator<AggregateDashboard>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface GraphPreviousValues {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  icon?: String;
+  publicUrl?: String;
+  title: String;
+  updatedAt: DateTimeOutput;
+  updateInterval: Int;
+}
+
+export interface GraphPreviousValuesPromise
+  extends Promise<GraphPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  icon: () => Promise<String>;
+  publicUrl: () => Promise<String>;
+  title: () => Promise<String>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  updateInterval: () => Promise<Int>;
+}
+
+export interface GraphPreviousValuesSubscription
+  extends Promise<AsyncIterator<GraphPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  icon: () => Promise<AsyncIterator<String>>;
+  publicUrl: () => Promise<AsyncIterator<String>>;
+  title: () => Promise<AsyncIterator<String>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updateInterval: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface GraphEdge {
+  node: Graph;
   cursor: String;
 }
 
-export interface DashboardEdgePromise
-  extends Promise<DashboardEdge>,
-    Fragmentable {
-  node: <T = DashboardPromise>() => T;
+export interface GraphEdgePromise extends Promise<GraphEdge>, Fragmentable {
+  node: <T = GraphPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface DashboardEdgeSubscription
-  extends Promise<AsyncIterator<DashboardEdge>>,
+export interface GraphEdgeSubscription
+  extends Promise<AsyncIterator<GraphEdge>>,
     Fragmentable {
-  node: <T = DashboardSubscription>() => T;
+  node: <T = GraphSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface PageInfo {
-  hasNextPage: Boolean;
-  hasPreviousPage: Boolean;
-  startCursor?: String;
-  endCursor?: String;
-}
-
-export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
-  hasNextPage: () => Promise<Boolean>;
-  hasPreviousPage: () => Promise<Boolean>;
-  startCursor: () => Promise<String>;
-  endCursor: () => Promise<String>;
-}
-
-export interface PageInfoSubscription
-  extends Promise<AsyncIterator<PageInfo>>,
-    Fragmentable {
-  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
-  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
-  startCursor: () => Promise<AsyncIterator<String>>;
-  endCursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface UserSubscriptionPayload {
@@ -1585,34 +1622,21 @@ export interface UserEdgeSubscription
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateGraph {
-  count: Int;
-}
-
-export interface AggregateGraphPromise
-  extends Promise<AggregateGraph>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateGraphSubscription
-  extends Promise<AsyncIterator<AggregateGraph>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
+/*
+The `Boolean` scalar type represents `true` or `false`.
+*/
+export type Boolean = boolean;
 
 /*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
+The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
-export type Int = number;
+export type String = string;
 
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
 */
 export type ID_Input = string | number;
 export type ID_Output = string;
-
-export type Long = string;
 
 /*
 DateTime scalar input type, allowing Date
@@ -1625,14 +1649,11 @@ DateTime scalar output type, which is always a string
 export type DateTimeOutput = string;
 
 /*
-The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
 */
-export type String = string;
+export type Int = number;
 
-/*
-The `Boolean` scalar type represents `true` or `false`.
-*/
-export type Boolean = boolean;
+export type Long = string;
 
 /**
  * Model Metadata
@@ -1649,6 +1670,10 @@ export const models: Model[] = [
   },
   {
     name: "User",
+    embedded: false
+  },
+  {
+    name: "Role",
     embedded: false
   }
 ];
