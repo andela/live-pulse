@@ -1,14 +1,10 @@
 export default {
   createGraph: async (root, args, context, info) => {
-    if (context.user) {
-      return await context.prisma.createGraph({
-        ...args.data,
-        createdBy: { connect: { id: context.user.id } },
-        dashboard: { connect: { id: args.dashboard.id } }
-      });
-    } else {
-      throw new Error('Not authenticated');
-    }
+    return await context.prisma.createGraph({
+      ...args.data,
+      createdBy: { connect: { id: context.user.id } },
+      dashboard: { connect: { id: args.dashboardId } }
+    });
   },
   createdBy: async (root, args, context, info) => await context.prisma.graph({ id: root.id }).createdBy(),
   dashboard: async (root, args, context, info) => await context.prisma.graph({ id: root.id }).dashboard(),

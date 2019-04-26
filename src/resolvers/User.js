@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 import utils from '../utils';
-const { APP_SECRET, getUserId } = utils;
+const { APP_SECRET } = utils;
 
 export default {
   dashboards: async (root, args, context, info) => await context.prisma.user({ id: root.id }).dashboards(),
@@ -21,8 +21,6 @@ export default {
 
     const token = jwt.sign({ userId: user.id }, APP_SECRET);
 
-    // TODO: delete user.password;
-
     return {
       token,
       user,
@@ -39,8 +37,6 @@ export default {
     });
 
     const token = jwt.sign({ userId: user.id }, APP_SECRET);
-
-    // TODO: delete user.password;
 
     return {
       token,
