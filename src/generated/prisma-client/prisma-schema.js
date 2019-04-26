@@ -813,6 +813,12 @@ type Query {
   node(id: ID!): Node
 }
 
+enum Role {
+  ADMIN
+  MEMBER
+  SUPER_ADMIN
+}
+
 type Subscription {
   dashboard(where: DashboardSubscriptionWhereInput): DashboardSubscriptionPayload
   graph(where: GraphSubscriptionWhereInput): GraphSubscriptionPayload
@@ -827,6 +833,7 @@ type User {
   email: String!
   graphs(where: GraphWhereInput, orderBy: GraphOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Graph!]
   password: String!
+  role: Role!
   updatedAt: DateTime!
 }
 
@@ -843,6 +850,7 @@ input UserCreateInput {
   email: String!
   graphs: GraphCreateManyWithoutCreatedByInput
   password: String!
+  role: Role
 }
 
 input UserCreateOneWithoutDashboardsInput {
@@ -861,6 +869,7 @@ input UserCreateWithoutDashboardsInput {
   email: String!
   graphs: GraphCreateManyWithoutCreatedByInput
   password: String!
+  role: Role
 }
 
 input UserCreateWithoutGraphsInput {
@@ -869,6 +878,7 @@ input UserCreateWithoutGraphsInput {
   displayName: String!
   email: String!
   password: String!
+  role: Role
 }
 
 type UserEdge {
@@ -887,6 +897,8 @@ enum UserOrderByInput {
   email_DESC
   password_ASC
   password_DESC
+  role_ASC
+  role_DESC
   updatedAt_ASC
   updatedAt_DESC
 }
@@ -897,6 +909,7 @@ type UserPreviousValues {
   displayName: String!
   email: String!
   password: String!
+  role: Role!
   updatedAt: DateTime!
 }
 
@@ -924,12 +937,14 @@ input UserUpdateInput {
   email: String
   graphs: GraphUpdateManyWithoutCreatedByInput
   password: String
+  role: Role
 }
 
 input UserUpdateManyMutationInput {
   displayName: String
   email: String
   password: String
+  role: Role
 }
 
 input UserUpdateOneRequiredWithoutDashboardsInput {
@@ -951,6 +966,7 @@ input UserUpdateWithoutDashboardsDataInput {
   email: String
   graphs: GraphUpdateManyWithoutCreatedByInput
   password: String
+  role: Role
 }
 
 input UserUpdateWithoutGraphsDataInput {
@@ -958,6 +974,7 @@ input UserUpdateWithoutGraphsDataInput {
   displayName: String
   email: String
   password: String
+  role: Role
 }
 
 input UserUpsertWithoutDashboardsInput {
@@ -1041,6 +1058,10 @@ input UserWhereInput {
   password_not_starts_with: String
   password_ends_with: String
   password_not_ends_with: String
+  role: Role
+  role_not: Role
+  role_in: [Role!]
+  role_not_in: [Role!]
   updatedAt: DateTime
   updatedAt_not: DateTime
   updatedAt_in: [DateTime!]

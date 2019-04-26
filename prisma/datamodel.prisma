@@ -30,5 +30,12 @@ type User {
   email: String! @unique
   graphs: [Graph!]! @relation(name: "GraphByUser" onDelete: CASCADE)
   password: String!
+  role: Role! @default(value: MEMBER)
   updatedAt: DateTime! @updatedAt
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+  SUPER_ADMIN
 }
