@@ -5,9 +5,10 @@ import dotenv from 'dotenv';
 import express from 'express';
 import { GraphQLServer } from 'graphql-yoga';
 
+import auth from './middlewares/auth';
+import directiveResolvers from './directives';
 import { prisma } from './generated/prisma-client';
 import resolvers from './resolvers';
-import utils from './utils';
 
 let src = 'build'
 if (process.env.NODE_ENV !== 'production') {
@@ -15,18 +16,9 @@ if (process.env.NODE_ENV !== 'production') {
   src = 'src'
 }
 
-const { getUser } = utils;
-
-const authentication = async (resolve, root, args, context, info) => {
-  if (!context.user) {
-    const user = await getUser(context);
-    // TODO: delete user.password
-    context.user = user;
-  }
-  return await resolve(root, args, context, info);
-}
-
 const server = new GraphQLServer({
+  directiveResolvers,
+  middlewares: [auth.authentication],
   typeDefs: `./${src}/schema/index.graphql`,
   resolvers,
   context: async (request) => {
@@ -35,7 +27,6 @@ const server = new GraphQLServer({
       prisma,
     }
   },
-  middlewares: [authentication],
 })
 
 server.start({ port: process.env.PORT || 5000 }, (options) => console.log(`Server is running on port ${options.port}`))

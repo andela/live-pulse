@@ -1,5 +1,9 @@
 # import * from "../generated/prisma.graphql"
 
+directive @hasRole(roles: [Role!]) on FIELD | FIELD_DEFINITION | MUTATION | QUERY
+directive @isAuthenticated on FIELD | FIELD_DEFINITION | MUTATION | QUERY
+directive @isOwner(resource: String!, id: String = "id") on FIELD | FIELD_DEFINITION | MUTATION | QUERY
+
 type Query {
   dashboard(id: ID!): Dashboard
   dashboards(where: DashboardWhereInput): [Dashboard!]!
@@ -11,17 +15,28 @@ type Query {
 }
 
 type Mutation {
-  createDashboard(data: DashboardUpdateInput!): Dashboard!
-  createGraph(dashboard: DashboardWhereUniqueInput!, data: GraphUpdateInput!): Graph!
-  deleteDashboard(id: ID!): Dashboard
-  deleteGraph(id: ID!): Graph
+  createDashboard(data: DashboardUpdateInput!): Dashboard! @isAuthenticated
+  createGraph(dashboardId: ID!, data: GraphUpdateInput!): Graph! @isOwner(resource: "Dashboard", id: "dashboardId") @isAuthenticated
+  deleteDashboard(id: ID!): Dashboard @isOwner(resource: "Dashboard") @isAuthenticated
+  deleteGraph(id: ID!): Graph @isOwner(resource: "Graph") @isAuthenticated
   signIn(email: String!, password: String!): AuthPayload
   signUp(email: String!, password: String!, data: UserUpdateInput!): AuthPayload
-  updateDashboard(id: ID!, data: DashboardUpdateInput!): Dashboard
-  updateGraph(id: ID!, data: GraphUpdateInput!): Graph
+  updateDashboard(id: ID!, data: DashboardUpdateInput!): Dashboard @isOwner(resource: "Dashboard") @isAuthenticated
+  updateGraph(id: ID!, data: GraphUpdateInput!): Graph @isOwner(resource: "Graph") @isAuthenticated
 }
 
 type AuthPayload {
   token: String
   user: User
+}
+
+type User {
+  createdAt: DateTime!
+  dashboards: [Dashboard!]!
+  displayName: String!
+  email: String!
+  graphs: [Graph!]!
+  password: String! @hasRole(roles: [SUPER_ADMIN])
+  role: Role!
+  updatedAt: DateTime!
 }
