@@ -6,7 +6,7 @@ import express from 'express';
 import { GraphQLServer } from 'graphql-yoga';
 
 import auth from './middlewares/auth';
-import directiveResolvers from './directives';
+import directives from './directives';
 import { prisma } from './generated/prisma-client';
 import resolvers from './resolvers';
 
@@ -17,8 +17,9 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const server = new GraphQLServer({
-  directiveResolvers,
+  directiveResolvers: directives.legacy,
   middlewares: [auth.authentication],
+  schemaDirectives: directives.schema,
   typeDefs: `./${src}/schema/index.graphql`,
   resolvers,
   context: async (request) => {
