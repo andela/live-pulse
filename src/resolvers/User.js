@@ -6,6 +6,7 @@ const { APP_SECRET } = utils;
 
 export default {
   dashboards: async (root, args, context, info) => await context.prisma.user({ id: root.id }).dashboards(),
+  entities: async (root, args, context, info) => await context.prisma.user({ id: root.id }).entities(),
   graphs: async (root, args, context, info) => await context.prisma.user({ id: root.id }).graphs(),
   signedInUser: async (root, args, context, info) => context.user,
   signIn: async (root, args, context, info) => {

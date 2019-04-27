@@ -35,6 +35,7 @@ type User {
   dashboards: [Dashboard!]!
   displayName: String!
   email: String!
+  entities: [Entity!]!
   graphs: [Graph!]!
   password: String! @hasRole(roles: [SUPER_ADMIN])
   role: Role!
