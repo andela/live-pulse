@@ -7,6 +7,10 @@ module.exports = {
   count: Int!
 }
 
+type AggregateEntity {
+  count: Int!
+}
+
 type AggregateGraph {
   count: Int!
 }
@@ -23,6 +27,7 @@ type Dashboard {
   id: ID!
   createdAt: DateTime!
   createdBy: User!
+  entity: Entity
   graphs(where: GraphWhereInput, orderBy: GraphOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Graph!]
   icon: String
   publicUrl: String
@@ -40,6 +45,7 @@ type DashboardConnection {
 input DashboardCreateInput {
   id: ID
   createdBy: UserCreateOneWithoutDashboardsInput!
+  entity: EntityCreateOneWithoutDashboardsInput
   graphs: GraphCreateManyWithoutDashboardInput
   icon: String
   publicUrl: String
@@ -52,6 +58,11 @@ input DashboardCreateManyWithoutCreatedByInput {
   connect: [DashboardWhereUniqueInput!]
 }
 
+input DashboardCreateManyWithoutEntityInput {
+  create: [DashboardCreateWithoutEntityInput!]
+  connect: [DashboardWhereUniqueInput!]
+}
+
 input DashboardCreateOneWithoutGraphsInput {
   create: DashboardCreateWithoutGraphsInput
   connect: DashboardWhereUniqueInput
@@ -59,6 +70,17 @@ input DashboardCreateOneWithoutGraphsInput {
 
 input DashboardCreateWithoutCreatedByInput {
   id: ID
+  entity: EntityCreateOneWithoutDashboardsInput
+  graphs: GraphCreateManyWithoutDashboardInput
+  icon: String
+  publicUrl: String
+  title: String!
+  updateInterval: Int
+}
+
+input DashboardCreateWithoutEntityInput {
+  id: ID
+  createdBy: UserCreateOneWithoutDashboardsInput!
   graphs: GraphCreateManyWithoutDashboardInput
   icon: String
   publicUrl: String
@@ -69,6 +91,7 @@ input DashboardCreateWithoutCreatedByInput {
 input DashboardCreateWithoutGraphsInput {
   id: ID
   createdBy: UserCreateOneWithoutDashboardsInput!
+  entity: EntityCreateOneWithoutDashboardsInput
   icon: String
   publicUrl: String
   title: String!
@@ -213,6 +236,7 @@ input DashboardSubscriptionWhereInput {
 
 input DashboardUpdateInput {
   createdBy: UserUpdateOneRequiredWithoutDashboardsInput
+  entity: EntityUpdateOneWithoutDashboardsInput
   graphs: GraphUpdateManyWithoutDashboardInput
   icon: String
   publicUrl: String
@@ -246,6 +270,18 @@ input DashboardUpdateManyWithoutCreatedByInput {
   updateMany: [DashboardUpdateManyWithWhereNestedInput!]
 }
 
+input DashboardUpdateManyWithoutEntityInput {
+  create: [DashboardCreateWithoutEntityInput!]
+  delete: [DashboardWhereUniqueInput!]
+  connect: [DashboardWhereUniqueInput!]
+  set: [DashboardWhereUniqueInput!]
+  disconnect: [DashboardWhereUniqueInput!]
+  update: [DashboardUpdateWithWhereUniqueWithoutEntityInput!]
+  upsert: [DashboardUpsertWithWhereUniqueWithoutEntityInput!]
+  deleteMany: [DashboardScalarWhereInput!]
+  updateMany: [DashboardUpdateManyWithWhereNestedInput!]
+}
+
 input DashboardUpdateManyWithWhereNestedInput {
   where: DashboardScalarWhereInput!
   data: DashboardUpdateManyDataInput!
@@ -259,6 +295,16 @@ input DashboardUpdateOneRequiredWithoutGraphsInput {
 }
 
 input DashboardUpdateWithoutCreatedByDataInput {
+  entity: EntityUpdateOneWithoutDashboardsInput
+  graphs: GraphUpdateManyWithoutDashboardInput
+  icon: String
+  publicUrl: String
+  title: String
+  updateInterval: Int
+}
+
+input DashboardUpdateWithoutEntityDataInput {
+  createdBy: UserUpdateOneRequiredWithoutDashboardsInput
   graphs: GraphUpdateManyWithoutDashboardInput
   icon: String
   publicUrl: String
@@ -268,6 +314,7 @@ input DashboardUpdateWithoutCreatedByDataInput {
 
 input DashboardUpdateWithoutGraphsDataInput {
   createdBy: UserUpdateOneRequiredWithoutDashboardsInput
+  entity: EntityUpdateOneWithoutDashboardsInput
   icon: String
   publicUrl: String
   title: String
@@ -279,6 +326,11 @@ input DashboardUpdateWithWhereUniqueWithoutCreatedByInput {
   data: DashboardUpdateWithoutCreatedByDataInput!
 }
 
+input DashboardUpdateWithWhereUniqueWithoutEntityInput {
+  where: DashboardWhereUniqueInput!
+  data: DashboardUpdateWithoutEntityDataInput!
+}
+
 input DashboardUpsertWithoutGraphsInput {
   update: DashboardUpdateWithoutGraphsDataInput!
   create: DashboardCreateWithoutGraphsInput!
@@ -288,6 +340,12 @@ input DashboardUpsertWithWhereUniqueWithoutCreatedByInput {
   where: DashboardWhereUniqueInput!
   update: DashboardUpdateWithoutCreatedByDataInput!
   create: DashboardCreateWithoutCreatedByInput!
+}
+
+input DashboardUpsertWithWhereUniqueWithoutEntityInput {
+  where: DashboardWhereUniqueInput!
+  update: DashboardUpdateWithoutEntityDataInput!
+  create: DashboardCreateWithoutEntityInput!
 }
 
 input DashboardWhereInput {
@@ -314,6 +372,7 @@ input DashboardWhereInput {
   createdAt_gt: DateTime
   createdAt_gte: DateTime
   createdBy: UserWhereInput
+  entity: EntityWhereInput
   graphs_every: GraphWhereInput
   graphs_some: GraphWhereInput
   graphs_none: GraphWhereInput
@@ -386,11 +445,387 @@ input DashboardWhereUniqueInput {
 
 scalar DateTime
 
+type Entity {
+  id: ID!
+  createdAt: DateTime!
+  createdBy: User
+  dashboards(where: DashboardWhereInput, orderBy: DashboardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Dashboard!]
+  data: Json!
+  graphs(where: GraphWhereInput, orderBy: GraphOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Graph!]
+  icon: String
+  private: Boolean!
+  title: String!
+  updatedAt: DateTime!
+}
+
+type EntityConnection {
+  pageInfo: PageInfo!
+  edges: [EntityEdge]!
+  aggregate: AggregateEntity!
+}
+
+input EntityCreateInput {
+  id: ID
+  createdBy: UserCreateOneWithoutEntitiesInput
+  dashboards: DashboardCreateManyWithoutEntityInput
+  data: Json!
+  graphs: GraphCreateManyWithoutEntityInput
+  icon: String
+  private: Boolean
+  title: String!
+}
+
+input EntityCreateManyWithoutCreatedByInput {
+  create: [EntityCreateWithoutCreatedByInput!]
+  connect: [EntityWhereUniqueInput!]
+}
+
+input EntityCreateOneWithoutDashboardsInput {
+  create: EntityCreateWithoutDashboardsInput
+  connect: EntityWhereUniqueInput
+}
+
+input EntityCreateOneWithoutGraphsInput {
+  create: EntityCreateWithoutGraphsInput
+  connect: EntityWhereUniqueInput
+}
+
+input EntityCreateWithoutCreatedByInput {
+  id: ID
+  dashboards: DashboardCreateManyWithoutEntityInput
+  data: Json!
+  graphs: GraphCreateManyWithoutEntityInput
+  icon: String
+  private: Boolean
+  title: String!
+}
+
+input EntityCreateWithoutDashboardsInput {
+  id: ID
+  createdBy: UserCreateOneWithoutEntitiesInput
+  data: Json!
+  graphs: GraphCreateManyWithoutEntityInput
+  icon: String
+  private: Boolean
+  title: String!
+}
+
+input EntityCreateWithoutGraphsInput {
+  id: ID
+  createdBy: UserCreateOneWithoutEntitiesInput
+  dashboards: DashboardCreateManyWithoutEntityInput
+  data: Json!
+  icon: String
+  private: Boolean
+  title: String!
+}
+
+type EntityEdge {
+  node: Entity!
+  cursor: String!
+}
+
+enum EntityOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  data_ASC
+  data_DESC
+  icon_ASC
+  icon_DESC
+  private_ASC
+  private_DESC
+  title_ASC
+  title_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type EntityPreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  data: Json!
+  icon: String
+  private: Boolean!
+  title: String!
+  updatedAt: DateTime!
+}
+
+input EntityScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  icon: String
+  icon_not: String
+  icon_in: [String!]
+  icon_not_in: [String!]
+  icon_lt: String
+  icon_lte: String
+  icon_gt: String
+  icon_gte: String
+  icon_contains: String
+  icon_not_contains: String
+  icon_starts_with: String
+  icon_not_starts_with: String
+  icon_ends_with: String
+  icon_not_ends_with: String
+  private: Boolean
+  private_not: Boolean
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [EntityScalarWhereInput!]
+  OR: [EntityScalarWhereInput!]
+  NOT: [EntityScalarWhereInput!]
+}
+
+type EntitySubscriptionPayload {
+  mutation: MutationType!
+  node: Entity
+  updatedFields: [String!]
+  previousValues: EntityPreviousValues
+}
+
+input EntitySubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: EntityWhereInput
+  AND: [EntitySubscriptionWhereInput!]
+  OR: [EntitySubscriptionWhereInput!]
+  NOT: [EntitySubscriptionWhereInput!]
+}
+
+input EntityUpdateInput {
+  createdBy: UserUpdateOneWithoutEntitiesInput
+  dashboards: DashboardUpdateManyWithoutEntityInput
+  data: Json
+  graphs: GraphUpdateManyWithoutEntityInput
+  icon: String
+  private: Boolean
+  title: String
+}
+
+input EntityUpdateManyDataInput {
+  data: Json
+  icon: String
+  private: Boolean
+  title: String
+}
+
+input EntityUpdateManyMutationInput {
+  data: Json
+  icon: String
+  private: Boolean
+  title: String
+}
+
+input EntityUpdateManyWithoutCreatedByInput {
+  create: [EntityCreateWithoutCreatedByInput!]
+  delete: [EntityWhereUniqueInput!]
+  connect: [EntityWhereUniqueInput!]
+  set: [EntityWhereUniqueInput!]
+  disconnect: [EntityWhereUniqueInput!]
+  update: [EntityUpdateWithWhereUniqueWithoutCreatedByInput!]
+  upsert: [EntityUpsertWithWhereUniqueWithoutCreatedByInput!]
+  deleteMany: [EntityScalarWhereInput!]
+  updateMany: [EntityUpdateManyWithWhereNestedInput!]
+}
+
+input EntityUpdateManyWithWhereNestedInput {
+  where: EntityScalarWhereInput!
+  data: EntityUpdateManyDataInput!
+}
+
+input EntityUpdateOneWithoutDashboardsInput {
+  create: EntityCreateWithoutDashboardsInput
+  update: EntityUpdateWithoutDashboardsDataInput
+  upsert: EntityUpsertWithoutDashboardsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: EntityWhereUniqueInput
+}
+
+input EntityUpdateOneWithoutGraphsInput {
+  create: EntityCreateWithoutGraphsInput
+  update: EntityUpdateWithoutGraphsDataInput
+  upsert: EntityUpsertWithoutGraphsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: EntityWhereUniqueInput
+}
+
+input EntityUpdateWithoutCreatedByDataInput {
+  dashboards: DashboardUpdateManyWithoutEntityInput
+  data: Json
+  graphs: GraphUpdateManyWithoutEntityInput
+  icon: String
+  private: Boolean
+  title: String
+}
+
+input EntityUpdateWithoutDashboardsDataInput {
+  createdBy: UserUpdateOneWithoutEntitiesInput
+  data: Json
+  graphs: GraphUpdateManyWithoutEntityInput
+  icon: String
+  private: Boolean
+  title: String
+}
+
+input EntityUpdateWithoutGraphsDataInput {
+  createdBy: UserUpdateOneWithoutEntitiesInput
+  dashboards: DashboardUpdateManyWithoutEntityInput
+  data: Json
+  icon: String
+  private: Boolean
+  title: String
+}
+
+input EntityUpdateWithWhereUniqueWithoutCreatedByInput {
+  where: EntityWhereUniqueInput!
+  data: EntityUpdateWithoutCreatedByDataInput!
+}
+
+input EntityUpsertWithoutDashboardsInput {
+  update: EntityUpdateWithoutDashboardsDataInput!
+  create: EntityCreateWithoutDashboardsInput!
+}
+
+input EntityUpsertWithoutGraphsInput {
+  update: EntityUpdateWithoutGraphsDataInput!
+  create: EntityCreateWithoutGraphsInput!
+}
+
+input EntityUpsertWithWhereUniqueWithoutCreatedByInput {
+  where: EntityWhereUniqueInput!
+  update: EntityUpdateWithoutCreatedByDataInput!
+  create: EntityCreateWithoutCreatedByInput!
+}
+
+input EntityWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdBy: UserWhereInput
+  dashboards_every: DashboardWhereInput
+  dashboards_some: DashboardWhereInput
+  dashboards_none: DashboardWhereInput
+  graphs_every: GraphWhereInput
+  graphs_some: GraphWhereInput
+  graphs_none: GraphWhereInput
+  icon: String
+  icon_not: String
+  icon_in: [String!]
+  icon_not_in: [String!]
+  icon_lt: String
+  icon_lte: String
+  icon_gt: String
+  icon_gte: String
+  icon_contains: String
+  icon_not_contains: String
+  icon_starts_with: String
+  icon_not_starts_with: String
+  icon_ends_with: String
+  icon_not_ends_with: String
+  private: Boolean
+  private_not: Boolean
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [EntityWhereInput!]
+  OR: [EntityWhereInput!]
+  NOT: [EntityWhereInput!]
+}
+
+input EntityWhereUniqueInput {
+  id: ID
+}
+
 type Graph {
   id: ID!
   createdAt: DateTime!
   createdBy: User!
   dashboard: Dashboard!
+  entity: Entity
   icon: String
   publicUrl: String
   title: String!
@@ -408,6 +843,7 @@ input GraphCreateInput {
   id: ID
   createdBy: UserCreateOneWithoutGraphsInput!
   dashboard: DashboardCreateOneWithoutGraphsInput!
+  entity: EntityCreateOneWithoutGraphsInput
   icon: String
   publicUrl: String
   title: String!
@@ -424,9 +860,15 @@ input GraphCreateManyWithoutDashboardInput {
   connect: [GraphWhereUniqueInput!]
 }
 
+input GraphCreateManyWithoutEntityInput {
+  create: [GraphCreateWithoutEntityInput!]
+  connect: [GraphWhereUniqueInput!]
+}
+
 input GraphCreateWithoutCreatedByInput {
   id: ID
   dashboard: DashboardCreateOneWithoutGraphsInput!
+  entity: EntityCreateOneWithoutGraphsInput
   icon: String
   publicUrl: String
   title: String!
@@ -436,6 +878,17 @@ input GraphCreateWithoutCreatedByInput {
 input GraphCreateWithoutDashboardInput {
   id: ID
   createdBy: UserCreateOneWithoutGraphsInput!
+  entity: EntityCreateOneWithoutGraphsInput
+  icon: String
+  publicUrl: String
+  title: String!
+  updateInterval: Int
+}
+
+input GraphCreateWithoutEntityInput {
+  id: ID
+  createdBy: UserCreateOneWithoutGraphsInput!
+  dashboard: DashboardCreateOneWithoutGraphsInput!
   icon: String
   publicUrl: String
   title: String!
@@ -581,6 +1034,7 @@ input GraphSubscriptionWhereInput {
 input GraphUpdateInput {
   createdBy: UserUpdateOneRequiredWithoutGraphsInput
   dashboard: DashboardUpdateOneRequiredWithoutGraphsInput
+  entity: EntityUpdateOneWithoutGraphsInput
   icon: String
   publicUrl: String
   title: String
@@ -625,6 +1079,18 @@ input GraphUpdateManyWithoutDashboardInput {
   updateMany: [GraphUpdateManyWithWhereNestedInput!]
 }
 
+input GraphUpdateManyWithoutEntityInput {
+  create: [GraphCreateWithoutEntityInput!]
+  delete: [GraphWhereUniqueInput!]
+  connect: [GraphWhereUniqueInput!]
+  set: [GraphWhereUniqueInput!]
+  disconnect: [GraphWhereUniqueInput!]
+  update: [GraphUpdateWithWhereUniqueWithoutEntityInput!]
+  upsert: [GraphUpsertWithWhereUniqueWithoutEntityInput!]
+  deleteMany: [GraphScalarWhereInput!]
+  updateMany: [GraphUpdateManyWithWhereNestedInput!]
+}
+
 input GraphUpdateManyWithWhereNestedInput {
   where: GraphScalarWhereInput!
   data: GraphUpdateManyDataInput!
@@ -632,6 +1098,7 @@ input GraphUpdateManyWithWhereNestedInput {
 
 input GraphUpdateWithoutCreatedByDataInput {
   dashboard: DashboardUpdateOneRequiredWithoutGraphsInput
+  entity: EntityUpdateOneWithoutGraphsInput
   icon: String
   publicUrl: String
   title: String
@@ -640,6 +1107,16 @@ input GraphUpdateWithoutCreatedByDataInput {
 
 input GraphUpdateWithoutDashboardDataInput {
   createdBy: UserUpdateOneRequiredWithoutGraphsInput
+  entity: EntityUpdateOneWithoutGraphsInput
+  icon: String
+  publicUrl: String
+  title: String
+  updateInterval: Int
+}
+
+input GraphUpdateWithoutEntityDataInput {
+  createdBy: UserUpdateOneRequiredWithoutGraphsInput
+  dashboard: DashboardUpdateOneRequiredWithoutGraphsInput
   icon: String
   publicUrl: String
   title: String
@@ -656,6 +1133,11 @@ input GraphUpdateWithWhereUniqueWithoutDashboardInput {
   data: GraphUpdateWithoutDashboardDataInput!
 }
 
+input GraphUpdateWithWhereUniqueWithoutEntityInput {
+  where: GraphWhereUniqueInput!
+  data: GraphUpdateWithoutEntityDataInput!
+}
+
 input GraphUpsertWithWhereUniqueWithoutCreatedByInput {
   where: GraphWhereUniqueInput!
   update: GraphUpdateWithoutCreatedByDataInput!
@@ -666,6 +1148,12 @@ input GraphUpsertWithWhereUniqueWithoutDashboardInput {
   where: GraphWhereUniqueInput!
   update: GraphUpdateWithoutDashboardDataInput!
   create: GraphCreateWithoutDashboardInput!
+}
+
+input GraphUpsertWithWhereUniqueWithoutEntityInput {
+  where: GraphWhereUniqueInput!
+  update: GraphUpdateWithoutEntityDataInput!
+  create: GraphCreateWithoutEntityInput!
 }
 
 input GraphWhereInput {
@@ -693,6 +1181,7 @@ input GraphWhereInput {
   createdAt_gte: DateTime
   createdBy: UserWhereInput
   dashboard: DashboardWhereInput
+  entity: EntityWhereInput
   icon: String
   icon_not: String
   icon_in: [String!]
@@ -760,6 +1249,8 @@ input GraphWhereUniqueInput {
   id: ID
 }
 
+scalar Json
+
 scalar Long
 
 type Mutation {
@@ -769,6 +1260,12 @@ type Mutation {
   upsertDashboard(where: DashboardWhereUniqueInput!, create: DashboardCreateInput!, update: DashboardUpdateInput!): Dashboard!
   deleteDashboard(where: DashboardWhereUniqueInput!): Dashboard
   deleteManyDashboards(where: DashboardWhereInput): BatchPayload!
+  createEntity(data: EntityCreateInput!): Entity!
+  updateEntity(data: EntityUpdateInput!, where: EntityWhereUniqueInput!): Entity
+  updateManyEntities(data: EntityUpdateManyMutationInput!, where: EntityWhereInput): BatchPayload!
+  upsertEntity(where: EntityWhereUniqueInput!, create: EntityCreateInput!, update: EntityUpdateInput!): Entity!
+  deleteEntity(where: EntityWhereUniqueInput!): Entity
+  deleteManyEntities(where: EntityWhereInput): BatchPayload!
   createGraph(data: GraphCreateInput!): Graph!
   updateGraph(data: GraphUpdateInput!, where: GraphWhereUniqueInput!): Graph
   updateManyGraphs(data: GraphUpdateManyMutationInput!, where: GraphWhereInput): BatchPayload!
@@ -804,6 +1301,9 @@ type Query {
   dashboard(where: DashboardWhereUniqueInput!): Dashboard
   dashboards(where: DashboardWhereInput, orderBy: DashboardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Dashboard]!
   dashboardsConnection(where: DashboardWhereInput, orderBy: DashboardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DashboardConnection!
+  entity(where: EntityWhereUniqueInput!): Entity
+  entities(where: EntityWhereInput, orderBy: EntityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Entity]!
+  entitiesConnection(where: EntityWhereInput, orderBy: EntityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): EntityConnection!
   graph(where: GraphWhereUniqueInput!): Graph
   graphs(where: GraphWhereInput, orderBy: GraphOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Graph]!
   graphsConnection(where: GraphWhereInput, orderBy: GraphOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GraphConnection!
@@ -821,6 +1321,7 @@ enum Role {
 
 type Subscription {
   dashboard(where: DashboardSubscriptionWhereInput): DashboardSubscriptionPayload
+  entity(where: EntitySubscriptionWhereInput): EntitySubscriptionPayload
   graph(where: GraphSubscriptionWhereInput): GraphSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
@@ -831,6 +1332,7 @@ type User {
   dashboards(where: DashboardWhereInput, orderBy: DashboardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Dashboard!]
   displayName: String!
   email: String!
+  entities(where: EntityWhereInput, orderBy: EntityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Entity!]
   graphs(where: GraphWhereInput, orderBy: GraphOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Graph!]
   password: String!
   role: Role!
@@ -848,6 +1350,7 @@ input UserCreateInput {
   dashboards: DashboardCreateManyWithoutCreatedByInput
   displayName: String!
   email: String!
+  entities: EntityCreateManyWithoutCreatedByInput
   graphs: GraphCreateManyWithoutCreatedByInput
   password: String!
   role: Role
@@ -855,6 +1358,11 @@ input UserCreateInput {
 
 input UserCreateOneWithoutDashboardsInput {
   create: UserCreateWithoutDashboardsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutEntitiesInput {
+  create: UserCreateWithoutEntitiesInput
   connect: UserWhereUniqueInput
 }
 
@@ -867,6 +1375,17 @@ input UserCreateWithoutDashboardsInput {
   id: ID
   displayName: String!
   email: String!
+  entities: EntityCreateManyWithoutCreatedByInput
+  graphs: GraphCreateManyWithoutCreatedByInput
+  password: String!
+  role: Role
+}
+
+input UserCreateWithoutEntitiesInput {
+  id: ID
+  dashboards: DashboardCreateManyWithoutCreatedByInput
+  displayName: String!
+  email: String!
   graphs: GraphCreateManyWithoutCreatedByInput
   password: String!
   role: Role
@@ -877,6 +1396,7 @@ input UserCreateWithoutGraphsInput {
   dashboards: DashboardCreateManyWithoutCreatedByInput
   displayName: String!
   email: String!
+  entities: EntityCreateManyWithoutCreatedByInput
   password: String!
   role: Role
 }
@@ -935,6 +1455,7 @@ input UserUpdateInput {
   dashboards: DashboardUpdateManyWithoutCreatedByInput
   displayName: String
   email: String
+  entities: EntityUpdateManyWithoutCreatedByInput
   graphs: GraphUpdateManyWithoutCreatedByInput
   password: String
   role: Role
@@ -961,7 +1482,26 @@ input UserUpdateOneRequiredWithoutGraphsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneWithoutEntitiesInput {
+  create: UserCreateWithoutEntitiesInput
+  update: UserUpdateWithoutEntitiesDataInput
+  upsert: UserUpsertWithoutEntitiesInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateWithoutDashboardsDataInput {
+  displayName: String
+  email: String
+  entities: EntityUpdateManyWithoutCreatedByInput
+  graphs: GraphUpdateManyWithoutCreatedByInput
+  password: String
+  role: Role
+}
+
+input UserUpdateWithoutEntitiesDataInput {
+  dashboards: DashboardUpdateManyWithoutCreatedByInput
   displayName: String
   email: String
   graphs: GraphUpdateManyWithoutCreatedByInput
@@ -973,6 +1513,7 @@ input UserUpdateWithoutGraphsDataInput {
   dashboards: DashboardUpdateManyWithoutCreatedByInput
   displayName: String
   email: String
+  entities: EntityUpdateManyWithoutCreatedByInput
   password: String
   role: Role
 }
@@ -980,6 +1521,11 @@ input UserUpdateWithoutGraphsDataInput {
 input UserUpsertWithoutDashboardsInput {
   update: UserUpdateWithoutDashboardsDataInput!
   create: UserCreateWithoutDashboardsInput!
+}
+
+input UserUpsertWithoutEntitiesInput {
+  update: UserUpdateWithoutEntitiesDataInput!
+  create: UserCreateWithoutEntitiesInput!
 }
 
 input UserUpsertWithoutGraphsInput {
@@ -1041,6 +1587,9 @@ input UserWhereInput {
   email_not_starts_with: String
   email_ends_with: String
   email_not_ends_with: String
+  entities_every: EntityWhereInput
+  entities_some: EntityWhereInput
+  entities_none: EntityWhereInput
   graphs_every: GraphWhereInput
   graphs_some: GraphWhereInput
   graphs_none: GraphWhereInput
