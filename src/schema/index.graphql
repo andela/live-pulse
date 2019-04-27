@@ -1,10 +1,10 @@
 # import * from "../generated/prisma.graphql"
 
-directive @hasRole(roles: [Role!]) on FIELD | FIELD_DEFINITION | MUTATION | QUERY
-directive @isAuthenticated on FIELD | FIELD_DEFINITION | MUTATION | QUERY
+directive @hasRole(roles: [Role!]) on FIELD_DEFINITION | OBJECT
+directive @isAuthenticated on FIELD_DEFINITION | OBJECT
 directive @isOwner(resource: String!, id: String = "id") on FIELD | FIELD_DEFINITION | MUTATION | QUERY
 
-type Query {
+type Query @isAuthenticated {
   dashboard(id: ID!): Dashboard
   dashboards(where: DashboardWhereInput): [Dashboard!]!
   graph(id: ID!): Graph
