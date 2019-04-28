@@ -2,6 +2,7 @@ type Dashboard {
   id: ID! @id
   createdAt: DateTime! @createdAt
   createdBy: User! @relation(name: "DashboardByUser")
+  entity: Entity @relation(name: "EntityInDashboard")
   graphs: [Graph!]! @relation(name: "GraphInDashboard" onDelete: CASCADE)
   icon: String
   publicUrl: String
@@ -10,11 +11,25 @@ type Dashboard {
   updateInterval: Int! @default(value: 900) # 15 minutes (15 * 60 seconds)
 }
 
+type Entity {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  createdBy: User @relation(name: "EntityByUser")
+  dashboards: [Dashboard!]! @relation(name: "EntityInDashboard")
+  data: Json!
+  graphs: [Graph!]! @relation(name: "EntityInGraph")
+  icon: String
+  private: Boolean! @default(value: false)
+  title: String!
+  updatedAt: DateTime! @updatedAt
+}
+
 type Graph {
   id: ID! @id
   createdAt: DateTime! @createdAt
   createdBy: User! @relation(name: "GraphByUser")
   dashboard: Dashboard! @relation(name: "GraphInDashboard")
+  entity: Entity @relation(name: "EntityInGraph")
   icon: String
   publicUrl: String
   title: String!
@@ -22,20 +37,22 @@ type Graph {
   updateInterval: Int! @default(value: 900) # 15 minutes (15 * 60 seconds)
 }
 
+enum Role {
+  ADMIN
+  MEMBER
+  SUPER_ADMIN
+}
+
+# if you update this User model remember to do so in ../schema/index.graphql
 type User {
   id: ID! @id
   createdAt: DateTime! @createdAt
   dashboards: [Dashboard!]! @relation(name: "DashboardByUser" onDelete: CASCADE)
   displayName: String!
   email: String! @unique
+  entities: [Entity!]! @relation(name: "EntityByUser")
   graphs: [Graph!]! @relation(name: "GraphByUser" onDelete: CASCADE)
   password: String!
   role: Role! @default(value: MEMBER)
   updatedAt: DateTime! @updatedAt
-}
-
-enum Role {
-  ADMIN
-  MEMBER
-  SUPER_ADMIN
 }

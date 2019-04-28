@@ -9,15 +9,19 @@ var models = [
     embedded: false
   },
   {
+    name: "Entity",
+    embedded: false
+  },
+  {
     name: "Graph",
     embedded: false
   },
   {
-    name: "User",
+    name: "Role",
     embedded: false
   },
   {
-    name: "Role",
+    name: "User",
     embedded: false
   }
 ];
