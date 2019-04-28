@@ -1,8 +1,9 @@
+import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 
-import utils from '../utils';
-
-const { APP_SECRET } = utils;
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config();
+}
 
 export default {
   authentication: async (resolve, root, args, context, info) => {
@@ -11,7 +12,7 @@ export default {
       let user = null;
       if (Authorization) {
         const token = Authorization.replace('Bearer ', '')
-        const { userId } = jwt.verify(token, APP_SECRET);
+        const { userId } = jwt.verify(token, process.env.APP_SECRET);
         if (userId) {
           user = await context.prisma.user({ id: userId });
         }

@@ -1,8 +1,10 @@
 import bcrypt from 'bcryptjs';
+import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 
-import utils from '../utils';
-const { APP_SECRET } = utils;
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config();
+}
 
 export default {
   dashboards: async (root, args, context, info) => await context.prisma.user({ id: root.id }).dashboards(),
@@ -20,7 +22,7 @@ export default {
       throw new Error('Invalid password');
     }
 
-    const token = jwt.sign({ userId: user.id }, APP_SECRET);
+    const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
 
     return {
       token,
@@ -37,7 +39,7 @@ export default {
       password
     });
 
-    const token = jwt.sign({ userId: user.id }, APP_SECRET);
+    const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
 
     return {
       token,
