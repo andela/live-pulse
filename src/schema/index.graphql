@@ -7,6 +7,8 @@ directive @isOwner(resource: String!, id: String = "id") on FIELD | FIELD_DEFINI
 type Query @isAuthenticated {
   dashboard(id: ID!): Dashboard
   dashboards(where: DashboardWhereInput): [Dashboard!]!
+  entity(id: ID!): Entity
+  entities(where: EntityWhereInput): [Entity!]!
   graph(id: ID!): Graph
   graphs(where: GraphWhereInput): [Graph!]!
   signedInUser: User
@@ -16,12 +18,15 @@ type Query @isAuthenticated {
 
 type Mutation {
   createDashboard(data: DashboardUpdateInput!): Dashboard! @isAuthenticated
+  createEntity(data: EntityCreateInput!): Entity! @isAuthenticated
   createGraph(dashboardId: ID!, data: GraphUpdateInput!): Graph! @isOwner(resource: "Dashboard", id: "dashboardId") @isAuthenticated
   deleteDashboard(id: ID!): Dashboard @isOwner(resource: "Dashboard") @isAuthenticated
+  deleteEntity(id: ID!): Entity @isOwner(resource: "Entity") @isAuthenticated
   deleteGraph(id: ID!): Graph @isOwner(resource: "Graph") @isAuthenticated
   signIn(email: String!, password: String!): AuthPayload
   signUp(email: String!, password: String!, data: UserUpdateInput!): AuthPayload
   updateDashboard(id: ID!, data: DashboardUpdateInput!): Dashboard @isOwner(resource: "Dashboard") @isAuthenticated
+  updateEntity(id: ID!, data: EntityUpdateInput!): Entity @isOwner(resource: "Entity") @isAuthenticated
   updateGraph(id: ID!, data: GraphUpdateInput!): Graph @isOwner(resource: "Graph") @isAuthenticated
 }
 
