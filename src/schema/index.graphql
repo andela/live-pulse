@@ -1,6 +1,7 @@
 # import * from "../generated/prisma.graphql"
 
-directive @hasRole(roles: [Role!]) on FIELD_DEFINITION | OBJECT
+# directive @hasRole(roles: [Role!]) on FIELD_DEFINITION | OBJECT # schema
+directive @hasRole(roles: [Role!]) on FIELD | FIELD_DEFINITION | MUTATION | QUERY # legacy
 directive @isAuthenticated on FIELD_DEFINITION | OBJECT
 directive @isOwner(resource: String!, id: String = "id") on FIELD | FIELD_DEFINITION | MUTATION | QUERY
 

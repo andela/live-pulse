@@ -29,7 +29,7 @@ export default class HasRoleDirective extends SchemaDirectiveVisitor {
 
         if (!roles) {
           return resolve.apply(this, args);
-        }console.log(fieldName);console.log(roles);
+        }
 
         const [, , context] = args;
         if (context.user && roles.includes(context.user.role)) {
