@@ -13,10 +13,15 @@ type Dashboard {
 
 type DataSource {
   id: ID! @id
+  author: String
   createdAt: DateTime! @createdAt
+  createdBy: User @relation(name: "DataSourceByUser")
   description: String
   env: Json # environment variables
+  meta: Json # extra info the author wants to provide
   name: String! @unique
+  requiredEnvVars: [String!] @scalarList(strategy: RELATION) # a list of the required env vars
+  requiredParams: [String!] @scalarList(strategy: RELATION) # a list of the required parameters
   source: String! # either the POST endpoint or the function source code
   type: DataSourceType! @default(value: FUNCTION)
   updatedAt: DateTime! @updatedAt
@@ -64,6 +69,7 @@ type User {
   id: ID! @id
   createdAt: DateTime! @createdAt
   dashboards: [Dashboard!]! @relation(name: "DashboardByUser" onDelete: CASCADE)
+  dataSources: [DataSource!]! @relation(name: "DataSourceByUser")
   displayName: String!
   email: String! @unique
   entities: [Entity!]! @relation(name: "EntityByUser")

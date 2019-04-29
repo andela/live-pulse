@@ -449,10 +449,15 @@ input DashboardWhereUniqueInput {
 
 type DataSource {
   id: ID!
+  author: String
   createdAt: DateTime!
+  createdBy: User
   description: String
   env: Json
+  meta: Json
   name: String!
+  requiredEnvVars: [String!]!
+  requiredParams: [String!]!
   source: String!
   type: DataSourceType!
   updatedAt: DateTime!
@@ -466,9 +471,40 @@ type DataSourceConnection {
 
 input DataSourceCreateInput {
   id: ID
+  author: String
+  createdBy: UserCreateOneWithoutDataSourcesInput
   description: String
   env: Json
+  meta: Json
   name: String!
+  requiredEnvVars: DataSourceCreaterequiredEnvVarsInput
+  requiredParams: DataSourceCreaterequiredParamsInput
+  source: String!
+  type: DataSourceType
+}
+
+input DataSourceCreateManyWithoutCreatedByInput {
+  create: [DataSourceCreateWithoutCreatedByInput!]
+  connect: [DataSourceWhereUniqueInput!]
+}
+
+input DataSourceCreaterequiredEnvVarsInput {
+  set: [String!]
+}
+
+input DataSourceCreaterequiredParamsInput {
+  set: [String!]
+}
+
+input DataSourceCreateWithoutCreatedByInput {
+  id: ID
+  author: String
+  description: String
+  env: Json
+  meta: Json
+  name: String!
+  requiredEnvVars: DataSourceCreaterequiredEnvVarsInput
+  requiredParams: DataSourceCreaterequiredParamsInput
   source: String!
   type: DataSourceType
 }
@@ -481,12 +517,16 @@ type DataSourceEdge {
 enum DataSourceOrderByInput {
   id_ASC
   id_DESC
+  author_ASC
+  author_DESC
   createdAt_ASC
   createdAt_DESC
   description_ASC
   description_DESC
   env_ASC
   env_DESC
+  meta_ASC
+  meta_DESC
   name_ASC
   name_DESC
   source_ASC
@@ -499,13 +539,113 @@ enum DataSourceOrderByInput {
 
 type DataSourcePreviousValues {
   id: ID!
+  author: String
   createdAt: DateTime!
   description: String
   env: Json
+  meta: Json
   name: String!
+  requiredEnvVars: [String!]!
+  requiredParams: [String!]!
   source: String!
   type: DataSourceType!
   updatedAt: DateTime!
+}
+
+input DataSourceScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  author: String
+  author_not: String
+  author_in: [String!]
+  author_not_in: [String!]
+  author_lt: String
+  author_lte: String
+  author_gt: String
+  author_gte: String
+  author_contains: String
+  author_not_contains: String
+  author_starts_with: String
+  author_not_starts_with: String
+  author_ends_with: String
+  author_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  source: String
+  source_not: String
+  source_in: [String!]
+  source_not_in: [String!]
+  source_lt: String
+  source_lte: String
+  source_gt: String
+  source_gte: String
+  source_contains: String
+  source_not_contains: String
+  source_starts_with: String
+  source_not_starts_with: String
+  source_ends_with: String
+  source_not_ends_with: String
+  type: DataSourceType
+  type_not: DataSourceType
+  type_in: [DataSourceType!]
+  type_not_in: [DataSourceType!]
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [DataSourceScalarWhereInput!]
+  OR: [DataSourceScalarWhereInput!]
+  NOT: [DataSourceScalarWhereInput!]
 }
 
 type DataSourceSubscriptionPayload {
@@ -532,19 +672,88 @@ enum DataSourceType {
 }
 
 input DataSourceUpdateInput {
+  author: String
+  createdBy: UserUpdateOneWithoutDataSourcesInput
   description: String
   env: Json
+  meta: Json
   name: String
+  requiredEnvVars: DataSourceUpdaterequiredEnvVarsInput
+  requiredParams: DataSourceUpdaterequiredParamsInput
+  source: String
+  type: DataSourceType
+}
+
+input DataSourceUpdateManyDataInput {
+  author: String
+  description: String
+  env: Json
+  meta: Json
+  name: String
+  requiredEnvVars: DataSourceUpdaterequiredEnvVarsInput
+  requiredParams: DataSourceUpdaterequiredParamsInput
   source: String
   type: DataSourceType
 }
 
 input DataSourceUpdateManyMutationInput {
+  author: String
   description: String
   env: Json
+  meta: Json
   name: String
+  requiredEnvVars: DataSourceUpdaterequiredEnvVarsInput
+  requiredParams: DataSourceUpdaterequiredParamsInput
   source: String
   type: DataSourceType
+}
+
+input DataSourceUpdateManyWithoutCreatedByInput {
+  create: [DataSourceCreateWithoutCreatedByInput!]
+  delete: [DataSourceWhereUniqueInput!]
+  connect: [DataSourceWhereUniqueInput!]
+  set: [DataSourceWhereUniqueInput!]
+  disconnect: [DataSourceWhereUniqueInput!]
+  update: [DataSourceUpdateWithWhereUniqueWithoutCreatedByInput!]
+  upsert: [DataSourceUpsertWithWhereUniqueWithoutCreatedByInput!]
+  deleteMany: [DataSourceScalarWhereInput!]
+  updateMany: [DataSourceUpdateManyWithWhereNestedInput!]
+}
+
+input DataSourceUpdateManyWithWhereNestedInput {
+  where: DataSourceScalarWhereInput!
+  data: DataSourceUpdateManyDataInput!
+}
+
+input DataSourceUpdaterequiredEnvVarsInput {
+  set: [String!]
+}
+
+input DataSourceUpdaterequiredParamsInput {
+  set: [String!]
+}
+
+input DataSourceUpdateWithoutCreatedByDataInput {
+  author: String
+  description: String
+  env: Json
+  meta: Json
+  name: String
+  requiredEnvVars: DataSourceUpdaterequiredEnvVarsInput
+  requiredParams: DataSourceUpdaterequiredParamsInput
+  source: String
+  type: DataSourceType
+}
+
+input DataSourceUpdateWithWhereUniqueWithoutCreatedByInput {
+  where: DataSourceWhereUniqueInput!
+  data: DataSourceUpdateWithoutCreatedByDataInput!
+}
+
+input DataSourceUpsertWithWhereUniqueWithoutCreatedByInput {
+  where: DataSourceWhereUniqueInput!
+  update: DataSourceUpdateWithoutCreatedByDataInput!
+  create: DataSourceCreateWithoutCreatedByInput!
 }
 
 input DataSourceWhereInput {
@@ -562,6 +771,20 @@ input DataSourceWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  author: String
+  author_not: String
+  author_in: [String!]
+  author_not_in: [String!]
+  author_lt: String
+  author_lte: String
+  author_gt: String
+  author_gte: String
+  author_contains: String
+  author_not_contains: String
+  author_starts_with: String
+  author_not_starts_with: String
+  author_ends_with: String
+  author_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -570,6 +793,7 @@ input DataSourceWhereInput {
   createdAt_lte: DateTime
   createdAt_gt: DateTime
   createdAt_gte: DateTime
+  createdBy: UserWhereInput
   description: String
   description_not: String
   description_in: [String!]
@@ -1531,6 +1755,7 @@ type User {
   id: ID!
   createdAt: DateTime!
   dashboards(where: DashboardWhereInput, orderBy: DashboardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Dashboard!]
+  dataSources(where: DataSourceWhereInput, orderBy: DataSourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [DataSource!]
   displayName: String!
   email: String!
   entities(where: EntityWhereInput, orderBy: EntityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Entity!]
@@ -1549,6 +1774,7 @@ type UserConnection {
 input UserCreateInput {
   id: ID
   dashboards: DashboardCreateManyWithoutCreatedByInput
+  dataSources: DataSourceCreateManyWithoutCreatedByInput
   displayName: String!
   email: String!
   entities: EntityCreateManyWithoutCreatedByInput
@@ -1559,6 +1785,11 @@ input UserCreateInput {
 
 input UserCreateOneWithoutDashboardsInput {
   create: UserCreateWithoutDashboardsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutDataSourcesInput {
+  create: UserCreateWithoutDataSourcesInput
   connect: UserWhereUniqueInput
 }
 
@@ -1574,6 +1805,18 @@ input UserCreateOneWithoutGraphsInput {
 
 input UserCreateWithoutDashboardsInput {
   id: ID
+  dataSources: DataSourceCreateManyWithoutCreatedByInput
+  displayName: String!
+  email: String!
+  entities: EntityCreateManyWithoutCreatedByInput
+  graphs: GraphCreateManyWithoutCreatedByInput
+  password: String!
+  role: Role
+}
+
+input UserCreateWithoutDataSourcesInput {
+  id: ID
+  dashboards: DashboardCreateManyWithoutCreatedByInput
   displayName: String!
   email: String!
   entities: EntityCreateManyWithoutCreatedByInput
@@ -1585,6 +1828,7 @@ input UserCreateWithoutDashboardsInput {
 input UserCreateWithoutEntitiesInput {
   id: ID
   dashboards: DashboardCreateManyWithoutCreatedByInput
+  dataSources: DataSourceCreateManyWithoutCreatedByInput
   displayName: String!
   email: String!
   graphs: GraphCreateManyWithoutCreatedByInput
@@ -1595,6 +1839,7 @@ input UserCreateWithoutEntitiesInput {
 input UserCreateWithoutGraphsInput {
   id: ID
   dashboards: DashboardCreateManyWithoutCreatedByInput
+  dataSources: DataSourceCreateManyWithoutCreatedByInput
   displayName: String!
   email: String!
   entities: EntityCreateManyWithoutCreatedByInput
@@ -1654,6 +1899,7 @@ input UserSubscriptionWhereInput {
 
 input UserUpdateInput {
   dashboards: DashboardUpdateManyWithoutCreatedByInput
+  dataSources: DataSourceUpdateManyWithoutCreatedByInput
   displayName: String
   email: String
   entities: EntityUpdateManyWithoutCreatedByInput
@@ -1683,6 +1929,15 @@ input UserUpdateOneRequiredWithoutGraphsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneWithoutDataSourcesInput {
+  create: UserCreateWithoutDataSourcesInput
+  update: UserUpdateWithoutDataSourcesDataInput
+  upsert: UserUpsertWithoutDataSourcesInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateOneWithoutEntitiesInput {
   create: UserCreateWithoutEntitiesInput
   update: UserUpdateWithoutEntitiesDataInput
@@ -1693,6 +1948,17 @@ input UserUpdateOneWithoutEntitiesInput {
 }
 
 input UserUpdateWithoutDashboardsDataInput {
+  dataSources: DataSourceUpdateManyWithoutCreatedByInput
+  displayName: String
+  email: String
+  entities: EntityUpdateManyWithoutCreatedByInput
+  graphs: GraphUpdateManyWithoutCreatedByInput
+  password: String
+  role: Role
+}
+
+input UserUpdateWithoutDataSourcesDataInput {
+  dashboards: DashboardUpdateManyWithoutCreatedByInput
   displayName: String
   email: String
   entities: EntityUpdateManyWithoutCreatedByInput
@@ -1703,6 +1969,7 @@ input UserUpdateWithoutDashboardsDataInput {
 
 input UserUpdateWithoutEntitiesDataInput {
   dashboards: DashboardUpdateManyWithoutCreatedByInput
+  dataSources: DataSourceUpdateManyWithoutCreatedByInput
   displayName: String
   email: String
   graphs: GraphUpdateManyWithoutCreatedByInput
@@ -1712,6 +1979,7 @@ input UserUpdateWithoutEntitiesDataInput {
 
 input UserUpdateWithoutGraphsDataInput {
   dashboards: DashboardUpdateManyWithoutCreatedByInput
+  dataSources: DataSourceUpdateManyWithoutCreatedByInput
   displayName: String
   email: String
   entities: EntityUpdateManyWithoutCreatedByInput
@@ -1722,6 +1990,11 @@ input UserUpdateWithoutGraphsDataInput {
 input UserUpsertWithoutDashboardsInput {
   update: UserUpdateWithoutDashboardsDataInput!
   create: UserCreateWithoutDashboardsInput!
+}
+
+input UserUpsertWithoutDataSourcesInput {
+  update: UserUpdateWithoutDataSourcesDataInput!
+  create: UserCreateWithoutDataSourcesInput!
 }
 
 input UserUpsertWithoutEntitiesInput {
@@ -1760,6 +2033,9 @@ input UserWhereInput {
   dashboards_every: DashboardWhereInput
   dashboards_some: DashboardWhereInput
   dashboards_none: DashboardWhereInput
+  dataSources_every: DataSourceWhereInput
+  dataSources_some: DataSourceWhereInput
+  dataSources_none: DataSourceWhereInput
   displayName: String
   displayName_not: String
   displayName_in: [String!]

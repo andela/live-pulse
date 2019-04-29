@@ -1,4 +1,5 @@
 import Dashboard from './Dashboard';
+import DataSource from './DataSource';
 import Entity from './Entity';
 import Graph from './Graph';
 import Mutation from './Mutation';
@@ -10,6 +11,9 @@ export default {
     createdBy: Dashboard.createdBy,
     entity: Dashboard.entity,
     graphs: Dashboard.graphs
+  },
+  DataSource: {
+    createdBy: DataSource.createdBy
   },
   Entity: {
     createdBy: Entity.createdBy,
@@ -25,6 +29,7 @@ export default {
   Query,
   User: {
     dashboards: User.dashboards,
+    dataSources: User.dataSources,
     entities: User.entities,
     graphs: User.graphs
   }
