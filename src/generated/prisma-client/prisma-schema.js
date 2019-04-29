@@ -7,6 +7,10 @@ module.exports = {
   count: Int!
 }
 
+type AggregateDataSource {
+  count: Int!
+}
+
 type AggregateEntity {
   count: Int!
 }
@@ -441,6 +445,193 @@ input DashboardWhereInput {
 
 input DashboardWhereUniqueInput {
   id: ID
+}
+
+type DataSource {
+  id: ID!
+  createdAt: DateTime!
+  description: String
+  env: Json
+  name: String!
+  source: String!
+  type: DataSourceType!
+  updatedAt: DateTime!
+}
+
+type DataSourceConnection {
+  pageInfo: PageInfo!
+  edges: [DataSourceEdge]!
+  aggregate: AggregateDataSource!
+}
+
+input DataSourceCreateInput {
+  id: ID
+  description: String
+  env: Json
+  name: String!
+  source: String!
+  type: DataSourceType
+}
+
+type DataSourceEdge {
+  node: DataSource!
+  cursor: String!
+}
+
+enum DataSourceOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  description_ASC
+  description_DESC
+  env_ASC
+  env_DESC
+  name_ASC
+  name_DESC
+  source_ASC
+  source_DESC
+  type_ASC
+  type_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type DataSourcePreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  description: String
+  env: Json
+  name: String!
+  source: String!
+  type: DataSourceType!
+  updatedAt: DateTime!
+}
+
+type DataSourceSubscriptionPayload {
+  mutation: MutationType!
+  node: DataSource
+  updatedFields: [String!]
+  previousValues: DataSourcePreviousValues
+}
+
+input DataSourceSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: DataSourceWhereInput
+  AND: [DataSourceSubscriptionWhereInput!]
+  OR: [DataSourceSubscriptionWhereInput!]
+  NOT: [DataSourceSubscriptionWhereInput!]
+}
+
+enum DataSourceType {
+  ENDPOINT
+  FUNCTION
+}
+
+input DataSourceUpdateInput {
+  description: String
+  env: Json
+  name: String
+  source: String
+  type: DataSourceType
+}
+
+input DataSourceUpdateManyMutationInput {
+  description: String
+  env: Json
+  name: String
+  source: String
+  type: DataSourceType
+}
+
+input DataSourceWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  source: String
+  source_not: String
+  source_in: [String!]
+  source_not_in: [String!]
+  source_lt: String
+  source_lte: String
+  source_gt: String
+  source_gte: String
+  source_contains: String
+  source_not_contains: String
+  source_starts_with: String
+  source_not_starts_with: String
+  source_ends_with: String
+  source_not_ends_with: String
+  type: DataSourceType
+  type_not: DataSourceType
+  type_in: [DataSourceType!]
+  type_not_in: [DataSourceType!]
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [DataSourceWhereInput!]
+  OR: [DataSourceWhereInput!]
+  NOT: [DataSourceWhereInput!]
+}
+
+input DataSourceWhereUniqueInput {
+  id: ID
+  name: String
 }
 
 scalar DateTime
@@ -1260,6 +1451,12 @@ type Mutation {
   upsertDashboard(where: DashboardWhereUniqueInput!, create: DashboardCreateInput!, update: DashboardUpdateInput!): Dashboard!
   deleteDashboard(where: DashboardWhereUniqueInput!): Dashboard
   deleteManyDashboards(where: DashboardWhereInput): BatchPayload!
+  createDataSource(data: DataSourceCreateInput!): DataSource!
+  updateDataSource(data: DataSourceUpdateInput!, where: DataSourceWhereUniqueInput!): DataSource
+  updateManyDataSources(data: DataSourceUpdateManyMutationInput!, where: DataSourceWhereInput): BatchPayload!
+  upsertDataSource(where: DataSourceWhereUniqueInput!, create: DataSourceCreateInput!, update: DataSourceUpdateInput!): DataSource!
+  deleteDataSource(where: DataSourceWhereUniqueInput!): DataSource
+  deleteManyDataSources(where: DataSourceWhereInput): BatchPayload!
   createEntity(data: EntityCreateInput!): Entity!
   updateEntity(data: EntityUpdateInput!, where: EntityWhereUniqueInput!): Entity
   updateManyEntities(data: EntityUpdateManyMutationInput!, where: EntityWhereInput): BatchPayload!
@@ -1301,6 +1498,9 @@ type Query {
   dashboard(where: DashboardWhereUniqueInput!): Dashboard
   dashboards(where: DashboardWhereInput, orderBy: DashboardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Dashboard]!
   dashboardsConnection(where: DashboardWhereInput, orderBy: DashboardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DashboardConnection!
+  dataSource(where: DataSourceWhereUniqueInput!): DataSource
+  dataSources(where: DataSourceWhereInput, orderBy: DataSourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [DataSource]!
+  dataSourcesConnection(where: DataSourceWhereInput, orderBy: DataSourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DataSourceConnection!
   entity(where: EntityWhereUniqueInput!): Entity
   entities(where: EntityWhereInput, orderBy: EntityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Entity]!
   entitiesConnection(where: EntityWhereInput, orderBy: EntityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): EntityConnection!
@@ -1321,6 +1521,7 @@ enum Role {
 
 type Subscription {
   dashboard(where: DashboardSubscriptionWhereInput): DashboardSubscriptionPayload
+  dataSource(where: DataSourceSubscriptionWhereInput): DataSourceSubscriptionPayload
   entity(where: EntitySubscriptionWhereInput): EntitySubscriptionPayload
   graph(where: GraphSubscriptionWhereInput): GraphSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload

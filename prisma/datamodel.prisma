@@ -11,6 +11,22 @@ type Dashboard {
   updateInterval: Int! @default(value: 900) # 15 minutes (15 * 60 seconds)
 }
 
+type DataSource {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  description: String
+  env: Json # environment variables
+  name: String! @unique
+  source: String! # either the POST endpoint or the function source code
+  type: DataSourceType! @default(value: FUNCTION)
+  updatedAt: DateTime! @updatedAt
+}
+
+enum DataSourceType {
+  ENDPOINT
+  FUNCTION
+}
+
 type Entity {
   id: ID! @id
   createdAt: DateTime! @createdAt

@@ -9,6 +9,14 @@ var models = [
     embedded: false
   },
   {
+    name: "DataSource",
+    embedded: false
+  },
+  {
+    name: "DataSourceType",
+    embedded: false
+  },
+  {
     name: "Entity",
     embedded: false
   },
