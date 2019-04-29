@@ -20,17 +20,17 @@ type Query @isAuthenticated {
 
 type Mutation {
   createDashboard(data: DashboardUpdateInput!): Dashboard! @isAuthenticated
-  createDataSource(data: DataSourceCreateInput!): DataSource! @hasRole(roles: [ADMIN]) @isAuthenticated
+  createDataSource(data: DataSourceCreateInput!): DataSource! @hasRole(roles: [ADMIN, SUPER_ADMIN]) @isAuthenticated
   createEntity(data: EntityCreateInput!): Entity! @isAuthenticated
   createGraph(dashboardId: ID!, data: GraphUpdateInput!): Graph! @isOwner(resource: "Dashboard", id: "dashboardId") @isAuthenticated
   deleteDashboard(id: ID!): Dashboard @isOwner(resource: "Dashboard") @isAuthenticated
-  deleteDataSource(id: ID!): DataSource @hasRole(roles: [ADMIN]) @isAuthenticated
+  deleteDataSource(id: ID!): DataSource @hasRole(roles: [ADMIN, SUPER_ADMIN]) @isAuthenticated
   deleteEntity(id: ID!): Entity @isOwner(resource: "Entity") @isAuthenticated
   deleteGraph(id: ID!): Graph @isOwner(resource: "Graph") @isAuthenticated
   signIn(email: String!, password: String!): AuthPayload
   signUp(email: String!, password: String!, data: UserUpdateInput!): AuthPayload
   updateDashboard(id: ID!, data: DashboardUpdateInput!): Dashboard @isOwner(resource: "Dashboard") @isAuthenticated
-  updateDataSource(id: ID!, data: DataSourceUpdateInput!): DataSource @hasRole(roles: [ADMIN]) @isAuthenticated
+  updateDataSource(id: ID!, data: DataSourceUpdateInput!): DataSource @hasRole(roles: [ADMIN, SUPER_ADMIN]) @isAuthenticated
   updateEntity(id: ID!, data: EntityUpdateInput!): Entity @isOwner(resource: "Entity") @isAuthenticated
   updateGraph(id: ID!, data: GraphUpdateInput!): Graph @isOwner(resource: "Graph") @isAuthenticated
 }
