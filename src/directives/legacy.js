@@ -1,3 +1,10 @@
+const hasRole = async (next, source, {roles}, context, info) => {
+  if (context.user && roles.includes(context.user.role)) {
+    return next();
+  }
+  throw new Error(`User must have one of the following roles: ${roles.join(', ')}`);
+}
+
 const isOwner = async (next, source, {resource, id}, context, info) => {
   let resourceId = info.fieldNodes[0].arguments.find(a => a.name.value === id).value.value;
   let owner;
@@ -11,9 +18,10 @@ const isOwner = async (next, source, {resource, id}, context, info) => {
   if (context.user && owner && context.user.id === owner.id) {
     return next();
   }
-  throw new Error(`User must be the owner of the ${resource.toLowerCase()}.`); 
+  throw new Error(`User must be the owner of the ${resource.toLowerCase()}.`);
 }
 
 export default {
+  hasRole,
   isOwner
 }
