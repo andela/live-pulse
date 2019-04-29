@@ -327,7 +327,11 @@ export type GraphOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC"
   | "updateInterval_ASC"
-  | "updateInterval_DESC";
+  | "updateInterval_DESC"
+  | "xAxisLabel_ASC"
+  | "xAxisLabel_DESC"
+  | "yAxisLabel_ASC"
+  | "yAxisLabel_DESC";
 
 export type UserOrderByInput =
   | "id_ASC"
@@ -449,6 +453,8 @@ export interface GraphCreateWithoutEntityInput {
   publicUrl?: String;
   title: String;
   updateInterval?: Int;
+  xAxisLabel?: String;
+  yAxisLabel?: String;
 }
 
 export interface EntityUpdateManyWithWhereNestedInput {
@@ -759,6 +765,8 @@ export interface GraphUpdateManyMutationInput {
   publicUrl?: String;
   title?: String;
   updateInterval?: Int;
+  xAxisLabel?: String;
+  yAxisLabel?: String;
 }
 
 export interface DataSourceUpdaterequiredParamsInput {
@@ -1073,6 +1081,34 @@ export interface GraphWhereInput {
   updateInterval_lte?: Int;
   updateInterval_gt?: Int;
   updateInterval_gte?: Int;
+  xAxisLabel?: String;
+  xAxisLabel_not?: String;
+  xAxisLabel_in?: String[] | String;
+  xAxisLabel_not_in?: String[] | String;
+  xAxisLabel_lt?: String;
+  xAxisLabel_lte?: String;
+  xAxisLabel_gt?: String;
+  xAxisLabel_gte?: String;
+  xAxisLabel_contains?: String;
+  xAxisLabel_not_contains?: String;
+  xAxisLabel_starts_with?: String;
+  xAxisLabel_not_starts_with?: String;
+  xAxisLabel_ends_with?: String;
+  xAxisLabel_not_ends_with?: String;
+  yAxisLabel?: String;
+  yAxisLabel_not?: String;
+  yAxisLabel_in?: String[] | String;
+  yAxisLabel_not_in?: String[] | String;
+  yAxisLabel_lt?: String;
+  yAxisLabel_lte?: String;
+  yAxisLabel_gt?: String;
+  yAxisLabel_gte?: String;
+  yAxisLabel_contains?: String;
+  yAxisLabel_not_contains?: String;
+  yAxisLabel_starts_with?: String;
+  yAxisLabel_not_starts_with?: String;
+  yAxisLabel_ends_with?: String;
+  yAxisLabel_not_ends_with?: String;
   AND?: GraphWhereInput[] | GraphWhereInput;
   OR?: GraphWhereInput[] | GraphWhereInput;
   NOT?: GraphWhereInput[] | GraphWhereInput;
@@ -1156,6 +1192,8 @@ export interface GraphUpdateWithoutDashboardDataInput {
   publicUrl?: String;
   title?: String;
   updateInterval?: Int;
+  xAxisLabel?: String;
+  yAxisLabel?: String;
 }
 
 export interface EntityCreateWithoutCreatedByInput {
@@ -1203,6 +1241,8 @@ export interface GraphCreateWithoutDashboardInput {
   publicUrl?: String;
   title: String;
   updateInterval?: Int;
+  xAxisLabel?: String;
+  yAxisLabel?: String;
 }
 
 export interface DashboardUpdateManyWithoutCreatedByInput {
@@ -1307,6 +1347,8 @@ export interface GraphCreateWithoutCreatedByInput {
   publicUrl?: String;
   title: String;
   updateInterval?: Int;
+  xAxisLabel?: String;
+  yAxisLabel?: String;
 }
 
 export interface UserUpdateOneWithoutEntitiesInput {
@@ -1402,6 +1444,8 @@ export interface GraphUpdateWithoutCreatedByDataInput {
   publicUrl?: String;
   title?: String;
   updateInterval?: Int;
+  xAxisLabel?: String;
+  yAxisLabel?: String;
 }
 
 export interface UserUpdateManyMutationInput {
@@ -1426,6 +1470,8 @@ export interface GraphUpdateInput {
   publicUrl?: String;
   title?: String;
   updateInterval?: Int;
+  xAxisLabel?: String;
+  yAxisLabel?: String;
 }
 
 export interface DashboardUpdateWithoutGraphsDataInput {
@@ -1603,6 +1649,34 @@ export interface GraphScalarWhereInput {
   updateInterval_lte?: Int;
   updateInterval_gt?: Int;
   updateInterval_gte?: Int;
+  xAxisLabel?: String;
+  xAxisLabel_not?: String;
+  xAxisLabel_in?: String[] | String;
+  xAxisLabel_not_in?: String[] | String;
+  xAxisLabel_lt?: String;
+  xAxisLabel_lte?: String;
+  xAxisLabel_gt?: String;
+  xAxisLabel_gte?: String;
+  xAxisLabel_contains?: String;
+  xAxisLabel_not_contains?: String;
+  xAxisLabel_starts_with?: String;
+  xAxisLabel_not_starts_with?: String;
+  xAxisLabel_ends_with?: String;
+  xAxisLabel_not_ends_with?: String;
+  yAxisLabel?: String;
+  yAxisLabel_not?: String;
+  yAxisLabel_in?: String[] | String;
+  yAxisLabel_not_in?: String[] | String;
+  yAxisLabel_lt?: String;
+  yAxisLabel_lte?: String;
+  yAxisLabel_gt?: String;
+  yAxisLabel_gte?: String;
+  yAxisLabel_contains?: String;
+  yAxisLabel_not_contains?: String;
+  yAxisLabel_starts_with?: String;
+  yAxisLabel_not_starts_with?: String;
+  yAxisLabel_ends_with?: String;
+  yAxisLabel_not_ends_with?: String;
   AND?: GraphScalarWhereInput[] | GraphScalarWhereInput;
   OR?: GraphScalarWhereInput[] | GraphScalarWhereInput;
   NOT?: GraphScalarWhereInput[] | GraphScalarWhereInput;
@@ -1630,6 +1704,8 @@ export interface GraphUpdateManyDataInput {
   publicUrl?: String;
   title?: String;
   updateInterval?: Int;
+  xAxisLabel?: String;
+  yAxisLabel?: String;
 }
 
 export interface EntityCreateOneWithoutDashboardsInput {
@@ -1778,6 +1854,8 @@ export interface GraphUpdateWithoutEntityDataInput {
   publicUrl?: String;
   title?: String;
   updateInterval?: Int;
+  xAxisLabel?: String;
+  yAxisLabel?: String;
 }
 
 export interface UserCreateInput {
@@ -1967,6 +2045,8 @@ export interface GraphCreateInput {
   publicUrl?: String;
   title: String;
   updateInterval?: Int;
+  xAxisLabel?: String;
+  yAxisLabel?: String;
 }
 
 export interface EntityScalarWhereInput {
@@ -2331,6 +2411,8 @@ export interface GraphPreviousValues {
   title: String;
   updatedAt: DateTimeOutput;
   updateInterval: Int;
+  xAxisLabel?: String;
+  yAxisLabel?: String;
 }
 
 export interface GraphPreviousValuesPromise
@@ -2343,6 +2425,8 @@ export interface GraphPreviousValuesPromise
   title: () => Promise<String>;
   updatedAt: () => Promise<DateTimeOutput>;
   updateInterval: () => Promise<Int>;
+  xAxisLabel: () => Promise<String>;
+  yAxisLabel: () => Promise<String>;
 }
 
 export interface GraphPreviousValuesSubscription
@@ -2355,6 +2439,8 @@ export interface GraphPreviousValuesSubscription
   title: () => Promise<AsyncIterator<String>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updateInterval: () => Promise<AsyncIterator<Int>>;
+  xAxisLabel: () => Promise<AsyncIterator<String>>;
+  yAxisLabel: () => Promise<AsyncIterator<String>>;
 }
 
 export interface Graph {
@@ -2365,6 +2451,8 @@ export interface Graph {
   title: String;
   updatedAt: DateTimeOutput;
   updateInterval: Int;
+  xAxisLabel?: String;
+  yAxisLabel?: String;
 }
 
 export interface GraphPromise extends Promise<Graph>, Fragmentable {
@@ -2378,6 +2466,8 @@ export interface GraphPromise extends Promise<Graph>, Fragmentable {
   title: () => Promise<String>;
   updatedAt: () => Promise<DateTimeOutput>;
   updateInterval: () => Promise<Int>;
+  xAxisLabel: () => Promise<String>;
+  yAxisLabel: () => Promise<String>;
 }
 
 export interface GraphSubscription
@@ -2393,6 +2483,8 @@ export interface GraphSubscription
   title: () => Promise<AsyncIterator<String>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updateInterval: () => Promise<AsyncIterator<Int>>;
+  xAxisLabel: () => Promise<AsyncIterator<String>>;
+  yAxisLabel: () => Promise<AsyncIterator<String>>;
 }
 
 export interface GraphEdge {

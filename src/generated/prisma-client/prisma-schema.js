@@ -1246,6 +1246,8 @@ type Graph {
   title: String!
   updatedAt: DateTime!
   updateInterval: Int!
+  xAxisLabel: String
+  yAxisLabel: String
 }
 
 type GraphConnection {
@@ -1263,6 +1265,8 @@ input GraphCreateInput {
   publicUrl: String
   title: String!
   updateInterval: Int
+  xAxisLabel: String
+  yAxisLabel: String
 }
 
 input GraphCreateManyWithoutCreatedByInput {
@@ -1288,6 +1292,8 @@ input GraphCreateWithoutCreatedByInput {
   publicUrl: String
   title: String!
   updateInterval: Int
+  xAxisLabel: String
+  yAxisLabel: String
 }
 
 input GraphCreateWithoutDashboardInput {
@@ -1298,6 +1304,8 @@ input GraphCreateWithoutDashboardInput {
   publicUrl: String
   title: String!
   updateInterval: Int
+  xAxisLabel: String
+  yAxisLabel: String
 }
 
 input GraphCreateWithoutEntityInput {
@@ -1308,6 +1316,8 @@ input GraphCreateWithoutEntityInput {
   publicUrl: String
   title: String!
   updateInterval: Int
+  xAxisLabel: String
+  yAxisLabel: String
 }
 
 type GraphEdge {
@@ -1330,6 +1340,10 @@ enum GraphOrderByInput {
   updatedAt_DESC
   updateInterval_ASC
   updateInterval_DESC
+  xAxisLabel_ASC
+  xAxisLabel_DESC
+  yAxisLabel_ASC
+  yAxisLabel_DESC
 }
 
 type GraphPreviousValues {
@@ -1340,6 +1354,8 @@ type GraphPreviousValues {
   title: String!
   updatedAt: DateTime!
   updateInterval: Int!
+  xAxisLabel: String
+  yAxisLabel: String
 }
 
 input GraphScalarWhereInput {
@@ -1423,6 +1439,34 @@ input GraphScalarWhereInput {
   updateInterval_lte: Int
   updateInterval_gt: Int
   updateInterval_gte: Int
+  xAxisLabel: String
+  xAxisLabel_not: String
+  xAxisLabel_in: [String!]
+  xAxisLabel_not_in: [String!]
+  xAxisLabel_lt: String
+  xAxisLabel_lte: String
+  xAxisLabel_gt: String
+  xAxisLabel_gte: String
+  xAxisLabel_contains: String
+  xAxisLabel_not_contains: String
+  xAxisLabel_starts_with: String
+  xAxisLabel_not_starts_with: String
+  xAxisLabel_ends_with: String
+  xAxisLabel_not_ends_with: String
+  yAxisLabel: String
+  yAxisLabel_not: String
+  yAxisLabel_in: [String!]
+  yAxisLabel_not_in: [String!]
+  yAxisLabel_lt: String
+  yAxisLabel_lte: String
+  yAxisLabel_gt: String
+  yAxisLabel_gte: String
+  yAxisLabel_contains: String
+  yAxisLabel_not_contains: String
+  yAxisLabel_starts_with: String
+  yAxisLabel_not_starts_with: String
+  yAxisLabel_ends_with: String
+  yAxisLabel_not_ends_with: String
   AND: [GraphScalarWhereInput!]
   OR: [GraphScalarWhereInput!]
   NOT: [GraphScalarWhereInput!]
@@ -1454,6 +1498,8 @@ input GraphUpdateInput {
   publicUrl: String
   title: String
   updateInterval: Int
+  xAxisLabel: String
+  yAxisLabel: String
 }
 
 input GraphUpdateManyDataInput {
@@ -1461,6 +1507,8 @@ input GraphUpdateManyDataInput {
   publicUrl: String
   title: String
   updateInterval: Int
+  xAxisLabel: String
+  yAxisLabel: String
 }
 
 input GraphUpdateManyMutationInput {
@@ -1468,6 +1516,8 @@ input GraphUpdateManyMutationInput {
   publicUrl: String
   title: String
   updateInterval: Int
+  xAxisLabel: String
+  yAxisLabel: String
 }
 
 input GraphUpdateManyWithoutCreatedByInput {
@@ -1518,6 +1568,8 @@ input GraphUpdateWithoutCreatedByDataInput {
   publicUrl: String
   title: String
   updateInterval: Int
+  xAxisLabel: String
+  yAxisLabel: String
 }
 
 input GraphUpdateWithoutDashboardDataInput {
@@ -1527,6 +1579,8 @@ input GraphUpdateWithoutDashboardDataInput {
   publicUrl: String
   title: String
   updateInterval: Int
+  xAxisLabel: String
+  yAxisLabel: String
 }
 
 input GraphUpdateWithoutEntityDataInput {
@@ -1536,6 +1590,8 @@ input GraphUpdateWithoutEntityDataInput {
   publicUrl: String
   title: String
   updateInterval: Int
+  xAxisLabel: String
+  yAxisLabel: String
 }
 
 input GraphUpdateWithWhereUniqueWithoutCreatedByInput {
@@ -1655,6 +1711,34 @@ input GraphWhereInput {
   updateInterval_lte: Int
   updateInterval_gt: Int
   updateInterval_gte: Int
+  xAxisLabel: String
+  xAxisLabel_not: String
+  xAxisLabel_in: [String!]
+  xAxisLabel_not_in: [String!]
+  xAxisLabel_lt: String
+  xAxisLabel_lte: String
+  xAxisLabel_gt: String
+  xAxisLabel_gte: String
+  xAxisLabel_contains: String
+  xAxisLabel_not_contains: String
+  xAxisLabel_starts_with: String
+  xAxisLabel_not_starts_with: String
+  xAxisLabel_ends_with: String
+  xAxisLabel_not_ends_with: String
+  yAxisLabel: String
+  yAxisLabel_not: String
+  yAxisLabel_in: [String!]
+  yAxisLabel_not_in: [String!]
+  yAxisLabel_lt: String
+  yAxisLabel_lte: String
+  yAxisLabel_gt: String
+  yAxisLabel_gte: String
+  yAxisLabel_contains: String
+  yAxisLabel_not_contains: String
+  yAxisLabel_starts_with: String
+  yAxisLabel_not_starts_with: String
+  yAxisLabel_ends_with: String
+  yAxisLabel_not_ends_with: String
   AND: [GraphWhereInput!]
   OR: [GraphWhereInput!]
   NOT: [GraphWhereInput!]
