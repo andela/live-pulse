@@ -1,10 +1,10 @@
 export default {
   createLineGenerator: async (root, args, context, info) => {
+    // checks
     let { graphId } = args;
     let { dataSource, parameterAliases } = args.data;
     let missingFields = [];
     let graphEntity = await context.prisma.graph({ id: graphId }).entity();
-    // checks
     if (parameterAliases) {
       // the graph must have an entity
       if (!graphEntity) {
@@ -67,6 +67,71 @@ export default {
   lineGenerator: async (root, args, context, info) => await context.prisma.lineGenerator(args),
   lineGenerators: async (root, args, context, info) => await context.prisma.lineGenerators(args),
   updateLineGenerator: async (root, args, context, info) => {
+    // checks
+    let currentGraph = await context.prisma.lineGenerator({ id: args.id }).graph();
+    let graphId = currentGraph.id;
+    if (args.data.graph && args.data.graph.connect) {
+      graphId = args.data.graph.connect.id;
+    }
+    let graphEntity = await context.prisma.graph({ id: graphId }).entity();
+    
+    let currentLineGenerator = await context.prisma.lineGenerator({ id: args.id });
+    let parameterAliases = args.data.parameterAliases || currentLineGenerator.parameterAliases;
+
+    let dataSource = await context.prisma.lineGenerator({ id: args.id }).dataSource();
+    if (args.data.dataSource && args.data.dataSource.connect) {
+      dataSource = await context.prisma.dataSource({ id: args.data.dataSource.connect.id });
+    }
+
+    let missingFields = [];
+    if (parameterAliases) {
+      // the graph must have an entity
+      if (!graphEntity) {
+        throw new Error('The parent graph must have an entity');
+      }
+      // for each value in the parameterAliases there must be a matching key in the graphEntity.data
+      let parameterAliasesValues = Object.values(parameterAliases);
+      for (let i = 0; i < parameterAliasesValues.length; i++) {
+        if(!graphEntity.data[parameterAliasesValues[i]]) {
+          missingFields.push(parameterAliasesValues[i]);
+        }
+      }
+      if (missingFields.length > 0) {
+        throw new Error(`Missing fields in the graph's entity: ${missingFields.join(', ')}`);
+      }
+    }
+    if (dataSource) {
+      missingFields = [];
+      // the graph must have an entity
+      if (!graphEntity) {
+        throw new Error('The parent graph must have an entity');
+      }
+      //
+      let { requiredParams } = dataSource;
+      if (requiredParams && requiredParams.length > 0) {
+        let missingFieldsInParameterAliases = [];
+        if (parameterAliases) {
+          // get items in the requiredParams that are missing in the keys of parameterAliases
+          for (let i = 0; i < requiredParams.length; i++) {
+            if(!parameterAliases[requiredParams[i]]) {
+              missingFieldsInParameterAliases.push(requiredParams[i]);
+            }
+          }
+        } else {
+          missingFieldsInParameterAliases = requiredParams;
+        }
+        // see if the missing fields in the keys of parameterAliases can be found in graphEntity
+        for (let i = 0; i < missingFieldsInParameterAliases.length; i++) {
+          if(!graphEntity.data[missingFieldsInParameterAliases[i]]) {
+            missingFields.push(missingFieldsInParameterAliases[i]);
+          }
+        }
+        if (missingFields.length > 0) {
+          throw new Error(`Missing fields in the graph's entity: ${missingFields.join(', ')}`);
+        }
+      }
+    }
+    // all checks succeeded
     const input = {
       where: {
         id: args.id
