@@ -30,6 +30,7 @@ export default {
   dataSource: async (root, args, context, info) => await context.prisma.dataSource(args),
   dataSources: async (root, args, context, info) => await context.prisma.dataSources(args),
   deleteDataSource: async (root, args, context, info) => await context.prisma.deleteDataSource(args),
+  lineGenerators: async (root, args, context, info) => await context.prisma.dataSource({ id: root.id }).lineGenerators(),
   updateDataSource: async (root, args, context, info) => {
     // check for required env vars
     let currentDataSource = await context.prisma.dataSource({ id: args.id });

@@ -19,6 +19,10 @@ type AggregateGraph {
   count: Int!
 }
 
+type AggregateLineGenerator {
+  count: Int!
+}
+
 type AggregateUser {
   count: Int!
 }
@@ -454,6 +458,7 @@ type DataSource {
   createdBy: User
   description: String
   env: Json
+  lineGenerators(where: LineGeneratorWhereInput, orderBy: LineGeneratorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [LineGenerator!]
   meta: Json
   name: String!
   requiredEnvVars: [String!]!
@@ -475,6 +480,7 @@ input DataSourceCreateInput {
   createdBy: UserCreateOneWithoutDataSourcesInput
   description: String
   env: Json
+  lineGenerators: LineGeneratorCreateManyWithoutDataSourceInput
   meta: Json
   name: String!
   requiredEnvVars: DataSourceCreaterequiredEnvVarsInput
@@ -488,6 +494,11 @@ input DataSourceCreateManyWithoutCreatedByInput {
   connect: [DataSourceWhereUniqueInput!]
 }
 
+input DataSourceCreateOneWithoutLineGeneratorsInput {
+  create: DataSourceCreateWithoutLineGeneratorsInput
+  connect: DataSourceWhereUniqueInput
+}
+
 input DataSourceCreaterequiredEnvVarsInput {
   set: [String!]
 }
@@ -499,6 +510,21 @@ input DataSourceCreaterequiredParamsInput {
 input DataSourceCreateWithoutCreatedByInput {
   id: ID
   author: String
+  description: String
+  env: Json
+  lineGenerators: LineGeneratorCreateManyWithoutDataSourceInput
+  meta: Json
+  name: String!
+  requiredEnvVars: DataSourceCreaterequiredEnvVarsInput
+  requiredParams: DataSourceCreaterequiredParamsInput
+  source: String!
+  type: DataSourceType
+}
+
+input DataSourceCreateWithoutLineGeneratorsInput {
+  id: ID
+  author: String
+  createdBy: UserCreateOneWithoutDataSourcesInput
   description: String
   env: Json
   meta: Json
@@ -676,6 +702,7 @@ input DataSourceUpdateInput {
   createdBy: UserUpdateOneWithoutDataSourcesInput
   description: String
   env: Json
+  lineGenerators: LineGeneratorUpdateManyWithoutDataSourceInput
   meta: Json
   name: String
   requiredEnvVars: DataSourceUpdaterequiredEnvVarsInput
@@ -725,6 +752,15 @@ input DataSourceUpdateManyWithWhereNestedInput {
   data: DataSourceUpdateManyDataInput!
 }
 
+input DataSourceUpdateOneWithoutLineGeneratorsInput {
+  create: DataSourceCreateWithoutLineGeneratorsInput
+  update: DataSourceUpdateWithoutLineGeneratorsDataInput
+  upsert: DataSourceUpsertWithoutLineGeneratorsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: DataSourceWhereUniqueInput
+}
+
 input DataSourceUpdaterequiredEnvVarsInput {
   set: [String!]
 }
@@ -735,6 +771,20 @@ input DataSourceUpdaterequiredParamsInput {
 
 input DataSourceUpdateWithoutCreatedByDataInput {
   author: String
+  description: String
+  env: Json
+  lineGenerators: LineGeneratorUpdateManyWithoutDataSourceInput
+  meta: Json
+  name: String
+  requiredEnvVars: DataSourceUpdaterequiredEnvVarsInput
+  requiredParams: DataSourceUpdaterequiredParamsInput
+  source: String
+  type: DataSourceType
+}
+
+input DataSourceUpdateWithoutLineGeneratorsDataInput {
+  author: String
+  createdBy: UserUpdateOneWithoutDataSourcesInput
   description: String
   env: Json
   meta: Json
@@ -748,6 +798,11 @@ input DataSourceUpdateWithoutCreatedByDataInput {
 input DataSourceUpdateWithWhereUniqueWithoutCreatedByInput {
   where: DataSourceWhereUniqueInput!
   data: DataSourceUpdateWithoutCreatedByDataInput!
+}
+
+input DataSourceUpsertWithoutLineGeneratorsInput {
+  update: DataSourceUpdateWithoutLineGeneratorsDataInput!
+  create: DataSourceCreateWithoutLineGeneratorsInput!
 }
 
 input DataSourceUpsertWithWhereUniqueWithoutCreatedByInput {
@@ -808,6 +863,9 @@ input DataSourceWhereInput {
   description_not_starts_with: String
   description_ends_with: String
   description_not_ends_with: String
+  lineGenerators_every: LineGeneratorWhereInput
+  lineGenerators_some: LineGeneratorWhereInput
+  lineGenerators_none: LineGeneratorWhereInput
   name: String
   name_not: String
   name_in: [String!]
@@ -1242,6 +1300,7 @@ type Graph {
   dashboard: Dashboard!
   entity: Entity
   icon: String
+  lineGenerators(where: LineGeneratorWhereInput, orderBy: LineGeneratorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [LineGenerator!]
   publicUrl: String
   title: String!
   updatedAt: DateTime!
@@ -1262,6 +1321,7 @@ input GraphCreateInput {
   dashboard: DashboardCreateOneWithoutGraphsInput!
   entity: EntityCreateOneWithoutGraphsInput
   icon: String
+  lineGenerators: LineGeneratorCreateManyWithoutGraphInput
   publicUrl: String
   title: String!
   updateInterval: Int
@@ -1284,11 +1344,17 @@ input GraphCreateManyWithoutEntityInput {
   connect: [GraphWhereUniqueInput!]
 }
 
+input GraphCreateOneWithoutLineGeneratorsInput {
+  create: GraphCreateWithoutLineGeneratorsInput
+  connect: GraphWhereUniqueInput
+}
+
 input GraphCreateWithoutCreatedByInput {
   id: ID
   dashboard: DashboardCreateOneWithoutGraphsInput!
   entity: EntityCreateOneWithoutGraphsInput
   icon: String
+  lineGenerators: LineGeneratorCreateManyWithoutGraphInput
   publicUrl: String
   title: String!
   updateInterval: Int
@@ -1301,6 +1367,7 @@ input GraphCreateWithoutDashboardInput {
   createdBy: UserCreateOneWithoutGraphsInput!
   entity: EntityCreateOneWithoutGraphsInput
   icon: String
+  lineGenerators: LineGeneratorCreateManyWithoutGraphInput
   publicUrl: String
   title: String!
   updateInterval: Int
@@ -1312,6 +1379,20 @@ input GraphCreateWithoutEntityInput {
   id: ID
   createdBy: UserCreateOneWithoutGraphsInput!
   dashboard: DashboardCreateOneWithoutGraphsInput!
+  icon: String
+  lineGenerators: LineGeneratorCreateManyWithoutGraphInput
+  publicUrl: String
+  title: String!
+  updateInterval: Int
+  xAxisLabel: String
+  yAxisLabel: String
+}
+
+input GraphCreateWithoutLineGeneratorsInput {
+  id: ID
+  createdBy: UserCreateOneWithoutGraphsInput!
+  dashboard: DashboardCreateOneWithoutGraphsInput!
+  entity: EntityCreateOneWithoutGraphsInput
   icon: String
   publicUrl: String
   title: String!
@@ -1495,6 +1576,7 @@ input GraphUpdateInput {
   dashboard: DashboardUpdateOneRequiredWithoutGraphsInput
   entity: EntityUpdateOneWithoutGraphsInput
   icon: String
+  lineGenerators: LineGeneratorUpdateManyWithoutGraphInput
   publicUrl: String
   title: String
   updateInterval: Int
@@ -1561,10 +1643,18 @@ input GraphUpdateManyWithWhereNestedInput {
   data: GraphUpdateManyDataInput!
 }
 
+input GraphUpdateOneRequiredWithoutLineGeneratorsInput {
+  create: GraphCreateWithoutLineGeneratorsInput
+  update: GraphUpdateWithoutLineGeneratorsDataInput
+  upsert: GraphUpsertWithoutLineGeneratorsInput
+  connect: GraphWhereUniqueInput
+}
+
 input GraphUpdateWithoutCreatedByDataInput {
   dashboard: DashboardUpdateOneRequiredWithoutGraphsInput
   entity: EntityUpdateOneWithoutGraphsInput
   icon: String
+  lineGenerators: LineGeneratorUpdateManyWithoutGraphInput
   publicUrl: String
   title: String
   updateInterval: Int
@@ -1576,6 +1666,7 @@ input GraphUpdateWithoutDashboardDataInput {
   createdBy: UserUpdateOneRequiredWithoutGraphsInput
   entity: EntityUpdateOneWithoutGraphsInput
   icon: String
+  lineGenerators: LineGeneratorUpdateManyWithoutGraphInput
   publicUrl: String
   title: String
   updateInterval: Int
@@ -1586,6 +1677,19 @@ input GraphUpdateWithoutDashboardDataInput {
 input GraphUpdateWithoutEntityDataInput {
   createdBy: UserUpdateOneRequiredWithoutGraphsInput
   dashboard: DashboardUpdateOneRequiredWithoutGraphsInput
+  icon: String
+  lineGenerators: LineGeneratorUpdateManyWithoutGraphInput
+  publicUrl: String
+  title: String
+  updateInterval: Int
+  xAxisLabel: String
+  yAxisLabel: String
+}
+
+input GraphUpdateWithoutLineGeneratorsDataInput {
+  createdBy: UserUpdateOneRequiredWithoutGraphsInput
+  dashboard: DashboardUpdateOneRequiredWithoutGraphsInput
+  entity: EntityUpdateOneWithoutGraphsInput
   icon: String
   publicUrl: String
   title: String
@@ -1607,6 +1711,11 @@ input GraphUpdateWithWhereUniqueWithoutDashboardInput {
 input GraphUpdateWithWhereUniqueWithoutEntityInput {
   where: GraphWhereUniqueInput!
   data: GraphUpdateWithoutEntityDataInput!
+}
+
+input GraphUpsertWithoutLineGeneratorsInput {
+  update: GraphUpdateWithoutLineGeneratorsDataInput!
+  create: GraphCreateWithoutLineGeneratorsInput!
 }
 
 input GraphUpsertWithWhereUniqueWithoutCreatedByInput {
@@ -1667,6 +1776,9 @@ input GraphWhereInput {
   icon_not_starts_with: String
   icon_ends_with: String
   icon_not_ends_with: String
+  lineGenerators_every: LineGeneratorWhereInput
+  lineGenerators_some: LineGeneratorWhereInput
+  lineGenerators_none: LineGeneratorWhereInput
   publicUrl: String
   publicUrl_not: String
   publicUrl_in: [String!]
@@ -1750,6 +1862,364 @@ input GraphWhereUniqueInput {
 
 scalar Json
 
+type LineGenerator {
+  id: ID!
+  createdAt: DateTime!
+  createdBy: User!
+  dataSource: DataSource
+  graph: Graph!
+  name: String!
+  parameterAliases: Json
+  state: LineGeneratorState!
+  updatedAt: DateTime!
+}
+
+type LineGeneratorConnection {
+  pageInfo: PageInfo!
+  edges: [LineGeneratorEdge]!
+  aggregate: AggregateLineGenerator!
+}
+
+input LineGeneratorCreateInput {
+  id: ID
+  createdBy: UserCreateOneWithoutLineGeneratorsInput!
+  dataSource: DataSourceCreateOneWithoutLineGeneratorsInput
+  graph: GraphCreateOneWithoutLineGeneratorsInput!
+  name: String!
+  parameterAliases: Json
+  state: LineGeneratorState
+}
+
+input LineGeneratorCreateManyWithoutCreatedByInput {
+  create: [LineGeneratorCreateWithoutCreatedByInput!]
+  connect: [LineGeneratorWhereUniqueInput!]
+}
+
+input LineGeneratorCreateManyWithoutDataSourceInput {
+  create: [LineGeneratorCreateWithoutDataSourceInput!]
+  connect: [LineGeneratorWhereUniqueInput!]
+}
+
+input LineGeneratorCreateManyWithoutGraphInput {
+  create: [LineGeneratorCreateWithoutGraphInput!]
+  connect: [LineGeneratorWhereUniqueInput!]
+}
+
+input LineGeneratorCreateWithoutCreatedByInput {
+  id: ID
+  dataSource: DataSourceCreateOneWithoutLineGeneratorsInput
+  graph: GraphCreateOneWithoutLineGeneratorsInput!
+  name: String!
+  parameterAliases: Json
+  state: LineGeneratorState
+}
+
+input LineGeneratorCreateWithoutDataSourceInput {
+  id: ID
+  createdBy: UserCreateOneWithoutLineGeneratorsInput!
+  graph: GraphCreateOneWithoutLineGeneratorsInput!
+  name: String!
+  parameterAliases: Json
+  state: LineGeneratorState
+}
+
+input LineGeneratorCreateWithoutGraphInput {
+  id: ID
+  createdBy: UserCreateOneWithoutLineGeneratorsInput!
+  dataSource: DataSourceCreateOneWithoutLineGeneratorsInput
+  name: String!
+  parameterAliases: Json
+  state: LineGeneratorState
+}
+
+type LineGeneratorEdge {
+  node: LineGenerator!
+  cursor: String!
+}
+
+enum LineGeneratorOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  name_ASC
+  name_DESC
+  parameterAliases_ASC
+  parameterAliases_DESC
+  state_ASC
+  state_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type LineGeneratorPreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  name: String!
+  parameterAliases: Json
+  state: LineGeneratorState!
+  updatedAt: DateTime!
+}
+
+input LineGeneratorScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  state: LineGeneratorState
+  state_not: LineGeneratorState
+  state_in: [LineGeneratorState!]
+  state_not_in: [LineGeneratorState!]
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [LineGeneratorScalarWhereInput!]
+  OR: [LineGeneratorScalarWhereInput!]
+  NOT: [LineGeneratorScalarWhereInput!]
+}
+
+enum LineGeneratorState {
+  DISABLED
+  ENABLED
+  HIDDEN
+}
+
+type LineGeneratorSubscriptionPayload {
+  mutation: MutationType!
+  node: LineGenerator
+  updatedFields: [String!]
+  previousValues: LineGeneratorPreviousValues
+}
+
+input LineGeneratorSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: LineGeneratorWhereInput
+  AND: [LineGeneratorSubscriptionWhereInput!]
+  OR: [LineGeneratorSubscriptionWhereInput!]
+  NOT: [LineGeneratorSubscriptionWhereInput!]
+}
+
+input LineGeneratorUpdateInput {
+  createdBy: UserUpdateOneRequiredWithoutLineGeneratorsInput
+  dataSource: DataSourceUpdateOneWithoutLineGeneratorsInput
+  graph: GraphUpdateOneRequiredWithoutLineGeneratorsInput
+  name: String
+  parameterAliases: Json
+  state: LineGeneratorState
+}
+
+input LineGeneratorUpdateManyDataInput {
+  name: String
+  parameterAliases: Json
+  state: LineGeneratorState
+}
+
+input LineGeneratorUpdateManyMutationInput {
+  name: String
+  parameterAliases: Json
+  state: LineGeneratorState
+}
+
+input LineGeneratorUpdateManyWithoutCreatedByInput {
+  create: [LineGeneratorCreateWithoutCreatedByInput!]
+  delete: [LineGeneratorWhereUniqueInput!]
+  connect: [LineGeneratorWhereUniqueInput!]
+  set: [LineGeneratorWhereUniqueInput!]
+  disconnect: [LineGeneratorWhereUniqueInput!]
+  update: [LineGeneratorUpdateWithWhereUniqueWithoutCreatedByInput!]
+  upsert: [LineGeneratorUpsertWithWhereUniqueWithoutCreatedByInput!]
+  deleteMany: [LineGeneratorScalarWhereInput!]
+  updateMany: [LineGeneratorUpdateManyWithWhereNestedInput!]
+}
+
+input LineGeneratorUpdateManyWithoutDataSourceInput {
+  create: [LineGeneratorCreateWithoutDataSourceInput!]
+  delete: [LineGeneratorWhereUniqueInput!]
+  connect: [LineGeneratorWhereUniqueInput!]
+  set: [LineGeneratorWhereUniqueInput!]
+  disconnect: [LineGeneratorWhereUniqueInput!]
+  update: [LineGeneratorUpdateWithWhereUniqueWithoutDataSourceInput!]
+  upsert: [LineGeneratorUpsertWithWhereUniqueWithoutDataSourceInput!]
+  deleteMany: [LineGeneratorScalarWhereInput!]
+  updateMany: [LineGeneratorUpdateManyWithWhereNestedInput!]
+}
+
+input LineGeneratorUpdateManyWithoutGraphInput {
+  create: [LineGeneratorCreateWithoutGraphInput!]
+  delete: [LineGeneratorWhereUniqueInput!]
+  connect: [LineGeneratorWhereUniqueInput!]
+  set: [LineGeneratorWhereUniqueInput!]
+  disconnect: [LineGeneratorWhereUniqueInput!]
+  update: [LineGeneratorUpdateWithWhereUniqueWithoutGraphInput!]
+  upsert: [LineGeneratorUpsertWithWhereUniqueWithoutGraphInput!]
+  deleteMany: [LineGeneratorScalarWhereInput!]
+  updateMany: [LineGeneratorUpdateManyWithWhereNestedInput!]
+}
+
+input LineGeneratorUpdateManyWithWhereNestedInput {
+  where: LineGeneratorScalarWhereInput!
+  data: LineGeneratorUpdateManyDataInput!
+}
+
+input LineGeneratorUpdateWithoutCreatedByDataInput {
+  dataSource: DataSourceUpdateOneWithoutLineGeneratorsInput
+  graph: GraphUpdateOneRequiredWithoutLineGeneratorsInput
+  name: String
+  parameterAliases: Json
+  state: LineGeneratorState
+}
+
+input LineGeneratorUpdateWithoutDataSourceDataInput {
+  createdBy: UserUpdateOneRequiredWithoutLineGeneratorsInput
+  graph: GraphUpdateOneRequiredWithoutLineGeneratorsInput
+  name: String
+  parameterAliases: Json
+  state: LineGeneratorState
+}
+
+input LineGeneratorUpdateWithoutGraphDataInput {
+  createdBy: UserUpdateOneRequiredWithoutLineGeneratorsInput
+  dataSource: DataSourceUpdateOneWithoutLineGeneratorsInput
+  name: String
+  parameterAliases: Json
+  state: LineGeneratorState
+}
+
+input LineGeneratorUpdateWithWhereUniqueWithoutCreatedByInput {
+  where: LineGeneratorWhereUniqueInput!
+  data: LineGeneratorUpdateWithoutCreatedByDataInput!
+}
+
+input LineGeneratorUpdateWithWhereUniqueWithoutDataSourceInput {
+  where: LineGeneratorWhereUniqueInput!
+  data: LineGeneratorUpdateWithoutDataSourceDataInput!
+}
+
+input LineGeneratorUpdateWithWhereUniqueWithoutGraphInput {
+  where: LineGeneratorWhereUniqueInput!
+  data: LineGeneratorUpdateWithoutGraphDataInput!
+}
+
+input LineGeneratorUpsertWithWhereUniqueWithoutCreatedByInput {
+  where: LineGeneratorWhereUniqueInput!
+  update: LineGeneratorUpdateWithoutCreatedByDataInput!
+  create: LineGeneratorCreateWithoutCreatedByInput!
+}
+
+input LineGeneratorUpsertWithWhereUniqueWithoutDataSourceInput {
+  where: LineGeneratorWhereUniqueInput!
+  update: LineGeneratorUpdateWithoutDataSourceDataInput!
+  create: LineGeneratorCreateWithoutDataSourceInput!
+}
+
+input LineGeneratorUpsertWithWhereUniqueWithoutGraphInput {
+  where: LineGeneratorWhereUniqueInput!
+  update: LineGeneratorUpdateWithoutGraphDataInput!
+  create: LineGeneratorCreateWithoutGraphInput!
+}
+
+input LineGeneratorWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdBy: UserWhereInput
+  dataSource: DataSourceWhereInput
+  graph: GraphWhereInput
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  state: LineGeneratorState
+  state_not: LineGeneratorState
+  state_in: [LineGeneratorState!]
+  state_not_in: [LineGeneratorState!]
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [LineGeneratorWhereInput!]
+  OR: [LineGeneratorWhereInput!]
+  NOT: [LineGeneratorWhereInput!]
+}
+
+input LineGeneratorWhereUniqueInput {
+  id: ID
+  name: String
+}
+
 scalar Long
 
 type Mutation {
@@ -1777,6 +2247,12 @@ type Mutation {
   upsertGraph(where: GraphWhereUniqueInput!, create: GraphCreateInput!, update: GraphUpdateInput!): Graph!
   deleteGraph(where: GraphWhereUniqueInput!): Graph
   deleteManyGraphs(where: GraphWhereInput): BatchPayload!
+  createLineGenerator(data: LineGeneratorCreateInput!): LineGenerator!
+  updateLineGenerator(data: LineGeneratorUpdateInput!, where: LineGeneratorWhereUniqueInput!): LineGenerator
+  updateManyLineGenerators(data: LineGeneratorUpdateManyMutationInput!, where: LineGeneratorWhereInput): BatchPayload!
+  upsertLineGenerator(where: LineGeneratorWhereUniqueInput!, create: LineGeneratorCreateInput!, update: LineGeneratorUpdateInput!): LineGenerator!
+  deleteLineGenerator(where: LineGeneratorWhereUniqueInput!): LineGenerator
+  deleteManyLineGenerators(where: LineGeneratorWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -1815,6 +2291,9 @@ type Query {
   graph(where: GraphWhereUniqueInput!): Graph
   graphs(where: GraphWhereInput, orderBy: GraphOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Graph]!
   graphsConnection(where: GraphWhereInput, orderBy: GraphOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GraphConnection!
+  lineGenerator(where: LineGeneratorWhereUniqueInput!): LineGenerator
+  lineGenerators(where: LineGeneratorWhereInput, orderBy: LineGeneratorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [LineGenerator]!
+  lineGeneratorsConnection(where: LineGeneratorWhereInput, orderBy: LineGeneratorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LineGeneratorConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
@@ -1832,6 +2311,7 @@ type Subscription {
   dataSource(where: DataSourceSubscriptionWhereInput): DataSourceSubscriptionPayload
   entity(where: EntitySubscriptionWhereInput): EntitySubscriptionPayload
   graph(where: GraphSubscriptionWhereInput): GraphSubscriptionPayload
+  lineGenerator(where: LineGeneratorSubscriptionWhereInput): LineGeneratorSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
@@ -1844,6 +2324,7 @@ type User {
   email: String!
   entities(where: EntityWhereInput, orderBy: EntityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Entity!]
   graphs(where: GraphWhereInput, orderBy: GraphOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Graph!]
+  lineGenerators(where: LineGeneratorWhereInput, orderBy: LineGeneratorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [LineGenerator!]
   password: String!
   role: Role!
   updatedAt: DateTime!
@@ -1863,6 +2344,7 @@ input UserCreateInput {
   email: String!
   entities: EntityCreateManyWithoutCreatedByInput
   graphs: GraphCreateManyWithoutCreatedByInput
+  lineGenerators: LineGeneratorCreateManyWithoutCreatedByInput
   password: String!
   role: Role
 }
@@ -1887,6 +2369,11 @@ input UserCreateOneWithoutGraphsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutLineGeneratorsInput {
+  create: UserCreateWithoutLineGeneratorsInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateWithoutDashboardsInput {
   id: ID
   dataSources: DataSourceCreateManyWithoutCreatedByInput
@@ -1894,6 +2381,7 @@ input UserCreateWithoutDashboardsInput {
   email: String!
   entities: EntityCreateManyWithoutCreatedByInput
   graphs: GraphCreateManyWithoutCreatedByInput
+  lineGenerators: LineGeneratorCreateManyWithoutCreatedByInput
   password: String!
   role: Role
 }
@@ -1905,6 +2393,7 @@ input UserCreateWithoutDataSourcesInput {
   email: String!
   entities: EntityCreateManyWithoutCreatedByInput
   graphs: GraphCreateManyWithoutCreatedByInput
+  lineGenerators: LineGeneratorCreateManyWithoutCreatedByInput
   password: String!
   role: Role
 }
@@ -1916,6 +2405,7 @@ input UserCreateWithoutEntitiesInput {
   displayName: String!
   email: String!
   graphs: GraphCreateManyWithoutCreatedByInput
+  lineGenerators: LineGeneratorCreateManyWithoutCreatedByInput
   password: String!
   role: Role
 }
@@ -1927,6 +2417,19 @@ input UserCreateWithoutGraphsInput {
   displayName: String!
   email: String!
   entities: EntityCreateManyWithoutCreatedByInput
+  lineGenerators: LineGeneratorCreateManyWithoutCreatedByInput
+  password: String!
+  role: Role
+}
+
+input UserCreateWithoutLineGeneratorsInput {
+  id: ID
+  dashboards: DashboardCreateManyWithoutCreatedByInput
+  dataSources: DataSourceCreateManyWithoutCreatedByInput
+  displayName: String!
+  email: String!
+  entities: EntityCreateManyWithoutCreatedByInput
+  graphs: GraphCreateManyWithoutCreatedByInput
   password: String!
   role: Role
 }
@@ -1988,6 +2491,7 @@ input UserUpdateInput {
   email: String
   entities: EntityUpdateManyWithoutCreatedByInput
   graphs: GraphUpdateManyWithoutCreatedByInput
+  lineGenerators: LineGeneratorUpdateManyWithoutCreatedByInput
   password: String
   role: Role
 }
@@ -2010,6 +2514,13 @@ input UserUpdateOneRequiredWithoutGraphsInput {
   create: UserCreateWithoutGraphsInput
   update: UserUpdateWithoutGraphsDataInput
   upsert: UserUpsertWithoutGraphsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneRequiredWithoutLineGeneratorsInput {
+  create: UserCreateWithoutLineGeneratorsInput
+  update: UserUpdateWithoutLineGeneratorsDataInput
+  upsert: UserUpsertWithoutLineGeneratorsInput
   connect: UserWhereUniqueInput
 }
 
@@ -2037,6 +2548,7 @@ input UserUpdateWithoutDashboardsDataInput {
   email: String
   entities: EntityUpdateManyWithoutCreatedByInput
   graphs: GraphUpdateManyWithoutCreatedByInput
+  lineGenerators: LineGeneratorUpdateManyWithoutCreatedByInput
   password: String
   role: Role
 }
@@ -2047,6 +2559,7 @@ input UserUpdateWithoutDataSourcesDataInput {
   email: String
   entities: EntityUpdateManyWithoutCreatedByInput
   graphs: GraphUpdateManyWithoutCreatedByInput
+  lineGenerators: LineGeneratorUpdateManyWithoutCreatedByInput
   password: String
   role: Role
 }
@@ -2057,6 +2570,7 @@ input UserUpdateWithoutEntitiesDataInput {
   displayName: String
   email: String
   graphs: GraphUpdateManyWithoutCreatedByInput
+  lineGenerators: LineGeneratorUpdateManyWithoutCreatedByInput
   password: String
   role: Role
 }
@@ -2067,6 +2581,18 @@ input UserUpdateWithoutGraphsDataInput {
   displayName: String
   email: String
   entities: EntityUpdateManyWithoutCreatedByInput
+  lineGenerators: LineGeneratorUpdateManyWithoutCreatedByInput
+  password: String
+  role: Role
+}
+
+input UserUpdateWithoutLineGeneratorsDataInput {
+  dashboards: DashboardUpdateManyWithoutCreatedByInput
+  dataSources: DataSourceUpdateManyWithoutCreatedByInput
+  displayName: String
+  email: String
+  entities: EntityUpdateManyWithoutCreatedByInput
+  graphs: GraphUpdateManyWithoutCreatedByInput
   password: String
   role: Role
 }
@@ -2089,6 +2615,11 @@ input UserUpsertWithoutEntitiesInput {
 input UserUpsertWithoutGraphsInput {
   update: UserUpdateWithoutGraphsDataInput!
   create: UserCreateWithoutGraphsInput!
+}
+
+input UserUpsertWithoutLineGeneratorsInput {
+  update: UserUpdateWithoutLineGeneratorsDataInput!
+  create: UserCreateWithoutLineGeneratorsInput!
 }
 
 input UserWhereInput {
@@ -2154,6 +2685,9 @@ input UserWhereInput {
   graphs_every: GraphWhereInput
   graphs_some: GraphWhereInput
   graphs_none: GraphWhereInput
+  lineGenerators_every: LineGeneratorWhereInput
+  lineGenerators_some: LineGeneratorWhereInput
+  lineGenerators_none: LineGeneratorWhereInput
   password: String
   password_not: String
   password_in: [String!]
