@@ -17,13 +17,10 @@ export default {
       dashboard: { connect: { id: dashboardId } },
     });
   },
-  createdBy: async (root, args, context, info) => await context.prisma.graph({ id: root.id }).createdBy(),
-  dashboard: async (root, args, context, info) => await context.prisma.graph({ id: root.id }).dashboard(),
-  entity: async (root, args, context, info) => await context.prisma.graph({ id: root.id }).entity(),
-  graph: async (root, args, context, info) => await context.prisma.graph(args),
-  graphs: async (root, args, context, info) => await context.prisma.graphs(args),
+  createdBy: async (root, args, context, info) => await context.prisma.lineGenerator({ id: root.id }).createdBy(),
+  dataSource: async (root, args, context, info) => await context.prisma.lineGenerator({ id: root.id }).dataSource(),
+  graph: async (root, args, context, info) => await context.prisma.lineGenerator({ id: root.id }).graph(),
   deleteGraph: async (root, args, context, info) => await context.prisma.deleteGraph(args),
-  lineGenerators: async (root, args, context, info) => await context.prisma.graph({ id: root.id }).lineGenerators(),
   updateGraph: async (root, args, context, info) => {
     const input = {
       where: {

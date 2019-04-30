@@ -49,6 +49,7 @@ type User {
   email: String!
   entities: [Entity!]!
   graphs: [Graph!]!
+  lineGenerators: [LineGenerator!]!
   password: String! @hasRole(roles: [SUPER_ADMIN])
   role: Role!
   updatedAt: DateTime!

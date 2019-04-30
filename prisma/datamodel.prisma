@@ -18,6 +18,7 @@ type DataSource {
   createdBy: User @relation(name: "DataSourceByUser")
   description: String
   env: Json # environment variables
+  lineGenerators: [LineGenerator!]! @relation(name: "DataSourceInLineGenerator")
   meta: Json # extra info the author wants to provide
   name: String! @unique
   requiredEnvVars: [String!] @scalarList(strategy: RELATION) # a list of the required env vars
@@ -52,12 +53,31 @@ type Graph {
   dashboard: Dashboard! @relation(name: "GraphInDashboard")
   entity: Entity @relation(name: "EntityInGraph")
   icon: String
+  lineGenerators: [LineGenerator!]! @relation(name: "LineGeneratorInGraph" onDelete: CASCADE)
   publicUrl: String
   title: String!
   updatedAt: DateTime! @updatedAt
   updateInterval: Int! @default(value: 900) # 15 minutes (15 * 60 seconds)
   xAxisLabel: String
   yAxisLabel: String
+}
+
+type LineGenerator {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  createdBy: User! @relation(name: "LineGeneratorByUser")
+  dataSource: DataSource @relation(name: "DataSourceInLineGenerator")
+  graph: Graph! @relation(name: "LineGeneratorInGraph")
+  name: String! @unique
+  parameterAliases: Json # if the parameter names required by the DataSource cannot be used, specify aliases here
+  state: LineGeneratorState! @default(value: ENABLED)
+  updatedAt: DateTime! @updatedAt
+}
+
+enum LineGeneratorState {
+  DISABLED
+  ENABLED
+  HIDDEN
 }
 
 enum Role {
@@ -76,6 +96,7 @@ type User {
   email: String! @unique
   entities: [Entity!]! @relation(name: "EntityByUser")
   graphs: [Graph!]! @relation(name: "GraphByUser" onDelete: CASCADE)
+  lineGenerators: [LineGenerator!]! @relation(name: "LineGeneratorByUser" onDelete: CASCADE)
   password: String!
   role: Role! @default(value: MEMBER)
   updatedAt: DateTime! @updatedAt

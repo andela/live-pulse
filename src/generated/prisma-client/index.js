@@ -25,6 +25,14 @@ var models = [
     embedded: false
   },
   {
+    name: "LineGenerator",
+    embedded: false
+  },
+  {
+    name: "LineGeneratorState",
+    embedded: false
+  },
+  {
     name: "Role",
     embedded: false
   },

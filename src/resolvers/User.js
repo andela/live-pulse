@@ -11,6 +11,7 @@ export default {
   dataSources: async (root, args, context, info) => await context.prisma.user({ id: root.id }).dataSources(),
   entities: async (root, args, context, info) => await context.prisma.user({ id: root.id }).entities(),
   graphs: async (root, args, context, info) => await context.prisma.user({ id: root.id }).graphs(),
+  lineGenerators: async (root, args, context, info) => await context.prisma.user({ id: root.id }).lineGenerators(),
   signedInUser: async (root, args, context, info) => context.user,
   signIn: async (root, args, context, info) => {
     const user = await context.prisma.user({ email: args.email });
