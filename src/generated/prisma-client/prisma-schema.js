@@ -1864,6 +1864,7 @@ scalar Json
 
 type LineGenerator {
   id: ID!
+  color: String
   createdAt: DateTime!
   createdBy: User!
   dataSource: DataSource
@@ -1882,6 +1883,7 @@ type LineGeneratorConnection {
 
 input LineGeneratorCreateInput {
   id: ID
+  color: String
   createdBy: UserCreateOneWithoutLineGeneratorsInput!
   dataSource: DataSourceCreateOneWithoutLineGeneratorsInput
   graph: GraphCreateOneWithoutLineGeneratorsInput!
@@ -1907,6 +1909,7 @@ input LineGeneratorCreateManyWithoutGraphInput {
 
 input LineGeneratorCreateWithoutCreatedByInput {
   id: ID
+  color: String
   dataSource: DataSourceCreateOneWithoutLineGeneratorsInput
   graph: GraphCreateOneWithoutLineGeneratorsInput!
   name: String!
@@ -1916,6 +1919,7 @@ input LineGeneratorCreateWithoutCreatedByInput {
 
 input LineGeneratorCreateWithoutDataSourceInput {
   id: ID
+  color: String
   createdBy: UserCreateOneWithoutLineGeneratorsInput!
   graph: GraphCreateOneWithoutLineGeneratorsInput!
   name: String!
@@ -1925,6 +1929,7 @@ input LineGeneratorCreateWithoutDataSourceInput {
 
 input LineGeneratorCreateWithoutGraphInput {
   id: ID
+  color: String
   createdBy: UserCreateOneWithoutLineGeneratorsInput!
   dataSource: DataSourceCreateOneWithoutLineGeneratorsInput
   name: String!
@@ -1940,6 +1945,8 @@ type LineGeneratorEdge {
 enum LineGeneratorOrderByInput {
   id_ASC
   id_DESC
+  color_ASC
+  color_DESC
   createdAt_ASC
   createdAt_DESC
   name_ASC
@@ -1954,6 +1961,7 @@ enum LineGeneratorOrderByInput {
 
 type LineGeneratorPreviousValues {
   id: ID!
+  color: String
   createdAt: DateTime!
   name: String!
   parameterAliases: Json
@@ -1976,6 +1984,20 @@ input LineGeneratorScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  color: String
+  color_not: String
+  color_in: [String!]
+  color_not_in: [String!]
+  color_lt: String
+  color_lte: String
+  color_gt: String
+  color_gte: String
+  color_contains: String
+  color_not_contains: String
+  color_starts_with: String
+  color_not_starts_with: String
+  color_ends_with: String
+  color_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -2040,6 +2062,7 @@ input LineGeneratorSubscriptionWhereInput {
 }
 
 input LineGeneratorUpdateInput {
+  color: String
   createdBy: UserUpdateOneRequiredWithoutLineGeneratorsInput
   dataSource: DataSourceUpdateOneWithoutLineGeneratorsInput
   graph: GraphUpdateOneRequiredWithoutLineGeneratorsInput
@@ -2049,12 +2072,14 @@ input LineGeneratorUpdateInput {
 }
 
 input LineGeneratorUpdateManyDataInput {
+  color: String
   name: String
   parameterAliases: Json
   state: LineGeneratorState
 }
 
 input LineGeneratorUpdateManyMutationInput {
+  color: String
   name: String
   parameterAliases: Json
   state: LineGeneratorState
@@ -2102,6 +2127,7 @@ input LineGeneratorUpdateManyWithWhereNestedInput {
 }
 
 input LineGeneratorUpdateWithoutCreatedByDataInput {
+  color: String
   dataSource: DataSourceUpdateOneWithoutLineGeneratorsInput
   graph: GraphUpdateOneRequiredWithoutLineGeneratorsInput
   name: String
@@ -2110,6 +2136,7 @@ input LineGeneratorUpdateWithoutCreatedByDataInput {
 }
 
 input LineGeneratorUpdateWithoutDataSourceDataInput {
+  color: String
   createdBy: UserUpdateOneRequiredWithoutLineGeneratorsInput
   graph: GraphUpdateOneRequiredWithoutLineGeneratorsInput
   name: String
@@ -2118,6 +2145,7 @@ input LineGeneratorUpdateWithoutDataSourceDataInput {
 }
 
 input LineGeneratorUpdateWithoutGraphDataInput {
+  color: String
   createdBy: UserUpdateOneRequiredWithoutLineGeneratorsInput
   dataSource: DataSourceUpdateOneWithoutLineGeneratorsInput
   name: String
@@ -2173,6 +2201,20 @@ input LineGeneratorWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  color: String
+  color_not: String
+  color_in: [String!]
+  color_not_in: [String!]
+  color_lt: String
+  color_lte: String
+  color_gt: String
+  color_gte: String
+  color_contains: String
+  color_not_contains: String
+  color_starts_with: String
+  color_not_starts_with: String
+  color_ends_with: String
+  color_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]

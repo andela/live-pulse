@@ -14,6 +14,8 @@ const isOwner = async (next, source, {resource, id}, context, info) => {
     owner = await context.prisma.entity({ id: resourceId }).createdBy();
   } else if (resource.toLowerCase() === 'graph') {
     owner = await context.prisma.graph({ id: resourceId }).createdBy();
+  } else if (resource.toLowerCase() === 'linegenerator') {
+    owner = await context.prisma.lineGenerator({ id: resourceId }).createdBy();
   }
   if (context.user && owner && context.user.id === owner.id) {
     return next();

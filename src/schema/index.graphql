@@ -14,6 +14,8 @@ type Query @isAuthenticated {
   entities(where: EntityWhereInput): [Entity!]!
   graph(id: ID!): Graph
   graphs(where: GraphWhereInput): [Graph!]!
+  lineGenerator(id: ID!): LineGenerator
+  lineGenerators(where: LineGeneratorWhereInput): [LineGenerator]!
   signedInUser: User
   user(id: ID!): User
   users(where: UserWhereInput): [User!]!
@@ -24,16 +26,19 @@ type Mutation {
   createDataSource(data: DataSourceCreateInput!): DataSource! @hasRole(roles: [ADMIN, SUPER_ADMIN]) @isAuthenticated
   createEntity(data: EntityCreateInput!): Entity! @isAuthenticated
   createGraph(dashboardId: ID!, data: GraphUpdateInput!): Graph! @isOwner(resource: "Dashboard", id: "dashboardId") @isAuthenticated
+  createLineGenerator(graphId: ID!, data: LineGeneratorUpdateInput!): LineGenerator! @isOwner(resource: "Graph", id: "graphId") @isAuthenticated
   deleteDashboard(id: ID!): Dashboard @isOwner(resource: "Dashboard") @isAuthenticated
   deleteDataSource(id: ID!): DataSource @hasRole(roles: [ADMIN, SUPER_ADMIN]) @isAuthenticated
   deleteEntity(id: ID!): Entity @isOwner(resource: "Entity") @isAuthenticated
   deleteGraph(id: ID!): Graph @isOwner(resource: "Graph") @isAuthenticated
+  deleteLineGenerator(id: ID!): LineGenerator @isOwner(resource: "LineGenerator") @isAuthenticated
   signIn(email: String!, password: String!): AuthPayload
   signUp(email: String!, password: String!, data: UserUpdateInput!): AuthPayload
   updateDashboard(id: ID!, data: DashboardUpdateInput!): Dashboard @isOwner(resource: "Dashboard") @isAuthenticated
   updateDataSource(id: ID!, data: DataSourceUpdateInput!): DataSource @hasRole(roles: [ADMIN, SUPER_ADMIN]) @isAuthenticated
   updateEntity(id: ID!, data: EntityUpdateInput!): Entity @isOwner(resource: "Entity") @isAuthenticated
   updateGraph(id: ID!, data: GraphUpdateInput!): Graph @isOwner(resource: "Graph") @isAuthenticated
+  updateLineGenerator(id: ID!, data: LineGeneratorUpdateInput!): LineGenerator @isOwner(resource: "LineGenerator") @isAuthenticated
 }
 
 type AuthPayload {

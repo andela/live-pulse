@@ -301,6 +301,8 @@ export interface ClientConstructor<T> {
 export type LineGeneratorOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "color_ASC"
+  | "color_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "name_ASC"
@@ -896,6 +898,7 @@ export interface UserUpdateInput {
 }
 
 export interface LineGeneratorUpdateWithoutDataSourceDataInput {
+  color?: String;
   createdBy?: UserUpdateOneRequiredWithoutLineGeneratorsInput;
   graph?: GraphUpdateOneRequiredWithoutLineGeneratorsInput;
   name?: String;
@@ -904,6 +907,7 @@ export interface LineGeneratorUpdateWithoutDataSourceDataInput {
 }
 
 export interface LineGeneratorUpdateManyMutationInput {
+  color?: String;
   name?: String;
   parameterAliases?: Json;
   state?: LineGeneratorState;
@@ -1155,6 +1159,7 @@ export interface DashboardUpsertWithoutGraphsInput {
 
 export interface LineGeneratorCreateWithoutDataSourceInput {
   id?: ID_Input;
+  color?: String;
   createdBy: UserCreateOneWithoutLineGeneratorsInput;
   graph: GraphCreateOneWithoutLineGeneratorsInput;
   name: String;
@@ -1440,6 +1445,7 @@ export interface EntityUpdateWithoutCreatedByDataInput {
 
 export interface LineGeneratorCreateWithoutGraphInput {
   id?: ID_Input;
+  color?: String;
   createdBy: UserCreateOneWithoutLineGeneratorsInput;
   dataSource?: DataSourceCreateOneWithoutLineGeneratorsInput;
   name: String;
@@ -1510,6 +1516,7 @@ export interface GraphUpdateWithoutEntityDataInput {
 
 export interface LineGeneratorCreateWithoutCreatedByInput {
   id?: ID_Input;
+  color?: String;
   dataSource?: DataSourceCreateOneWithoutLineGeneratorsInput;
   graph: GraphCreateOneWithoutLineGeneratorsInput;
   name: String;
@@ -1629,6 +1636,7 @@ export interface EntityWhereInput {
 }
 
 export interface LineGeneratorUpdateWithoutGraphDataInput {
+  color?: String;
   createdBy?: UserUpdateOneRequiredWithoutLineGeneratorsInput;
   dataSource?: DataSourceUpdateOneWithoutLineGeneratorsInput;
   name?: String;
@@ -1786,6 +1794,7 @@ export interface UserUpdateOneWithoutDataSourcesInput {
 }
 
 export interface LineGeneratorUpdateInput {
+  color?: String;
   createdBy?: UserUpdateOneRequiredWithoutLineGeneratorsInput;
   dataSource?: DataSourceUpdateOneWithoutLineGeneratorsInput;
   graph?: GraphUpdateOneRequiredWithoutLineGeneratorsInput;
@@ -1868,6 +1877,7 @@ export interface DataSourceUpdateInput {
 }
 
 export interface LineGeneratorUpdateWithoutCreatedByDataInput {
+  color?: String;
   dataSource?: DataSourceUpdateOneWithoutLineGeneratorsInput;
   graph?: GraphUpdateOneRequiredWithoutLineGeneratorsInput;
   name?: String;
@@ -2040,6 +2050,20 @@ export interface LineGeneratorScalarWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
+  color?: String;
+  color_not?: String;
+  color_in?: String[] | String;
+  color_not_in?: String[] | String;
+  color_lt?: String;
+  color_lte?: String;
+  color_gt?: String;
+  color_gte?: String;
+  color_contains?: String;
+  color_not_contains?: String;
+  color_starts_with?: String;
+  color_not_starts_with?: String;
+  color_ends_with?: String;
+  color_not_ends_with?: String;
   createdAt?: DateTimeInput;
   createdAt_not?: DateTimeInput;
   createdAt_in?: DateTimeInput[] | DateTimeInput;
@@ -2095,6 +2119,7 @@ export interface DashboardCreateOneWithoutGraphsInput {
 }
 
 export interface LineGeneratorUpdateManyDataInput {
+  color?: String;
   name?: String;
   parameterAliases?: Json;
   state?: LineGeneratorState;
@@ -2649,6 +2674,20 @@ export interface LineGeneratorWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
+  color?: String;
+  color_not?: String;
+  color_in?: String[] | String;
+  color_not_in?: String[] | String;
+  color_lt?: String;
+  color_lte?: String;
+  color_gt?: String;
+  color_gte?: String;
+  color_contains?: String;
+  color_not_contains?: String;
+  color_starts_with?: String;
+  color_not_starts_with?: String;
+  color_ends_with?: String;
+  color_not_ends_with?: String;
   createdAt?: DateTimeInput;
   createdAt_not?: DateTimeInput;
   createdAt_in?: DateTimeInput[] | DateTimeInput;
@@ -2717,6 +2756,7 @@ export interface DataSourceUpdateManyDataInput {
 
 export interface LineGeneratorCreateInput {
   id?: ID_Input;
+  color?: String;
   createdBy: UserCreateOneWithoutLineGeneratorsInput;
   dataSource?: DataSourceCreateOneWithoutLineGeneratorsInput;
   graph: GraphCreateOneWithoutLineGeneratorsInput;
@@ -3115,6 +3155,7 @@ export interface UserSubscription
 
 export interface LineGeneratorPreviousValues {
   id: ID_Output;
+  color?: String;
   createdAt: DateTimeOutput;
   name: String;
   parameterAliases?: Json;
@@ -3126,6 +3167,7 @@ export interface LineGeneratorPreviousValuesPromise
   extends Promise<LineGeneratorPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  color: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
   name: () => Promise<String>;
   parameterAliases: () => Promise<Json>;
@@ -3137,6 +3179,7 @@ export interface LineGeneratorPreviousValuesSubscription
   extends Promise<AsyncIterator<LineGeneratorPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  color: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   name: () => Promise<AsyncIterator<String>>;
   parameterAliases: () => Promise<AsyncIterator<Json>>;
@@ -3590,6 +3633,7 @@ export interface LineGeneratorConnectionSubscription
 
 export interface LineGenerator {
   id: ID_Output;
+  color?: String;
   createdAt: DateTimeOutput;
   name: String;
   parameterAliases?: Json;
@@ -3601,6 +3645,7 @@ export interface LineGeneratorPromise
   extends Promise<LineGenerator>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  color: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
   createdBy: <T = UserPromise>() => T;
   dataSource: <T = DataSourcePromise>() => T;
@@ -3615,6 +3660,7 @@ export interface LineGeneratorSubscription
   extends Promise<AsyncIterator<LineGenerator>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  color: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   createdBy: <T = UserSubscription>() => T;
   dataSource: <T = DataSourceSubscription>() => T;

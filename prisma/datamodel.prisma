@@ -64,6 +64,7 @@ type Graph {
 
 type LineGenerator {
   id: ID! @id
+  color: String @default(value: "#000000")
   createdAt: DateTime! @createdAt
   createdBy: User! @relation(name: "LineGeneratorByUser")
   dataSource: DataSource @relation(name: "DataSourceInLineGenerator")
