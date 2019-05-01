@@ -2,8 +2,10 @@ import Dashboard from './Dashboard';
 import DataSource from './DataSource';
 import Entity from './Entity';
 import Graph from './Graph';
+import Line from './Line';
 import LineGenerator from './LineGenerator';
 import Mutation from './Mutation';
+import Point from './Point';
 import Query from './Query';
 import User from './User';
 
@@ -28,12 +30,20 @@ export default {
     entity: Graph.entity,
     lineGenerators: Graph.lineGenerators,
   },
+  Line: {
+    lineGenerator: Line.lineGenerator,
+    points: Line.points,
+  },
   LineGenerator: {
     createdBy: LineGenerator.createdBy,
     dataSource: LineGenerator.dataSource,
     graph: LineGenerator.graph,
+    line: LineGenerator.line,
   },
   Mutation,
+  Point: {
+    line: Point.line,
+  },
   Query,
   User: {
     dashboards: User.dashboards,

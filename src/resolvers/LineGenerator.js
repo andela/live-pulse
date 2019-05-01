@@ -64,6 +64,7 @@ export default {
   dataSource: async (root, args, context, info) => await context.prisma.lineGenerator({ id: root.id }).dataSource(),
   graph: async (root, args, context, info) => await context.prisma.lineGenerator({ id: root.id }).graph(),
   deleteLineGenerator: async (root, args, context, info) => await context.prisma.deleteLineGenerator(args),
+  line: async (root, args, context, info) => await context.prisma.lineGenerator({ id: root.id }).line(),
   lineGenerator: async (root, args, context, info) => await context.prisma.lineGenerator(args),
   lineGenerators: async (root, args, context, info) => await context.prisma.lineGenerators(args),
   updateLineGenerator: async (root, args, context, info) => {
