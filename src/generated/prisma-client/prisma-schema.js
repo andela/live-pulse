@@ -19,6 +19,10 @@ type AggregateGraph {
   count: Int!
 }
 
+type AggregateGraphUpdate {
+  count: Int!
+}
+
 type AggregateLine {
   count: Int!
 }
@@ -1311,6 +1315,7 @@ type Graph {
   lineGenerators(where: LineGeneratorWhereInput, orderBy: LineGeneratorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [LineGenerator!]
   publicUrl: String
   title: String!
+  update: GraphUpdate
   updatedAt: DateTime!
   updateInterval: Int!
   xAxisLabel: String
@@ -1332,6 +1337,7 @@ input GraphCreateInput {
   lineGenerators: LineGeneratorCreateManyWithoutGraphInput
   publicUrl: String
   title: String!
+  update: GraphUpdateCreateOneWithoutGraphInput
   updateInterval: Int
   xAxisLabel: String
   yAxisLabel: String
@@ -1357,6 +1363,11 @@ input GraphCreateOneWithoutLineGeneratorsInput {
   connect: GraphWhereUniqueInput
 }
 
+input GraphCreateOneWithoutUpdateInput {
+  create: GraphCreateWithoutUpdateInput
+  connect: GraphWhereUniqueInput
+}
+
 input GraphCreateWithoutCreatedByInput {
   id: ID
   dashboard: DashboardCreateOneWithoutGraphsInput!
@@ -1365,6 +1376,7 @@ input GraphCreateWithoutCreatedByInput {
   lineGenerators: LineGeneratorCreateManyWithoutGraphInput
   publicUrl: String
   title: String!
+  update: GraphUpdateCreateOneWithoutGraphInput
   updateInterval: Int
   xAxisLabel: String
   yAxisLabel: String
@@ -1378,6 +1390,7 @@ input GraphCreateWithoutDashboardInput {
   lineGenerators: LineGeneratorCreateManyWithoutGraphInput
   publicUrl: String
   title: String!
+  update: GraphUpdateCreateOneWithoutGraphInput
   updateInterval: Int
   xAxisLabel: String
   yAxisLabel: String
@@ -1391,6 +1404,7 @@ input GraphCreateWithoutEntityInput {
   lineGenerators: LineGeneratorCreateManyWithoutGraphInput
   publicUrl: String
   title: String!
+  update: GraphUpdateCreateOneWithoutGraphInput
   updateInterval: Int
   xAxisLabel: String
   yAxisLabel: String
@@ -1402,6 +1416,21 @@ input GraphCreateWithoutLineGeneratorsInput {
   dashboard: DashboardCreateOneWithoutGraphsInput!
   entity: EntityCreateOneWithoutGraphsInput
   icon: String
+  publicUrl: String
+  title: String!
+  update: GraphUpdateCreateOneWithoutGraphInput
+  updateInterval: Int
+  xAxisLabel: String
+  yAxisLabel: String
+}
+
+input GraphCreateWithoutUpdateInput {
+  id: ID
+  createdBy: UserCreateOneWithoutGraphsInput!
+  dashboard: DashboardCreateOneWithoutGraphsInput!
+  entity: EntityCreateOneWithoutGraphsInput
+  icon: String
+  lineGenerators: LineGeneratorCreateManyWithoutGraphInput
   publicUrl: String
   title: String!
   updateInterval: Int
@@ -1579,6 +1608,41 @@ input GraphSubscriptionWhereInput {
   NOT: [GraphSubscriptionWhereInput!]
 }
 
+type GraphUpdate {
+  id: ID!
+  createdAt: DateTime!
+  graph: Graph!
+  time: DateTime!
+  updatedAt: DateTime!
+}
+
+type GraphUpdateConnection {
+  pageInfo: PageInfo!
+  edges: [GraphUpdateEdge]!
+  aggregate: AggregateGraphUpdate!
+}
+
+input GraphUpdateCreateInput {
+  id: ID
+  graph: GraphCreateOneWithoutUpdateInput!
+  time: DateTime!
+}
+
+input GraphUpdateCreateOneWithoutGraphInput {
+  create: GraphUpdateCreateWithoutGraphInput
+  connect: GraphUpdateWhereUniqueInput
+}
+
+input GraphUpdateCreateWithoutGraphInput {
+  id: ID
+  time: DateTime!
+}
+
+type GraphUpdateEdge {
+  node: GraphUpdate!
+  cursor: String!
+}
+
 input GraphUpdateInput {
   createdBy: UserUpdateOneRequiredWithoutGraphsInput
   dashboard: DashboardUpdateOneRequiredWithoutGraphsInput
@@ -1587,6 +1651,7 @@ input GraphUpdateInput {
   lineGenerators: LineGeneratorUpdateManyWithoutGraphInput
   publicUrl: String
   title: String
+  update: GraphUpdateUpdateOneWithoutGraphInput
   updateInterval: Int
   xAxisLabel: String
   yAxisLabel: String
@@ -1658,6 +1723,125 @@ input GraphUpdateOneRequiredWithoutLineGeneratorsInput {
   connect: GraphWhereUniqueInput
 }
 
+input GraphUpdateOneRequiredWithoutUpdateInput {
+  create: GraphCreateWithoutUpdateInput
+  update: GraphUpdateWithoutUpdateDataInput
+  upsert: GraphUpsertWithoutUpdateInput
+  connect: GraphWhereUniqueInput
+}
+
+enum GraphUpdateOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  time_ASC
+  time_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type GraphUpdatePreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  time: DateTime!
+  updatedAt: DateTime!
+}
+
+type GraphUpdateSubscriptionPayload {
+  mutation: MutationType!
+  node: GraphUpdate
+  updatedFields: [String!]
+  previousValues: GraphUpdatePreviousValues
+}
+
+input GraphUpdateSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: GraphUpdateWhereInput
+  AND: [GraphUpdateSubscriptionWhereInput!]
+  OR: [GraphUpdateSubscriptionWhereInput!]
+  NOT: [GraphUpdateSubscriptionWhereInput!]
+}
+
+input GraphUpdateUpdateInput {
+  graph: GraphUpdateOneRequiredWithoutUpdateInput
+  time: DateTime
+}
+
+input GraphUpdateUpdateManyMutationInput {
+  time: DateTime
+}
+
+input GraphUpdateUpdateOneWithoutGraphInput {
+  create: GraphUpdateCreateWithoutGraphInput
+  update: GraphUpdateUpdateWithoutGraphDataInput
+  upsert: GraphUpdateUpsertWithoutGraphInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: GraphUpdateWhereUniqueInput
+}
+
+input GraphUpdateUpdateWithoutGraphDataInput {
+  time: DateTime
+}
+
+input GraphUpdateUpsertWithoutGraphInput {
+  update: GraphUpdateUpdateWithoutGraphDataInput!
+  create: GraphUpdateCreateWithoutGraphInput!
+}
+
+input GraphUpdateWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  graph: GraphWhereInput
+  time: DateTime
+  time_not: DateTime
+  time_in: [DateTime!]
+  time_not_in: [DateTime!]
+  time_lt: DateTime
+  time_lte: DateTime
+  time_gt: DateTime
+  time_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [GraphUpdateWhereInput!]
+  OR: [GraphUpdateWhereInput!]
+  NOT: [GraphUpdateWhereInput!]
+}
+
+input GraphUpdateWhereUniqueInput {
+  id: ID
+}
+
 input GraphUpdateWithoutCreatedByDataInput {
   dashboard: DashboardUpdateOneRequiredWithoutGraphsInput
   entity: EntityUpdateOneWithoutGraphsInput
@@ -1665,6 +1849,7 @@ input GraphUpdateWithoutCreatedByDataInput {
   lineGenerators: LineGeneratorUpdateManyWithoutGraphInput
   publicUrl: String
   title: String
+  update: GraphUpdateUpdateOneWithoutGraphInput
   updateInterval: Int
   xAxisLabel: String
   yAxisLabel: String
@@ -1677,6 +1862,7 @@ input GraphUpdateWithoutDashboardDataInput {
   lineGenerators: LineGeneratorUpdateManyWithoutGraphInput
   publicUrl: String
   title: String
+  update: GraphUpdateUpdateOneWithoutGraphInput
   updateInterval: Int
   xAxisLabel: String
   yAxisLabel: String
@@ -1689,6 +1875,7 @@ input GraphUpdateWithoutEntityDataInput {
   lineGenerators: LineGeneratorUpdateManyWithoutGraphInput
   publicUrl: String
   title: String
+  update: GraphUpdateUpdateOneWithoutGraphInput
   updateInterval: Int
   xAxisLabel: String
   yAxisLabel: String
@@ -1699,6 +1886,20 @@ input GraphUpdateWithoutLineGeneratorsDataInput {
   dashboard: DashboardUpdateOneRequiredWithoutGraphsInput
   entity: EntityUpdateOneWithoutGraphsInput
   icon: String
+  publicUrl: String
+  title: String
+  update: GraphUpdateUpdateOneWithoutGraphInput
+  updateInterval: Int
+  xAxisLabel: String
+  yAxisLabel: String
+}
+
+input GraphUpdateWithoutUpdateDataInput {
+  createdBy: UserUpdateOneRequiredWithoutGraphsInput
+  dashboard: DashboardUpdateOneRequiredWithoutGraphsInput
+  entity: EntityUpdateOneWithoutGraphsInput
+  icon: String
+  lineGenerators: LineGeneratorUpdateManyWithoutGraphInput
   publicUrl: String
   title: String
   updateInterval: Int
@@ -1724,6 +1925,11 @@ input GraphUpdateWithWhereUniqueWithoutEntityInput {
 input GraphUpsertWithoutLineGeneratorsInput {
   update: GraphUpdateWithoutLineGeneratorsDataInput!
   create: GraphCreateWithoutLineGeneratorsInput!
+}
+
+input GraphUpsertWithoutUpdateInput {
+  update: GraphUpdateWithoutUpdateDataInput!
+  create: GraphCreateWithoutUpdateInput!
 }
 
 input GraphUpsertWithWhereUniqueWithoutCreatedByInput {
@@ -1815,6 +2021,7 @@ input GraphWhereInput {
   title_not_starts_with: String
   title_ends_with: String
   title_not_ends_with: String
+  update: GraphUpdateWhereInput
   updatedAt: DateTime
   updatedAt_not: DateTime
   updatedAt_in: [DateTime!]
@@ -2506,6 +2713,12 @@ type Mutation {
   upsertGraph(where: GraphWhereUniqueInput!, create: GraphCreateInput!, update: GraphUpdateInput!): Graph!
   deleteGraph(where: GraphWhereUniqueInput!): Graph
   deleteManyGraphs(where: GraphWhereInput): BatchPayload!
+  createGraphUpdate(data: GraphUpdateCreateInput!): GraphUpdate!
+  updateGraphUpdate(data: GraphUpdateUpdateInput!, where: GraphUpdateWhereUniqueInput!): GraphUpdate
+  updateManyGraphUpdates(data: GraphUpdateUpdateManyMutationInput!, where: GraphUpdateWhereInput): BatchPayload!
+  upsertGraphUpdate(where: GraphUpdateWhereUniqueInput!, create: GraphUpdateCreateInput!, update: GraphUpdateUpdateInput!): GraphUpdate!
+  deleteGraphUpdate(where: GraphUpdateWhereUniqueInput!): GraphUpdate
+  deleteManyGraphUpdates(where: GraphUpdateWhereInput): BatchPayload!
   createLine(data: LineCreateInput!): Line!
   updateLine(data: LineUpdateInput!, where: LineWhereUniqueInput!): Line
   upsertLine(where: LineWhereUniqueInput!, create: LineCreateInput!, update: LineUpdateInput!): Line!
@@ -2810,6 +3023,9 @@ type Query {
   graph(where: GraphWhereUniqueInput!): Graph
   graphs(where: GraphWhereInput, orderBy: GraphOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Graph]!
   graphsConnection(where: GraphWhereInput, orderBy: GraphOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GraphConnection!
+  graphUpdate(where: GraphUpdateWhereUniqueInput!): GraphUpdate
+  graphUpdates(where: GraphUpdateWhereInput, orderBy: GraphUpdateOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GraphUpdate]!
+  graphUpdatesConnection(where: GraphUpdateWhereInput, orderBy: GraphUpdateOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GraphUpdateConnection!
   line(where: LineWhereUniqueInput!): Line
   lines(where: LineWhereInput, orderBy: LineOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Line]!
   linesConnection(where: LineWhereInput, orderBy: LineOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LineConnection!
@@ -2836,6 +3052,7 @@ type Subscription {
   dataSource(where: DataSourceSubscriptionWhereInput): DataSourceSubscriptionPayload
   entity(where: EntitySubscriptionWhereInput): EntitySubscriptionPayload
   graph(where: GraphSubscriptionWhereInput): GraphSubscriptionPayload
+  graphUpdate(where: GraphUpdateSubscriptionWhereInput): GraphUpdateSubscriptionPayload
   line(where: LineSubscriptionWhereInput): LineSubscriptionPayload
   lineGenerator(where: LineGeneratorSubscriptionWhereInput): LineGeneratorSubscriptionPayload
   point(where: PointSubscriptionWhereInput): PointSubscriptionPayload

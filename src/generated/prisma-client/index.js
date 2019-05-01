@@ -25,6 +25,10 @@ var models = [
     embedded: false
   },
   {
+    name: "GraphUpdate",
+    embedded: false
+  },
+  {
     name: "Line",
     embedded: false
   },
