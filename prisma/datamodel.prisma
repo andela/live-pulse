@@ -8,7 +8,7 @@ type Dashboard {
   publicUrl: String
   title: String!
   updatedAt: DateTime! @updatedAt
-  updateInterval: Int! @default(value: 900) # 15 minutes (15 * 60 seconds)
+  updateInterval: Int! @default(value: 15) # 15 minutes
 }
 
 type DataSource {
@@ -56,10 +56,19 @@ type Graph {
   lineGenerators: [LineGenerator!]! @relation(name: "LineGeneratorInGraph" onDelete: CASCADE)
   publicUrl: String
   title: String!
+  update: GraphUpdate @relation(name: "GraphToUpdate" onDelete: CASCADE link: TABLE)
   updatedAt: DateTime! @updatedAt
-  updateInterval: Int! @default(value: 900) # 15 minutes (15 * 60 seconds)
+  updateInterval: Int! @default(value: 15) # 15 minutes
   xAxisLabel: String
   yAxisLabel: String
+}
+
+type GraphUpdate {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  graph: Graph! @relation(name: "GraphToUpdate")
+  time: DateTime!
+  updatedAt: DateTime! @updatedAt
 }
 
 type Line {
