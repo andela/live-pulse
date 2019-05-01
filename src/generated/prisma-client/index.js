@@ -25,11 +25,19 @@ var models = [
     embedded: false
   },
   {
+    name: "Line",
+    embedded: false
+  },
+  {
     name: "LineGenerator",
     embedded: false
   },
   {
     name: "LineGeneratorState",
+    embedded: false
+  },
+  {
+    name: "Point",
     embedded: false
   },
   {

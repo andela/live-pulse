@@ -19,7 +19,15 @@ type AggregateGraph {
   count: Int!
 }
 
+type AggregateLine {
+  count: Int!
+}
+
 type AggregateLineGenerator {
+  count: Int!
+}
+
+type AggregatePoint {
   count: Int!
 }
 
@@ -1862,6 +1870,51 @@ input GraphWhereUniqueInput {
 
 scalar Json
 
+type Line {
+  id: ID!
+  createdAt: DateTime!
+  lineGenerator: LineGenerator!
+  points(where: PointWhereInput, orderBy: PointOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Point!]
+  updatedAt: DateTime!
+}
+
+type LineConnection {
+  pageInfo: PageInfo!
+  edges: [LineEdge]!
+  aggregate: AggregateLine!
+}
+
+input LineCreateInput {
+  id: ID
+  lineGenerator: LineGeneratorCreateOneWithoutLineInput!
+  points: PointCreateManyWithoutLineInput
+}
+
+input LineCreateOneWithoutLineGeneratorInput {
+  create: LineCreateWithoutLineGeneratorInput
+  connect: LineWhereUniqueInput
+}
+
+input LineCreateOneWithoutPointsInput {
+  create: LineCreateWithoutPointsInput
+  connect: LineWhereUniqueInput
+}
+
+input LineCreateWithoutLineGeneratorInput {
+  id: ID
+  points: PointCreateManyWithoutLineInput
+}
+
+input LineCreateWithoutPointsInput {
+  id: ID
+  lineGenerator: LineGeneratorCreateOneWithoutLineInput!
+}
+
+type LineEdge {
+  node: Line!
+  cursor: String!
+}
+
 type LineGenerator {
   id: ID!
   color: String
@@ -1869,6 +1922,7 @@ type LineGenerator {
   createdBy: User!
   dataSource: DataSource
   graph: Graph!
+  line: Line
   name: String!
   parameterAliases: Json
   state: LineGeneratorState!
@@ -1887,6 +1941,7 @@ input LineGeneratorCreateInput {
   createdBy: UserCreateOneWithoutLineGeneratorsInput!
   dataSource: DataSourceCreateOneWithoutLineGeneratorsInput
   graph: GraphCreateOneWithoutLineGeneratorsInput!
+  line: LineCreateOneWithoutLineGeneratorInput
   name: String!
   parameterAliases: Json
   state: LineGeneratorState
@@ -1907,11 +1962,17 @@ input LineGeneratorCreateManyWithoutGraphInput {
   connect: [LineGeneratorWhereUniqueInput!]
 }
 
+input LineGeneratorCreateOneWithoutLineInput {
+  create: LineGeneratorCreateWithoutLineInput
+  connect: LineGeneratorWhereUniqueInput
+}
+
 input LineGeneratorCreateWithoutCreatedByInput {
   id: ID
   color: String
   dataSource: DataSourceCreateOneWithoutLineGeneratorsInput
   graph: GraphCreateOneWithoutLineGeneratorsInput!
+  line: LineCreateOneWithoutLineGeneratorInput
   name: String!
   parameterAliases: Json
   state: LineGeneratorState
@@ -1922,6 +1983,7 @@ input LineGeneratorCreateWithoutDataSourceInput {
   color: String
   createdBy: UserCreateOneWithoutLineGeneratorsInput!
   graph: GraphCreateOneWithoutLineGeneratorsInput!
+  line: LineCreateOneWithoutLineGeneratorInput
   name: String!
   parameterAliases: Json
   state: LineGeneratorState
@@ -1932,6 +1994,18 @@ input LineGeneratorCreateWithoutGraphInput {
   color: String
   createdBy: UserCreateOneWithoutLineGeneratorsInput!
   dataSource: DataSourceCreateOneWithoutLineGeneratorsInput
+  line: LineCreateOneWithoutLineGeneratorInput
+  name: String!
+  parameterAliases: Json
+  state: LineGeneratorState
+}
+
+input LineGeneratorCreateWithoutLineInput {
+  id: ID
+  color: String
+  createdBy: UserCreateOneWithoutLineGeneratorsInput!
+  dataSource: DataSourceCreateOneWithoutLineGeneratorsInput
+  graph: GraphCreateOneWithoutLineGeneratorsInput!
   name: String!
   parameterAliases: Json
   state: LineGeneratorState
@@ -2066,6 +2140,7 @@ input LineGeneratorUpdateInput {
   createdBy: UserUpdateOneRequiredWithoutLineGeneratorsInput
   dataSource: DataSourceUpdateOneWithoutLineGeneratorsInput
   graph: GraphUpdateOneRequiredWithoutLineGeneratorsInput
+  line: LineUpdateOneWithoutLineGeneratorInput
   name: String
   parameterAliases: Json
   state: LineGeneratorState
@@ -2126,10 +2201,18 @@ input LineGeneratorUpdateManyWithWhereNestedInput {
   data: LineGeneratorUpdateManyDataInput!
 }
 
+input LineGeneratorUpdateOneRequiredWithoutLineInput {
+  create: LineGeneratorCreateWithoutLineInput
+  update: LineGeneratorUpdateWithoutLineDataInput
+  upsert: LineGeneratorUpsertWithoutLineInput
+  connect: LineGeneratorWhereUniqueInput
+}
+
 input LineGeneratorUpdateWithoutCreatedByDataInput {
   color: String
   dataSource: DataSourceUpdateOneWithoutLineGeneratorsInput
   graph: GraphUpdateOneRequiredWithoutLineGeneratorsInput
+  line: LineUpdateOneWithoutLineGeneratorInput
   name: String
   parameterAliases: Json
   state: LineGeneratorState
@@ -2139,6 +2222,7 @@ input LineGeneratorUpdateWithoutDataSourceDataInput {
   color: String
   createdBy: UserUpdateOneRequiredWithoutLineGeneratorsInput
   graph: GraphUpdateOneRequiredWithoutLineGeneratorsInput
+  line: LineUpdateOneWithoutLineGeneratorInput
   name: String
   parameterAliases: Json
   state: LineGeneratorState
@@ -2148,6 +2232,17 @@ input LineGeneratorUpdateWithoutGraphDataInput {
   color: String
   createdBy: UserUpdateOneRequiredWithoutLineGeneratorsInput
   dataSource: DataSourceUpdateOneWithoutLineGeneratorsInput
+  line: LineUpdateOneWithoutLineGeneratorInput
+  name: String
+  parameterAliases: Json
+  state: LineGeneratorState
+}
+
+input LineGeneratorUpdateWithoutLineDataInput {
+  color: String
+  createdBy: UserUpdateOneRequiredWithoutLineGeneratorsInput
+  dataSource: DataSourceUpdateOneWithoutLineGeneratorsInput
+  graph: GraphUpdateOneRequiredWithoutLineGeneratorsInput
   name: String
   parameterAliases: Json
   state: LineGeneratorState
@@ -2166,6 +2261,11 @@ input LineGeneratorUpdateWithWhereUniqueWithoutDataSourceInput {
 input LineGeneratorUpdateWithWhereUniqueWithoutGraphInput {
   where: LineGeneratorWhereUniqueInput!
   data: LineGeneratorUpdateWithoutGraphDataInput!
+}
+
+input LineGeneratorUpsertWithoutLineInput {
+  update: LineGeneratorUpdateWithoutLineDataInput!
+  create: LineGeneratorCreateWithoutLineInput!
 }
 
 input LineGeneratorUpsertWithWhereUniqueWithoutCreatedByInput {
@@ -2226,6 +2326,7 @@ input LineGeneratorWhereInput {
   createdBy: UserWhereInput
   dataSource: DataSourceWhereInput
   graph: GraphWhereInput
+  line: LineWhereInput
   name: String
   name_not: String
   name_in: [String!]
@@ -2262,6 +2363,122 @@ input LineGeneratorWhereUniqueInput {
   name: String
 }
 
+enum LineOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type LinePreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type LineSubscriptionPayload {
+  mutation: MutationType!
+  node: Line
+  updatedFields: [String!]
+  previousValues: LinePreviousValues
+}
+
+input LineSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: LineWhereInput
+  AND: [LineSubscriptionWhereInput!]
+  OR: [LineSubscriptionWhereInput!]
+  NOT: [LineSubscriptionWhereInput!]
+}
+
+input LineUpdateInput {
+  lineGenerator: LineGeneratorUpdateOneRequiredWithoutLineInput
+  points: PointUpdateManyWithoutLineInput
+}
+
+input LineUpdateOneRequiredWithoutPointsInput {
+  create: LineCreateWithoutPointsInput
+  update: LineUpdateWithoutPointsDataInput
+  upsert: LineUpsertWithoutPointsInput
+  connect: LineWhereUniqueInput
+}
+
+input LineUpdateOneWithoutLineGeneratorInput {
+  create: LineCreateWithoutLineGeneratorInput
+  update: LineUpdateWithoutLineGeneratorDataInput
+  upsert: LineUpsertWithoutLineGeneratorInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: LineWhereUniqueInput
+}
+
+input LineUpdateWithoutLineGeneratorDataInput {
+  points: PointUpdateManyWithoutLineInput
+}
+
+input LineUpdateWithoutPointsDataInput {
+  lineGenerator: LineGeneratorUpdateOneRequiredWithoutLineInput
+}
+
+input LineUpsertWithoutLineGeneratorInput {
+  update: LineUpdateWithoutLineGeneratorDataInput!
+  create: LineCreateWithoutLineGeneratorInput!
+}
+
+input LineUpsertWithoutPointsInput {
+  update: LineUpdateWithoutPointsDataInput!
+  create: LineCreateWithoutPointsInput!
+}
+
+input LineWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  lineGenerator: LineGeneratorWhereInput
+  points_every: PointWhereInput
+  points_some: PointWhereInput
+  points_none: PointWhereInput
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [LineWhereInput!]
+  OR: [LineWhereInput!]
+  NOT: [LineWhereInput!]
+}
+
+input LineWhereUniqueInput {
+  id: ID
+}
+
 scalar Long
 
 type Mutation {
@@ -2289,12 +2506,23 @@ type Mutation {
   upsertGraph(where: GraphWhereUniqueInput!, create: GraphCreateInput!, update: GraphUpdateInput!): Graph!
   deleteGraph(where: GraphWhereUniqueInput!): Graph
   deleteManyGraphs(where: GraphWhereInput): BatchPayload!
+  createLine(data: LineCreateInput!): Line!
+  updateLine(data: LineUpdateInput!, where: LineWhereUniqueInput!): Line
+  upsertLine(where: LineWhereUniqueInput!, create: LineCreateInput!, update: LineUpdateInput!): Line!
+  deleteLine(where: LineWhereUniqueInput!): Line
+  deleteManyLines(where: LineWhereInput): BatchPayload!
   createLineGenerator(data: LineGeneratorCreateInput!): LineGenerator!
   updateLineGenerator(data: LineGeneratorUpdateInput!, where: LineGeneratorWhereUniqueInput!): LineGenerator
   updateManyLineGenerators(data: LineGeneratorUpdateManyMutationInput!, where: LineGeneratorWhereInput): BatchPayload!
   upsertLineGenerator(where: LineGeneratorWhereUniqueInput!, create: LineGeneratorCreateInput!, update: LineGeneratorUpdateInput!): LineGenerator!
   deleteLineGenerator(where: LineGeneratorWhereUniqueInput!): LineGenerator
   deleteManyLineGenerators(where: LineGeneratorWhereInput): BatchPayload!
+  createPoint(data: PointCreateInput!): Point!
+  updatePoint(data: PointUpdateInput!, where: PointWhereUniqueInput!): Point
+  updateManyPoints(data: PointUpdateManyMutationInput!, where: PointWhereInput): BatchPayload!
+  upsertPoint(where: PointWhereUniqueInput!, create: PointCreateInput!, update: PointUpdateInput!): Point!
+  deletePoint(where: PointWhereUniqueInput!): Point
+  deleteManyPoints(where: PointWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -2320,6 +2548,255 @@ type PageInfo {
   endCursor: String
 }
 
+type Point {
+  id: ID!
+  createdAt: DateTime!
+  hidden: Boolean
+  line: Line!
+  updatedAt: DateTime!
+  x: DateTime!
+  y: Float!
+}
+
+type PointConnection {
+  pageInfo: PageInfo!
+  edges: [PointEdge]!
+  aggregate: AggregatePoint!
+}
+
+input PointCreateInput {
+  id: ID
+  hidden: Boolean
+  line: LineCreateOneWithoutPointsInput!
+  x: DateTime!
+  y: Float!
+}
+
+input PointCreateManyWithoutLineInput {
+  create: [PointCreateWithoutLineInput!]
+  connect: [PointWhereUniqueInput!]
+}
+
+input PointCreateWithoutLineInput {
+  id: ID
+  hidden: Boolean
+  x: DateTime!
+  y: Float!
+}
+
+type PointEdge {
+  node: Point!
+  cursor: String!
+}
+
+enum PointOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  hidden_ASC
+  hidden_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  x_ASC
+  x_DESC
+  y_ASC
+  y_DESC
+}
+
+type PointPreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  hidden: Boolean
+  updatedAt: DateTime!
+  x: DateTime!
+  y: Float!
+}
+
+input PointScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  hidden: Boolean
+  hidden_not: Boolean
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  x: DateTime
+  x_not: DateTime
+  x_in: [DateTime!]
+  x_not_in: [DateTime!]
+  x_lt: DateTime
+  x_lte: DateTime
+  x_gt: DateTime
+  x_gte: DateTime
+  y: Float
+  y_not: Float
+  y_in: [Float!]
+  y_not_in: [Float!]
+  y_lt: Float
+  y_lte: Float
+  y_gt: Float
+  y_gte: Float
+  AND: [PointScalarWhereInput!]
+  OR: [PointScalarWhereInput!]
+  NOT: [PointScalarWhereInput!]
+}
+
+type PointSubscriptionPayload {
+  mutation: MutationType!
+  node: Point
+  updatedFields: [String!]
+  previousValues: PointPreviousValues
+}
+
+input PointSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: PointWhereInput
+  AND: [PointSubscriptionWhereInput!]
+  OR: [PointSubscriptionWhereInput!]
+  NOT: [PointSubscriptionWhereInput!]
+}
+
+input PointUpdateInput {
+  hidden: Boolean
+  line: LineUpdateOneRequiredWithoutPointsInput
+  x: DateTime
+  y: Float
+}
+
+input PointUpdateManyDataInput {
+  hidden: Boolean
+  x: DateTime
+  y: Float
+}
+
+input PointUpdateManyMutationInput {
+  hidden: Boolean
+  x: DateTime
+  y: Float
+}
+
+input PointUpdateManyWithoutLineInput {
+  create: [PointCreateWithoutLineInput!]
+  delete: [PointWhereUniqueInput!]
+  connect: [PointWhereUniqueInput!]
+  set: [PointWhereUniqueInput!]
+  disconnect: [PointWhereUniqueInput!]
+  update: [PointUpdateWithWhereUniqueWithoutLineInput!]
+  upsert: [PointUpsertWithWhereUniqueWithoutLineInput!]
+  deleteMany: [PointScalarWhereInput!]
+  updateMany: [PointUpdateManyWithWhereNestedInput!]
+}
+
+input PointUpdateManyWithWhereNestedInput {
+  where: PointScalarWhereInput!
+  data: PointUpdateManyDataInput!
+}
+
+input PointUpdateWithoutLineDataInput {
+  hidden: Boolean
+  x: DateTime
+  y: Float
+}
+
+input PointUpdateWithWhereUniqueWithoutLineInput {
+  where: PointWhereUniqueInput!
+  data: PointUpdateWithoutLineDataInput!
+}
+
+input PointUpsertWithWhereUniqueWithoutLineInput {
+  where: PointWhereUniqueInput!
+  update: PointUpdateWithoutLineDataInput!
+  create: PointCreateWithoutLineInput!
+}
+
+input PointWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  hidden: Boolean
+  hidden_not: Boolean
+  line: LineWhereInput
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  x: DateTime
+  x_not: DateTime
+  x_in: [DateTime!]
+  x_not_in: [DateTime!]
+  x_lt: DateTime
+  x_lte: DateTime
+  x_gt: DateTime
+  x_gte: DateTime
+  y: Float
+  y_not: Float
+  y_in: [Float!]
+  y_not_in: [Float!]
+  y_lt: Float
+  y_lte: Float
+  y_gt: Float
+  y_gte: Float
+  AND: [PointWhereInput!]
+  OR: [PointWhereInput!]
+  NOT: [PointWhereInput!]
+}
+
+input PointWhereUniqueInput {
+  id: ID
+}
+
 type Query {
   dashboard(where: DashboardWhereUniqueInput!): Dashboard
   dashboards(where: DashboardWhereInput, orderBy: DashboardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Dashboard]!
@@ -2333,9 +2810,15 @@ type Query {
   graph(where: GraphWhereUniqueInput!): Graph
   graphs(where: GraphWhereInput, orderBy: GraphOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Graph]!
   graphsConnection(where: GraphWhereInput, orderBy: GraphOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GraphConnection!
+  line(where: LineWhereUniqueInput!): Line
+  lines(where: LineWhereInput, orderBy: LineOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Line]!
+  linesConnection(where: LineWhereInput, orderBy: LineOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LineConnection!
   lineGenerator(where: LineGeneratorWhereUniqueInput!): LineGenerator
   lineGenerators(where: LineGeneratorWhereInput, orderBy: LineGeneratorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [LineGenerator]!
   lineGeneratorsConnection(where: LineGeneratorWhereInput, orderBy: LineGeneratorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LineGeneratorConnection!
+  point(where: PointWhereUniqueInput!): Point
+  points(where: PointWhereInput, orderBy: PointOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Point]!
+  pointsConnection(where: PointWhereInput, orderBy: PointOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PointConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
@@ -2353,7 +2836,9 @@ type Subscription {
   dataSource(where: DataSourceSubscriptionWhereInput): DataSourceSubscriptionPayload
   entity(where: EntitySubscriptionWhereInput): EntitySubscriptionPayload
   graph(where: GraphSubscriptionWhereInput): GraphSubscriptionPayload
+  line(where: LineSubscriptionWhereInput): LineSubscriptionPayload
   lineGenerator(where: LineGeneratorSubscriptionWhereInput): LineGeneratorSubscriptionPayload
+  point(where: PointSubscriptionWhereInput): PointSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 

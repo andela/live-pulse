@@ -14,8 +14,12 @@ type Query @isAuthenticated {
   entities(where: EntityWhereInput): [Entity!]!
   graph(id: ID!): Graph
   graphs(where: GraphWhereInput): [Graph!]!
+  line(id: ID!): Line
+  lines(where: LineWhereInput): [Line]!
   lineGenerator(id: ID!): LineGenerator
   lineGenerators(where: LineGeneratorWhereInput): [LineGenerator]!
+  point(id: ID!): Point
+  points(where: PointWhereInput): [Point]!
   signedInUser: User
   user(id: ID!): User
   users(where: UserWhereInput): [User!]!
