@@ -13,11 +13,6 @@ const { createLineGenerator, deleteLineGenerator, updateLineGenerator } = LineGe
 const { signIn, signUp } = User;
 
 export default {
-  createTest: async (root, args, context, info) => {
-    return await context.prisma.createTest({
-      ...args.data
-    });
-  },
   createDashboard,
   createDataSource,
   createEntity,

@@ -22,7 +22,6 @@ export interface Exists {
   line: (where?: LineWhereInput) => Promise<boolean>;
   lineGenerator: (where?: LineGeneratorWhereInput) => Promise<boolean>;
   point: (where?: PointWhereInput) => Promise<boolean>;
-  test: (where?: TestWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
 }
 
@@ -197,25 +196,6 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => PointConnectionPromise;
-  test: (where: TestWhereUniqueInput) => TestPromise;
-  tests: (args?: {
-    where?: TestWhereInput;
-    orderBy?: TestOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => FragmentableArray<Test>;
-  testsConnection: (args?: {
-    where?: TestWhereInput;
-    orderBy?: TestOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => TestConnectionPromise;
   user: (where: UserWhereUniqueInput) => UserPromise;
   users: (args?: {
     where?: UserWhereInput;
@@ -371,22 +351,6 @@ export interface Prisma {
   }) => PointPromise;
   deletePoint: (where: PointWhereUniqueInput) => PointPromise;
   deleteManyPoints: (where?: PointWhereInput) => BatchPayloadPromise;
-  createTest: (data: TestCreateInput) => TestPromise;
-  updateTest: (args: {
-    data: TestUpdateInput;
-    where: TestWhereUniqueInput;
-  }) => TestPromise;
-  updateManyTests: (args: {
-    data: TestUpdateManyMutationInput;
-    where?: TestWhereInput;
-  }) => BatchPayloadPromise;
-  upsertTest: (args: {
-    where: TestWhereUniqueInput;
-    create: TestCreateInput;
-    update: TestUpdateInput;
-  }) => TestPromise;
-  deleteTest: (where: TestWhereUniqueInput) => TestPromise;
-  deleteManyTests: (where?: TestWhereInput) => BatchPayloadPromise;
   createUser: (data: UserCreateInput) => UserPromise;
   updateUser: (args: {
     data: UserUpdateInput;
@@ -436,9 +400,6 @@ export interface Subscription {
   point: (
     where?: PointSubscriptionWhereInput
   ) => PointSubscriptionPayloadSubscription;
-  test: (
-    where?: TestSubscriptionWhereInput
-  ) => TestSubscriptionPayloadSubscription;
   user: (
     where?: UserSubscriptionWhereInput
   ) => UserSubscriptionPayloadSubscription;
@@ -451,22 +412,6 @@ export interface ClientConstructor<T> {
 /**
  * Types
  */
-
-export type PointOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "hidden_ASC"
-  | "hidden_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC"
-  | "x_ASC"
-  | "x_DESC"
-  | "y_ASC"
-  | "y_DESC";
-
-export type LineGeneratorState = "DISABLED" | "ENABLED" | "HIDDEN";
 
 export type GraphOrderByInput =
   | "id_ASC"
@@ -488,21 +433,7 @@ export type GraphOrderByInput =
   | "yAxisLabel_ASC"
   | "yAxisLabel_DESC";
 
-export type UserOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "displayName_ASC"
-  | "displayName_DESC"
-  | "email_ASC"
-  | "email_DESC"
-  | "password_ASC"
-  | "password_DESC"
-  | "role_ASC"
-  | "role_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
+export type LineGeneratorState = "DISABLED" | "ENABLED" | "HIDDEN";
 
 export type LineGeneratorOrderByInput =
   | "id_ASC"
@@ -520,11 +451,19 @@ export type LineGeneratorOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type LineOrderByInput =
+export type UserOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
+  | "displayName_ASC"
+  | "displayName_DESC"
+  | "email_ASC"
+  | "email_DESC"
+  | "password_ASC"
+  | "password_DESC"
+  | "role_ASC"
+  | "role_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
@@ -570,27 +509,29 @@ export type DataSourceOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type GraphUpdateOrderByInput =
+export type LineOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
-  | "time_ASC"
-  | "time_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
-
-export type TestOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "text_ASC"
-  | "text_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
+
+export type PointOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "hidden_ASC"
+  | "hidden_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC"
+  | "x_ASC"
+  | "x_DESC"
+  | "y_ASC"
+  | "y_DESC";
 
 export type EntityOrderByInput =
   | "id_ASC"
@@ -608,13 +549,19 @@ export type EntityOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export interface DashboardUpdateWithoutGraphsDataInput {
-  createdBy?: UserUpdateOneRequiredWithoutDashboardsInput;
-  entity?: EntityUpdateOneWithoutDashboardsInput;
-  icon?: String;
-  publicUrl?: String;
-  title?: String;
-  updateInterval?: Int;
+export type GraphUpdateOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "time_ASC"
+  | "time_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export interface DashboardUpsertWithoutGraphsInput {
+  update: DashboardUpdateWithoutGraphsDataInput;
+  create: DashboardCreateWithoutGraphsInput;
 }
 
 export type DashboardWhereUniqueInput = AtLeastOne<{
@@ -624,74 +571,6 @@ export type DashboardWhereUniqueInput = AtLeastOne<{
 export interface GraphUpdateWithWhereUniqueWithoutDashboardInput {
   where: GraphWhereUniqueInput;
   data: GraphUpdateWithoutDashboardDataInput;
-}
-
-export interface PointWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  hidden?: Boolean;
-  hidden_not?: Boolean;
-  line?: LineWhereInput;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  x?: DateTimeInput;
-  x_not?: DateTimeInput;
-  x_in?: DateTimeInput[] | DateTimeInput;
-  x_not_in?: DateTimeInput[] | DateTimeInput;
-  x_lt?: DateTimeInput;
-  x_lte?: DateTimeInput;
-  x_gt?: DateTimeInput;
-  x_gte?: DateTimeInput;
-  y?: Float;
-  y_not?: Float;
-  y_in?: Float[] | Float;
-  y_not_in?: Float[] | Float;
-  y_lt?: Float;
-  y_lte?: Float;
-  y_gt?: Float;
-  y_gte?: Float;
-  AND?: PointWhereInput[] | PointWhereInput;
-  OR?: PointWhereInput[] | PointWhereInput;
-  NOT?: PointWhereInput[] | PointWhereInput;
-}
-
-export interface GraphUpdateWithoutDashboardDataInput {
-  createdBy?: UserUpdateOneRequiredWithoutGraphsInput;
-  entity?: EntityUpdateOneWithoutGraphsInput;
-  icon?: String;
-  lineGenerators?: LineGeneratorUpdateManyWithoutGraphInput;
-  publicUrl?: String;
-  title?: String;
-  update?: GraphUpdateUpdateOneWithoutGraphInput;
-  updateInterval?: Int;
-  xAxisLabel?: String;
-  yAxisLabel?: String;
 }
 
 export interface LineWhereInput {
@@ -734,142 +613,6 @@ export interface LineWhereInput {
   NOT?: LineWhereInput[] | LineWhereInput;
 }
 
-export interface UserUpdateOneRequiredWithoutGraphsInput {
-  create?: UserCreateWithoutGraphsInput;
-  update?: UserUpdateWithoutGraphsDataInput;
-  upsert?: UserUpsertWithoutGraphsInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface GraphUpdateWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  graph?: GraphWhereInput;
-  time?: DateTimeInput;
-  time_not?: DateTimeInput;
-  time_in?: DateTimeInput[] | DateTimeInput;
-  time_not_in?: DateTimeInput[] | DateTimeInput;
-  time_lt?: DateTimeInput;
-  time_lte?: DateTimeInput;
-  time_gt?: DateTimeInput;
-  time_gte?: DateTimeInput;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  AND?: GraphUpdateWhereInput[] | GraphUpdateWhereInput;
-  OR?: GraphUpdateWhereInput[] | GraphUpdateWhereInput;
-  NOT?: GraphUpdateWhereInput[] | GraphUpdateWhereInput;
-}
-
-export interface UserUpdateWithoutGraphsDataInput {
-  dashboards?: DashboardUpdateManyWithoutCreatedByInput;
-  dataSources?: DataSourceUpdateManyWithoutCreatedByInput;
-  displayName?: String;
-  email?: String;
-  entities?: EntityUpdateManyWithoutCreatedByInput;
-  lineGenerators?: LineGeneratorUpdateManyWithoutCreatedByInput;
-  password?: String;
-  role?: Role;
-}
-
-export interface EntityWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  createdBy?: UserWhereInput;
-  dashboards_every?: DashboardWhereInput;
-  dashboards_some?: DashboardWhereInput;
-  dashboards_none?: DashboardWhereInput;
-  graphs_every?: GraphWhereInput;
-  graphs_some?: GraphWhereInput;
-  graphs_none?: GraphWhereInput;
-  icon?: String;
-  icon_not?: String;
-  icon_in?: String[] | String;
-  icon_not_in?: String[] | String;
-  icon_lt?: String;
-  icon_lte?: String;
-  icon_gt?: String;
-  icon_gte?: String;
-  icon_contains?: String;
-  icon_not_contains?: String;
-  icon_starts_with?: String;
-  icon_not_starts_with?: String;
-  icon_ends_with?: String;
-  icon_not_ends_with?: String;
-  private?: Boolean;
-  private_not?: Boolean;
-  title?: String;
-  title_not?: String;
-  title_in?: String[] | String;
-  title_not_in?: String[] | String;
-  title_lt?: String;
-  title_lte?: String;
-  title_gt?: String;
-  title_gte?: String;
-  title_contains?: String;
-  title_not_contains?: String;
-  title_starts_with?: String;
-  title_not_starts_with?: String;
-  title_ends_with?: String;
-  title_not_ends_with?: String;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  AND?: EntityWhereInput[] | EntityWhereInput;
-  OR?: EntityWhereInput[] | EntityWhereInput;
-  NOT?: EntityWhereInput[] | EntityWhereInput;
-}
-
 export interface DashboardUpdateInput {
   createdBy?: UserUpdateOneRequiredWithoutDashboardsInput;
   entity?: EntityUpdateOneWithoutDashboardsInput;
@@ -899,24 +642,17 @@ export interface UserUpdateOneRequiredWithoutDashboardsInput {
   connect?: UserWhereUniqueInput;
 }
 
-export interface EntityUpdateManyWithoutCreatedByInput {
-  create?:
-    | EntityCreateWithoutCreatedByInput[]
-    | EntityCreateWithoutCreatedByInput;
-  delete?: EntityWhereUniqueInput[] | EntityWhereUniqueInput;
-  connect?: EntityWhereUniqueInput[] | EntityWhereUniqueInput;
-  set?: EntityWhereUniqueInput[] | EntityWhereUniqueInput;
-  disconnect?: EntityWhereUniqueInput[] | EntityWhereUniqueInput;
-  update?:
-    | EntityUpdateWithWhereUniqueWithoutCreatedByInput[]
-    | EntityUpdateWithWhereUniqueWithoutCreatedByInput;
-  upsert?:
-    | EntityUpsertWithWhereUniqueWithoutCreatedByInput[]
-    | EntityUpsertWithWhereUniqueWithoutCreatedByInput;
-  deleteMany?: EntityScalarWhereInput[] | EntityScalarWhereInput;
-  updateMany?:
-    | EntityUpdateManyWithWhereNestedInput[]
-    | EntityUpdateManyWithWhereNestedInput;
+export interface GraphUpdateWithoutDashboardDataInput {
+  createdBy?: UserUpdateOneRequiredWithoutGraphsInput;
+  entity?: EntityUpdateOneWithoutGraphsInput;
+  icon?: String;
+  lineGenerators?: LineGeneratorUpdateManyWithoutGraphInput;
+  publicUrl?: String;
+  title?: String;
+  update?: GraphUpdateUpdateOneWithoutGraphInput;
+  updateInterval?: Int;
+  xAxisLabel?: String;
+  yAxisLabel?: String;
 }
 
 export interface UserUpdateWithoutDashboardsDataInput {
@@ -930,15 +666,15 @@ export interface UserUpdateWithoutDashboardsDataInput {
   role?: Role;
 }
 
-export interface TestSubscriptionWhereInput {
+export interface UserSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
   updatedFields_contains_every?: String[] | String;
   updatedFields_contains_some?: String[] | String;
-  node?: TestWhereInput;
-  AND?: TestSubscriptionWhereInput[] | TestSubscriptionWhereInput;
-  OR?: TestSubscriptionWhereInput[] | TestSubscriptionWhereInput;
-  NOT?: TestSubscriptionWhereInput[] | TestSubscriptionWhereInput;
+  node?: UserWhereInput;
+  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
 }
 
 export interface DataSourceUpdateManyWithoutCreatedByInput {
@@ -959,729 +695,6 @@ export interface DataSourceUpdateManyWithoutCreatedByInput {
   updateMany?:
     | DataSourceUpdateManyWithWhereNestedInput[]
     | DataSourceUpdateManyWithWhereNestedInput;
-}
-
-export interface LineGeneratorWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  color?: String;
-  color_not?: String;
-  color_in?: String[] | String;
-  color_not_in?: String[] | String;
-  color_lt?: String;
-  color_lte?: String;
-  color_gt?: String;
-  color_gte?: String;
-  color_contains?: String;
-  color_not_contains?: String;
-  color_starts_with?: String;
-  color_not_starts_with?: String;
-  color_ends_with?: String;
-  color_not_ends_with?: String;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  createdBy?: UserWhereInput;
-  dataSource?: DataSourceWhereInput;
-  graph?: GraphWhereInput;
-  line?: LineWhereInput;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  state?: LineGeneratorState;
-  state_not?: LineGeneratorState;
-  state_in?: LineGeneratorState[] | LineGeneratorState;
-  state_not_in?: LineGeneratorState[] | LineGeneratorState;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  AND?: LineGeneratorWhereInput[] | LineGeneratorWhereInput;
-  OR?: LineGeneratorWhereInput[] | LineGeneratorWhereInput;
-  NOT?: LineGeneratorWhereInput[] | LineGeneratorWhereInput;
-}
-
-export interface DataSourceUpdateWithWhereUniqueWithoutCreatedByInput {
-  where: DataSourceWhereUniqueInput;
-  data: DataSourceUpdateWithoutCreatedByDataInput;
-}
-
-export interface LineSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: LineWhereInput;
-  AND?: LineSubscriptionWhereInput[] | LineSubscriptionWhereInput;
-  OR?: LineSubscriptionWhereInput[] | LineSubscriptionWhereInput;
-  NOT?: LineSubscriptionWhereInput[] | LineSubscriptionWhereInput;
-}
-
-export interface DataSourceUpdateWithoutCreatedByDataInput {
-  author?: String;
-  description?: String;
-  env?: Json;
-  lineGenerators?: LineGeneratorUpdateManyWithoutDataSourceInput;
-  meta?: Json;
-  name?: String;
-  requiredEnvVars?: DataSourceUpdaterequiredEnvVarsInput;
-  requiredParams?: DataSourceUpdaterequiredParamsInput;
-  source?: String;
-  type?: DataSourceType;
-}
-
-export interface GraphSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: GraphWhereInput;
-  AND?: GraphSubscriptionWhereInput[] | GraphSubscriptionWhereInput;
-  OR?: GraphSubscriptionWhereInput[] | GraphSubscriptionWhereInput;
-  NOT?: GraphSubscriptionWhereInput[] | GraphSubscriptionWhereInput;
-}
-
-export interface LineGeneratorUpdateManyWithoutDataSourceInput {
-  create?:
-    | LineGeneratorCreateWithoutDataSourceInput[]
-    | LineGeneratorCreateWithoutDataSourceInput;
-  delete?: LineGeneratorWhereUniqueInput[] | LineGeneratorWhereUniqueInput;
-  connect?: LineGeneratorWhereUniqueInput[] | LineGeneratorWhereUniqueInput;
-  set?: LineGeneratorWhereUniqueInput[] | LineGeneratorWhereUniqueInput;
-  disconnect?: LineGeneratorWhereUniqueInput[] | LineGeneratorWhereUniqueInput;
-  update?:
-    | LineGeneratorUpdateWithWhereUniqueWithoutDataSourceInput[]
-    | LineGeneratorUpdateWithWhereUniqueWithoutDataSourceInput;
-  upsert?:
-    | LineGeneratorUpsertWithWhereUniqueWithoutDataSourceInput[]
-    | LineGeneratorUpsertWithWhereUniqueWithoutDataSourceInput;
-  deleteMany?: LineGeneratorScalarWhereInput[] | LineGeneratorScalarWhereInput;
-  updateMany?:
-    | LineGeneratorUpdateManyWithWhereNestedInput[]
-    | LineGeneratorUpdateManyWithWhereNestedInput;
-}
-
-export interface EntitySubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: EntityWhereInput;
-  AND?: EntitySubscriptionWhereInput[] | EntitySubscriptionWhereInput;
-  OR?: EntitySubscriptionWhereInput[] | EntitySubscriptionWhereInput;
-  NOT?: EntitySubscriptionWhereInput[] | EntitySubscriptionWhereInput;
-}
-
-export interface LineGeneratorUpdateWithWhereUniqueWithoutDataSourceInput {
-  where: LineGeneratorWhereUniqueInput;
-  data: LineGeneratorUpdateWithoutDataSourceDataInput;
-}
-
-export interface DashboardSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: DashboardWhereInput;
-  AND?: DashboardSubscriptionWhereInput[] | DashboardSubscriptionWhereInput;
-  OR?: DashboardSubscriptionWhereInput[] | DashboardSubscriptionWhereInput;
-  NOT?: DashboardSubscriptionWhereInput[] | DashboardSubscriptionWhereInput;
-}
-
-export interface LineGeneratorUpdateWithoutDataSourceDataInput {
-  color?: String;
-  createdBy?: UserUpdateOneRequiredWithoutLineGeneratorsInput;
-  graph?: GraphUpdateOneRequiredWithoutLineGeneratorsInput;
-  line?: LineUpdateOneWithoutLineGeneratorInput;
-  name?: String;
-  parameterAliases?: Json;
-  state?: LineGeneratorState;
-}
-
-export type DataSourceWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  name?: String;
-}>;
-
-export interface UserUpdateOneRequiredWithoutLineGeneratorsInput {
-  create?: UserCreateWithoutLineGeneratorsInput;
-  update?: UserUpdateWithoutLineGeneratorsDataInput;
-  upsert?: UserUpsertWithoutLineGeneratorsInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface UserCreateInput {
-  id?: ID_Input;
-  dashboards?: DashboardCreateManyWithoutCreatedByInput;
-  dataSources?: DataSourceCreateManyWithoutCreatedByInput;
-  displayName: String;
-  email: String;
-  entities?: EntityCreateManyWithoutCreatedByInput;
-  graphs?: GraphCreateManyWithoutCreatedByInput;
-  lineGenerators?: LineGeneratorCreateManyWithoutCreatedByInput;
-  password: String;
-  role?: Role;
-}
-
-export interface UserUpdateWithoutLineGeneratorsDataInput {
-  dashboards?: DashboardUpdateManyWithoutCreatedByInput;
-  dataSources?: DataSourceUpdateManyWithoutCreatedByInput;
-  displayName?: String;
-  email?: String;
-  entities?: EntityUpdateManyWithoutCreatedByInput;
-  graphs?: GraphUpdateManyWithoutCreatedByInput;
-  password?: String;
-  role?: Role;
-}
-
-export type EntityWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface DashboardUpdateManyWithoutCreatedByInput {
-  create?:
-    | DashboardCreateWithoutCreatedByInput[]
-    | DashboardCreateWithoutCreatedByInput;
-  delete?: DashboardWhereUniqueInput[] | DashboardWhereUniqueInput;
-  connect?: DashboardWhereUniqueInput[] | DashboardWhereUniqueInput;
-  set?: DashboardWhereUniqueInput[] | DashboardWhereUniqueInput;
-  disconnect?: DashboardWhereUniqueInput[] | DashboardWhereUniqueInput;
-  update?:
-    | DashboardUpdateWithWhereUniqueWithoutCreatedByInput[]
-    | DashboardUpdateWithWhereUniqueWithoutCreatedByInput;
-  upsert?:
-    | DashboardUpsertWithWhereUniqueWithoutCreatedByInput[]
-    | DashboardUpsertWithWhereUniqueWithoutCreatedByInput;
-  deleteMany?: DashboardScalarWhereInput[] | DashboardScalarWhereInput;
-  updateMany?:
-    | DashboardUpdateManyWithWhereNestedInput[]
-    | DashboardUpdateManyWithWhereNestedInput;
-}
-
-export interface TestCreateInput {
-  id?: ID_Input;
-  text?: String;
-}
-
-export interface DashboardUpdateWithWhereUniqueWithoutCreatedByInput {
-  where: DashboardWhereUniqueInput;
-  data: DashboardUpdateWithoutCreatedByDataInput;
-}
-
-export type GraphWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface DashboardUpdateWithoutCreatedByDataInput {
-  entity?: EntityUpdateOneWithoutDashboardsInput;
-  graphs?: GraphUpdateManyWithoutDashboardInput;
-  icon?: String;
-  publicUrl?: String;
-  title?: String;
-  updateInterval?: Int;
-}
-
-export interface LineUpdateWithoutPointsDataInput {
-  lineGenerator?: LineGeneratorUpdateOneRequiredWithoutLineInput;
-}
-
-export interface EntityUpdateOneWithoutDashboardsInput {
-  create?: EntityCreateWithoutDashboardsInput;
-  update?: EntityUpdateWithoutDashboardsDataInput;
-  upsert?: EntityUpsertWithoutDashboardsInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: EntityWhereUniqueInput;
-}
-
-export type GraphUpdateWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface EntityUpdateWithoutDashboardsDataInput {
-  createdBy?: UserUpdateOneWithoutEntitiesInput;
-  data?: Json;
-  graphs?: GraphUpdateManyWithoutEntityInput;
-  icon?: String;
-  private?: Boolean;
-  title?: String;
-}
-
-export interface PointUpdateInput {
-  hidden?: Boolean;
-  line?: LineUpdateOneRequiredWithoutPointsInput;
-  x?: DateTimeInput;
-  y?: Float;
-}
-
-export interface UserUpdateOneWithoutEntitiesInput {
-  create?: UserCreateWithoutEntitiesInput;
-  update?: UserUpdateWithoutEntitiesDataInput;
-  upsert?: UserUpsertWithoutEntitiesInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface LineCreateOneWithoutPointsInput {
-  create?: LineCreateWithoutPointsInput;
-  connect?: LineWhereUniqueInput;
-}
-
-export interface UserUpdateWithoutEntitiesDataInput {
-  dashboards?: DashboardUpdateManyWithoutCreatedByInput;
-  dataSources?: DataSourceUpdateManyWithoutCreatedByInput;
-  displayName?: String;
-  email?: String;
-  graphs?: GraphUpdateManyWithoutCreatedByInput;
-  lineGenerators?: LineGeneratorUpdateManyWithoutCreatedByInput;
-  password?: String;
-  role?: Role;
-}
-
-export interface DashboardWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  createdBy?: UserWhereInput;
-  entity?: EntityWhereInput;
-  graphs_every?: GraphWhereInput;
-  graphs_some?: GraphWhereInput;
-  graphs_none?: GraphWhereInput;
-  icon?: String;
-  icon_not?: String;
-  icon_in?: String[] | String;
-  icon_not_in?: String[] | String;
-  icon_lt?: String;
-  icon_lte?: String;
-  icon_gt?: String;
-  icon_gte?: String;
-  icon_contains?: String;
-  icon_not_contains?: String;
-  icon_starts_with?: String;
-  icon_not_starts_with?: String;
-  icon_ends_with?: String;
-  icon_not_ends_with?: String;
-  publicUrl?: String;
-  publicUrl_not?: String;
-  publicUrl_in?: String[] | String;
-  publicUrl_not_in?: String[] | String;
-  publicUrl_lt?: String;
-  publicUrl_lte?: String;
-  publicUrl_gt?: String;
-  publicUrl_gte?: String;
-  publicUrl_contains?: String;
-  publicUrl_not_contains?: String;
-  publicUrl_starts_with?: String;
-  publicUrl_not_starts_with?: String;
-  publicUrl_ends_with?: String;
-  publicUrl_not_ends_with?: String;
-  title?: String;
-  title_not?: String;
-  title_in?: String[] | String;
-  title_not_in?: String[] | String;
-  title_lt?: String;
-  title_lte?: String;
-  title_gt?: String;
-  title_gte?: String;
-  title_contains?: String;
-  title_not_contains?: String;
-  title_starts_with?: String;
-  title_not_starts_with?: String;
-  title_ends_with?: String;
-  title_not_ends_with?: String;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  updateInterval?: Int;
-  updateInterval_not?: Int;
-  updateInterval_in?: Int[] | Int;
-  updateInterval_not_in?: Int[] | Int;
-  updateInterval_lt?: Int;
-  updateInterval_lte?: Int;
-  updateInterval_gt?: Int;
-  updateInterval_gte?: Int;
-  AND?: DashboardWhereInput[] | DashboardWhereInput;
-  OR?: DashboardWhereInput[] | DashboardWhereInput;
-  NOT?: DashboardWhereInput[] | DashboardWhereInput;
-}
-
-export interface GraphUpdateManyWithoutCreatedByInput {
-  create?:
-    | GraphCreateWithoutCreatedByInput[]
-    | GraphCreateWithoutCreatedByInput;
-  delete?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
-  connect?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
-  set?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
-  disconnect?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
-  update?:
-    | GraphUpdateWithWhereUniqueWithoutCreatedByInput[]
-    | GraphUpdateWithWhereUniqueWithoutCreatedByInput;
-  upsert?:
-    | GraphUpsertWithWhereUniqueWithoutCreatedByInput[]
-    | GraphUpsertWithWhereUniqueWithoutCreatedByInput;
-  deleteMany?: GraphScalarWhereInput[] | GraphScalarWhereInput;
-  updateMany?:
-    | GraphUpdateManyWithWhereNestedInput[]
-    | GraphUpdateManyWithWhereNestedInput;
-}
-
-export interface LineGeneratorUpdateManyMutationInput {
-  color?: String;
-  name?: String;
-  parameterAliases?: Json;
-  state?: LineGeneratorState;
-}
-
-export interface GraphUpdateWithWhereUniqueWithoutCreatedByInput {
-  where: GraphWhereUniqueInput;
-  data: GraphUpdateWithoutCreatedByDataInput;
-}
-
-export type LineGeneratorWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  name?: String;
-}>;
-
-export interface GraphUpdateWithoutCreatedByDataInput {
-  dashboard?: DashboardUpdateOneRequiredWithoutGraphsInput;
-  entity?: EntityUpdateOneWithoutGraphsInput;
-  icon?: String;
-  lineGenerators?: LineGeneratorUpdateManyWithoutGraphInput;
-  publicUrl?: String;
-  title?: String;
-  update?: GraphUpdateUpdateOneWithoutGraphInput;
-  updateInterval?: Int;
-  xAxisLabel?: String;
-  yAxisLabel?: String;
-}
-
-export interface LineGeneratorUpsertWithoutLineInput {
-  update: LineGeneratorUpdateWithoutLineDataInput;
-  create: LineGeneratorCreateWithoutLineInput;
-}
-
-export interface DashboardUpdateOneRequiredWithoutGraphsInput {
-  create?: DashboardCreateWithoutGraphsInput;
-  update?: DashboardUpdateWithoutGraphsDataInput;
-  upsert?: DashboardUpsertWithoutGraphsInput;
-  connect?: DashboardWhereUniqueInput;
-}
-
-export type PointWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface GraphUpdateCreateInput {
-  id?: ID_Input;
-  graph: GraphCreateOneWithoutUpdateInput;
-  time: DateTimeInput;
-}
-
-export interface LineUpdateInput {
-  lineGenerator?: LineGeneratorUpdateOneRequiredWithoutLineInput;
-  points?: PointUpdateManyWithoutLineInput;
-}
-
-export interface DashboardUpsertWithoutGraphsInput {
-  update: DashboardUpdateWithoutGraphsDataInput;
-  create: DashboardCreateWithoutGraphsInput;
-}
-
-export type TestWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface EntityUpdateOneWithoutGraphsInput {
-  create?: EntityCreateWithoutGraphsInput;
-  update?: EntityUpdateWithoutGraphsDataInput;
-  upsert?: EntityUpsertWithoutGraphsInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: EntityWhereUniqueInput;
-}
-
-export interface TestWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  text?: String;
-  text_not?: String;
-  text_in?: String[] | String;
-  text_not_in?: String[] | String;
-  text_lt?: String;
-  text_lte?: String;
-  text_gt?: String;
-  text_gte?: String;
-  text_contains?: String;
-  text_not_contains?: String;
-  text_starts_with?: String;
-  text_not_starts_with?: String;
-  text_ends_with?: String;
-  text_not_ends_with?: String;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  AND?: TestWhereInput[] | TestWhereInput;
-  OR?: TestWhereInput[] | TestWhereInput;
-  NOT?: TestWhereInput[] | TestWhereInput;
-}
-
-export interface EntityUpdateWithoutGraphsDataInput {
-  createdBy?: UserUpdateOneWithoutEntitiesInput;
-  dashboards?: DashboardUpdateManyWithoutEntityInput;
-  data?: Json;
-  icon?: String;
-  private?: Boolean;
-  title?: String;
-}
-
-export interface GraphUpdateUpdateManyMutationInput {
-  time?: DateTimeInput;
-}
-
-export interface DashboardUpdateManyWithoutEntityInput {
-  create?:
-    | DashboardCreateWithoutEntityInput[]
-    | DashboardCreateWithoutEntityInput;
-  delete?: DashboardWhereUniqueInput[] | DashboardWhereUniqueInput;
-  connect?: DashboardWhereUniqueInput[] | DashboardWhereUniqueInput;
-  set?: DashboardWhereUniqueInput[] | DashboardWhereUniqueInput;
-  disconnect?: DashboardWhereUniqueInput[] | DashboardWhereUniqueInput;
-  update?:
-    | DashboardUpdateWithWhereUniqueWithoutEntityInput[]
-    | DashboardUpdateWithWhereUniqueWithoutEntityInput;
-  upsert?:
-    | DashboardUpsertWithWhereUniqueWithoutEntityInput[]
-    | DashboardUpsertWithWhereUniqueWithoutEntityInput;
-  deleteMany?: DashboardScalarWhereInput[] | DashboardScalarWhereInput;
-  updateMany?:
-    | DashboardUpdateManyWithWhereNestedInput[]
-    | DashboardUpdateManyWithWhereNestedInput;
-}
-
-export interface GraphUpdateWithoutUpdateDataInput {
-  createdBy?: UserUpdateOneRequiredWithoutGraphsInput;
-  dashboard?: DashboardUpdateOneRequiredWithoutGraphsInput;
-  entity?: EntityUpdateOneWithoutGraphsInput;
-  icon?: String;
-  lineGenerators?: LineGeneratorUpdateManyWithoutGraphInput;
-  publicUrl?: String;
-  title?: String;
-  updateInterval?: Int;
-  xAxisLabel?: String;
-  yAxisLabel?: String;
-}
-
-export interface DashboardUpdateWithWhereUniqueWithoutEntityInput {
-  where: DashboardWhereUniqueInput;
-  data: DashboardUpdateWithoutEntityDataInput;
-}
-
-export interface GraphUpdateOneRequiredWithoutUpdateInput {
-  create?: GraphCreateWithoutUpdateInput;
-  update?: GraphUpdateWithoutUpdateDataInput;
-  upsert?: GraphUpsertWithoutUpdateInput;
-  connect?: GraphWhereUniqueInput;
-}
-
-export interface DashboardUpdateWithoutEntityDataInput {
-  createdBy?: UserUpdateOneRequiredWithoutDashboardsInput;
-  graphs?: GraphUpdateManyWithoutDashboardInput;
-  icon?: String;
-  publicUrl?: String;
-  title?: String;
-  updateInterval?: Int;
-}
-
-export interface GraphCreateWithoutUpdateInput {
-  id?: ID_Input;
-  createdBy: UserCreateOneWithoutGraphsInput;
-  dashboard: DashboardCreateOneWithoutGraphsInput;
-  entity?: EntityCreateOneWithoutGraphsInput;
-  icon?: String;
-  lineGenerators?: LineGeneratorCreateManyWithoutGraphInput;
-  publicUrl?: String;
-  title: String;
-  updateInterval?: Int;
-  xAxisLabel?: String;
-  yAxisLabel?: String;
-}
-
-export interface GraphUpdateManyWithoutDashboardInput {
-  create?:
-    | GraphCreateWithoutDashboardInput[]
-    | GraphCreateWithoutDashboardInput;
-  delete?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
-  connect?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
-  set?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
-  disconnect?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
-  update?:
-    | GraphUpdateWithWhereUniqueWithoutDashboardInput[]
-    | GraphUpdateWithWhereUniqueWithoutDashboardInput;
-  upsert?:
-    | GraphUpsertWithWhereUniqueWithoutDashboardInput[]
-    | GraphUpsertWithWhereUniqueWithoutDashboardInput;
-  deleteMany?: GraphScalarWhereInput[] | GraphScalarWhereInput;
-  updateMany?:
-    | GraphUpdateManyWithWhereNestedInput[]
-    | GraphUpdateManyWithWhereNestedInput;
-}
-
-export interface UserCreateOneWithoutDashboardsInput {
-  create?: UserCreateWithoutDashboardsInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface GraphUpdateManyMutationInput {
-  icon?: String;
-  publicUrl?: String;
-  title?: String;
-  updateInterval?: Int;
-  xAxisLabel?: String;
-  yAxisLabel?: String;
-}
-
-export interface DataSourceCreateManyWithoutCreatedByInput {
-  create?:
-    | DataSourceCreateWithoutCreatedByInput[]
-    | DataSourceCreateWithoutCreatedByInput;
-  connect?: DataSourceWhereUniqueInput[] | DataSourceWhereUniqueInput;
-}
-
-export interface GraphUpdateInput {
-  createdBy?: UserUpdateOneRequiredWithoutGraphsInput;
-  dashboard?: DashboardUpdateOneRequiredWithoutGraphsInput;
-  entity?: EntityUpdateOneWithoutGraphsInput;
-  icon?: String;
-  lineGenerators?: LineGeneratorUpdateManyWithoutGraphInput;
-  publicUrl?: String;
-  title?: String;
-  update?: GraphUpdateUpdateOneWithoutGraphInput;
-  updateInterval?: Int;
-  xAxisLabel?: String;
-  yAxisLabel?: String;
-}
-
-export interface LineGeneratorCreateManyWithoutDataSourceInput {
-  create?:
-    | LineGeneratorCreateWithoutDataSourceInput[]
-    | LineGeneratorCreateWithoutDataSourceInput;
-  connect?: LineGeneratorWhereUniqueInput[] | LineGeneratorWhereUniqueInput;
-}
-
-export interface GraphCreateInput {
-  id?: ID_Input;
-  createdBy: UserCreateOneWithoutGraphsInput;
-  dashboard: DashboardCreateOneWithoutGraphsInput;
-  entity?: EntityCreateOneWithoutGraphsInput;
-  icon?: String;
-  lineGenerators?: LineGeneratorCreateManyWithoutGraphInput;
-  publicUrl?: String;
-  title: String;
-  update?: GraphUpdateCreateOneWithoutGraphInput;
-  updateInterval?: Int;
-  xAxisLabel?: String;
-  yAxisLabel?: String;
-}
-
-export interface UserCreateOneWithoutLineGeneratorsInput {
-  create?: UserCreateWithoutLineGeneratorsInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface EntityUpdateManyMutationInput {
-  data?: Json;
-  icon?: String;
-  private?: Boolean;
-  title?: String;
-}
-
-export interface DashboardCreateManyWithoutCreatedByInput {
-  create?:
-    | DashboardCreateWithoutCreatedByInput[]
-    | DashboardCreateWithoutCreatedByInput;
-  connect?: DashboardWhereUniqueInput[] | DashboardWhereUniqueInput;
 }
 
 export interface GraphWhereInput {
@@ -1803,6 +816,903 @@ export interface GraphWhereInput {
   AND?: GraphWhereInput[] | GraphWhereInput;
   OR?: GraphWhereInput[] | GraphWhereInput;
   NOT?: GraphWhereInput[] | GraphWhereInput;
+}
+
+export interface DataSourceUpdateWithWhereUniqueWithoutCreatedByInput {
+  where: DataSourceWhereUniqueInput;
+  data: DataSourceUpdateWithoutCreatedByDataInput;
+}
+
+export interface LineGeneratorSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: LineGeneratorWhereInput;
+  AND?:
+    | LineGeneratorSubscriptionWhereInput[]
+    | LineGeneratorSubscriptionWhereInput;
+  OR?:
+    | LineGeneratorSubscriptionWhereInput[]
+    | LineGeneratorSubscriptionWhereInput;
+  NOT?:
+    | LineGeneratorSubscriptionWhereInput[]
+    | LineGeneratorSubscriptionWhereInput;
+}
+
+export interface DataSourceUpdateWithoutCreatedByDataInput {
+  author?: String;
+  description?: String;
+  env?: Json;
+  lineGenerators?: LineGeneratorUpdateManyWithoutDataSourceInput;
+  meta?: Json;
+  name?: String;
+  requiredEnvVars?: DataSourceUpdaterequiredEnvVarsInput;
+  requiredParams?: DataSourceUpdaterequiredParamsInput;
+  source?: String;
+  type?: DataSourceType;
+}
+
+export interface LineSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: LineWhereInput;
+  AND?: LineSubscriptionWhereInput[] | LineSubscriptionWhereInput;
+  OR?: LineSubscriptionWhereInput[] | LineSubscriptionWhereInput;
+  NOT?: LineSubscriptionWhereInput[] | LineSubscriptionWhereInput;
+}
+
+export interface LineGeneratorUpdateManyWithoutDataSourceInput {
+  create?:
+    | LineGeneratorCreateWithoutDataSourceInput[]
+    | LineGeneratorCreateWithoutDataSourceInput;
+  delete?: LineGeneratorWhereUniqueInput[] | LineGeneratorWhereUniqueInput;
+  connect?: LineGeneratorWhereUniqueInput[] | LineGeneratorWhereUniqueInput;
+  set?: LineGeneratorWhereUniqueInput[] | LineGeneratorWhereUniqueInput;
+  disconnect?: LineGeneratorWhereUniqueInput[] | LineGeneratorWhereUniqueInput;
+  update?:
+    | LineGeneratorUpdateWithWhereUniqueWithoutDataSourceInput[]
+    | LineGeneratorUpdateWithWhereUniqueWithoutDataSourceInput;
+  upsert?:
+    | LineGeneratorUpsertWithWhereUniqueWithoutDataSourceInput[]
+    | LineGeneratorUpsertWithWhereUniqueWithoutDataSourceInput;
+  deleteMany?: LineGeneratorScalarWhereInput[] | LineGeneratorScalarWhereInput;
+  updateMany?:
+    | LineGeneratorUpdateManyWithWhereNestedInput[]
+    | LineGeneratorUpdateManyWithWhereNestedInput;
+}
+
+export interface GraphSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: GraphWhereInput;
+  AND?: GraphSubscriptionWhereInput[] | GraphSubscriptionWhereInput;
+  OR?: GraphSubscriptionWhereInput[] | GraphSubscriptionWhereInput;
+  NOT?: GraphSubscriptionWhereInput[] | GraphSubscriptionWhereInput;
+}
+
+export interface LineGeneratorUpdateWithWhereUniqueWithoutDataSourceInput {
+  where: LineGeneratorWhereUniqueInput;
+  data: LineGeneratorUpdateWithoutDataSourceDataInput;
+}
+
+export interface DataSourceSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: DataSourceWhereInput;
+  AND?: DataSourceSubscriptionWhereInput[] | DataSourceSubscriptionWhereInput;
+  OR?: DataSourceSubscriptionWhereInput[] | DataSourceSubscriptionWhereInput;
+  NOT?: DataSourceSubscriptionWhereInput[] | DataSourceSubscriptionWhereInput;
+}
+
+export interface LineGeneratorUpdateWithoutDataSourceDataInput {
+  color?: String;
+  createdBy?: UserUpdateOneRequiredWithoutLineGeneratorsInput;
+  graph?: GraphUpdateOneRequiredWithoutLineGeneratorsInput;
+  line?: LineUpdateOneWithoutLineGeneratorInput;
+  name?: String;
+  parameterAliases?: Json;
+  state?: LineGeneratorState;
+}
+
+export interface DataSourceWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  author?: String;
+  author_not?: String;
+  author_in?: String[] | String;
+  author_not_in?: String[] | String;
+  author_lt?: String;
+  author_lte?: String;
+  author_gt?: String;
+  author_gte?: String;
+  author_contains?: String;
+  author_not_contains?: String;
+  author_starts_with?: String;
+  author_not_starts_with?: String;
+  author_ends_with?: String;
+  author_not_ends_with?: String;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  createdBy?: UserWhereInput;
+  description?: String;
+  description_not?: String;
+  description_in?: String[] | String;
+  description_not_in?: String[] | String;
+  description_lt?: String;
+  description_lte?: String;
+  description_gt?: String;
+  description_gte?: String;
+  description_contains?: String;
+  description_not_contains?: String;
+  description_starts_with?: String;
+  description_not_starts_with?: String;
+  description_ends_with?: String;
+  description_not_ends_with?: String;
+  lineGenerators_every?: LineGeneratorWhereInput;
+  lineGenerators_some?: LineGeneratorWhereInput;
+  lineGenerators_none?: LineGeneratorWhereInput;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  source?: String;
+  source_not?: String;
+  source_in?: String[] | String;
+  source_not_in?: String[] | String;
+  source_lt?: String;
+  source_lte?: String;
+  source_gt?: String;
+  source_gte?: String;
+  source_contains?: String;
+  source_not_contains?: String;
+  source_starts_with?: String;
+  source_not_starts_with?: String;
+  source_ends_with?: String;
+  source_not_ends_with?: String;
+  type?: DataSourceType;
+  type_not?: DataSourceType;
+  type_in?: DataSourceType[] | DataSourceType;
+  type_not_in?: DataSourceType[] | DataSourceType;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  AND?: DataSourceWhereInput[] | DataSourceWhereInput;
+  OR?: DataSourceWhereInput[] | DataSourceWhereInput;
+  NOT?: DataSourceWhereInput[] | DataSourceWhereInput;
+}
+
+export interface UserUpdateOneRequiredWithoutLineGeneratorsInput {
+  create?: UserCreateWithoutLineGeneratorsInput;
+  update?: UserUpdateWithoutLineGeneratorsDataInput;
+  upsert?: UserUpsertWithoutLineGeneratorsInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface UserWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  dashboards_every?: DashboardWhereInput;
+  dashboards_some?: DashboardWhereInput;
+  dashboards_none?: DashboardWhereInput;
+  dataSources_every?: DataSourceWhereInput;
+  dataSources_some?: DataSourceWhereInput;
+  dataSources_none?: DataSourceWhereInput;
+  displayName?: String;
+  displayName_not?: String;
+  displayName_in?: String[] | String;
+  displayName_not_in?: String[] | String;
+  displayName_lt?: String;
+  displayName_lte?: String;
+  displayName_gt?: String;
+  displayName_gte?: String;
+  displayName_contains?: String;
+  displayName_not_contains?: String;
+  displayName_starts_with?: String;
+  displayName_not_starts_with?: String;
+  displayName_ends_with?: String;
+  displayName_not_ends_with?: String;
+  email?: String;
+  email_not?: String;
+  email_in?: String[] | String;
+  email_not_in?: String[] | String;
+  email_lt?: String;
+  email_lte?: String;
+  email_gt?: String;
+  email_gte?: String;
+  email_contains?: String;
+  email_not_contains?: String;
+  email_starts_with?: String;
+  email_not_starts_with?: String;
+  email_ends_with?: String;
+  email_not_ends_with?: String;
+  entities_every?: EntityWhereInput;
+  entities_some?: EntityWhereInput;
+  entities_none?: EntityWhereInput;
+  graphs_every?: GraphWhereInput;
+  graphs_some?: GraphWhereInput;
+  graphs_none?: GraphWhereInput;
+  lineGenerators_every?: LineGeneratorWhereInput;
+  lineGenerators_some?: LineGeneratorWhereInput;
+  lineGenerators_none?: LineGeneratorWhereInput;
+  password?: String;
+  password_not?: String;
+  password_in?: String[] | String;
+  password_not_in?: String[] | String;
+  password_lt?: String;
+  password_lte?: String;
+  password_gt?: String;
+  password_gte?: String;
+  password_contains?: String;
+  password_not_contains?: String;
+  password_starts_with?: String;
+  password_not_starts_with?: String;
+  password_ends_with?: String;
+  password_not_ends_with?: String;
+  role?: Role;
+  role_not?: Role;
+  role_in?: Role[] | Role;
+  role_not_in?: Role[] | Role;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  AND?: UserWhereInput[] | UserWhereInput;
+  OR?: UserWhereInput[] | UserWhereInput;
+  NOT?: UserWhereInput[] | UserWhereInput;
+}
+
+export interface UserUpdateWithoutLineGeneratorsDataInput {
+  dashboards?: DashboardUpdateManyWithoutCreatedByInput;
+  dataSources?: DataSourceUpdateManyWithoutCreatedByInput;
+  displayName?: String;
+  email?: String;
+  entities?: EntityUpdateManyWithoutCreatedByInput;
+  graphs?: GraphUpdateManyWithoutCreatedByInput;
+  password?: String;
+  role?: Role;
+}
+
+export interface UserCreateInput {
+  id?: ID_Input;
+  dashboards?: DashboardCreateManyWithoutCreatedByInput;
+  dataSources?: DataSourceCreateManyWithoutCreatedByInput;
+  displayName: String;
+  email: String;
+  entities?: EntityCreateManyWithoutCreatedByInput;
+  graphs?: GraphCreateManyWithoutCreatedByInput;
+  lineGenerators?: LineGeneratorCreateManyWithoutCreatedByInput;
+  password: String;
+  role?: Role;
+}
+
+export interface DashboardUpdateManyWithoutCreatedByInput {
+  create?:
+    | DashboardCreateWithoutCreatedByInput[]
+    | DashboardCreateWithoutCreatedByInput;
+  delete?: DashboardWhereUniqueInput[] | DashboardWhereUniqueInput;
+  connect?: DashboardWhereUniqueInput[] | DashboardWhereUniqueInput;
+  set?: DashboardWhereUniqueInput[] | DashboardWhereUniqueInput;
+  disconnect?: DashboardWhereUniqueInput[] | DashboardWhereUniqueInput;
+  update?:
+    | DashboardUpdateWithWhereUniqueWithoutCreatedByInput[]
+    | DashboardUpdateWithWhereUniqueWithoutCreatedByInput;
+  upsert?:
+    | DashboardUpsertWithWhereUniqueWithoutCreatedByInput[]
+    | DashboardUpsertWithWhereUniqueWithoutCreatedByInput;
+  deleteMany?: DashboardScalarWhereInput[] | DashboardScalarWhereInput;
+  updateMany?:
+    | DashboardUpdateManyWithWhereNestedInput[]
+    | DashboardUpdateManyWithWhereNestedInput;
+}
+
+export interface LineUpsertWithoutPointsInput {
+  update: LineUpdateWithoutPointsDataInput;
+  create: LineCreateWithoutPointsInput;
+}
+
+export interface DashboardUpdateWithWhereUniqueWithoutCreatedByInput {
+  where: DashboardWhereUniqueInput;
+  data: DashboardUpdateWithoutCreatedByDataInput;
+}
+
+export interface LineUpdateWithoutPointsDataInput {
+  lineGenerator?: LineGeneratorUpdateOneRequiredWithoutLineInput;
+}
+
+export interface DashboardUpdateWithoutCreatedByDataInput {
+  entity?: EntityUpdateOneWithoutDashboardsInput;
+  graphs?: GraphUpdateManyWithoutDashboardInput;
+  icon?: String;
+  publicUrl?: String;
+  title?: String;
+  updateInterval?: Int;
+}
+
+export interface PointUpdateInput {
+  hidden?: Boolean;
+  line?: LineUpdateOneRequiredWithoutPointsInput;
+  x?: DateTimeInput;
+  y?: Float;
+}
+
+export interface EntityUpdateOneWithoutDashboardsInput {
+  create?: EntityCreateWithoutDashboardsInput;
+  update?: EntityUpdateWithoutDashboardsDataInput;
+  upsert?: EntityUpsertWithoutDashboardsInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: EntityWhereUniqueInput;
+}
+
+export interface LineCreateWithoutPointsInput {
+  id?: ID_Input;
+  lineGenerator: LineGeneratorCreateOneWithoutLineInput;
+}
+
+export interface EntityUpdateWithoutDashboardsDataInput {
+  createdBy?: UserUpdateOneWithoutEntitiesInput;
+  data?: Json;
+  graphs?: GraphUpdateManyWithoutEntityInput;
+  icon?: String;
+  private?: Boolean;
+  title?: String;
+}
+
+export interface PointCreateInput {
+  id?: ID_Input;
+  hidden?: Boolean;
+  line: LineCreateOneWithoutPointsInput;
+  x: DateTimeInput;
+  y: Float;
+}
+
+export interface UserUpdateOneWithoutEntitiesInput {
+  create?: UserCreateWithoutEntitiesInput;
+  update?: UserUpdateWithoutEntitiesDataInput;
+  upsert?: UserUpsertWithoutEntitiesInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface LineGeneratorUpdateManyMutationInput {
+  color?: String;
+  name?: String;
+  parameterAliases?: Json;
+  state?: LineGeneratorState;
+}
+
+export interface UserUpdateWithoutEntitiesDataInput {
+  dashboards?: DashboardUpdateManyWithoutCreatedByInput;
+  dataSources?: DataSourceUpdateManyWithoutCreatedByInput;
+  displayName?: String;
+  email?: String;
+  graphs?: GraphUpdateManyWithoutCreatedByInput;
+  lineGenerators?: LineGeneratorUpdateManyWithoutCreatedByInput;
+  password?: String;
+  role?: Role;
+}
+
+export interface LineGeneratorCreateInput {
+  id?: ID_Input;
+  color?: String;
+  createdBy: UserCreateOneWithoutLineGeneratorsInput;
+  dataSource?: DataSourceCreateOneWithoutLineGeneratorsInput;
+  graph: GraphCreateOneWithoutLineGeneratorsInput;
+  line?: LineCreateOneWithoutLineGeneratorInput;
+  name: String;
+  parameterAliases?: Json;
+  state?: LineGeneratorState;
+}
+
+export interface GraphUpdateManyWithoutCreatedByInput {
+  create?:
+    | GraphCreateWithoutCreatedByInput[]
+    | GraphCreateWithoutCreatedByInput;
+  delete?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
+  connect?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
+  set?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
+  disconnect?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
+  update?:
+    | GraphUpdateWithWhereUniqueWithoutCreatedByInput[]
+    | GraphUpdateWithWhereUniqueWithoutCreatedByInput;
+  upsert?:
+    | GraphUpsertWithWhereUniqueWithoutCreatedByInput[]
+    | GraphUpsertWithWhereUniqueWithoutCreatedByInput;
+  deleteMany?: GraphScalarWhereInput[] | GraphScalarWhereInput;
+  updateMany?:
+    | GraphUpdateManyWithWhereNestedInput[]
+    | GraphUpdateManyWithWhereNestedInput;
+}
+
+export interface DashboardWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  createdBy?: UserWhereInput;
+  entity?: EntityWhereInput;
+  graphs_every?: GraphWhereInput;
+  graphs_some?: GraphWhereInput;
+  graphs_none?: GraphWhereInput;
+  icon?: String;
+  icon_not?: String;
+  icon_in?: String[] | String;
+  icon_not_in?: String[] | String;
+  icon_lt?: String;
+  icon_lte?: String;
+  icon_gt?: String;
+  icon_gte?: String;
+  icon_contains?: String;
+  icon_not_contains?: String;
+  icon_starts_with?: String;
+  icon_not_starts_with?: String;
+  icon_ends_with?: String;
+  icon_not_ends_with?: String;
+  publicUrl?: String;
+  publicUrl_not?: String;
+  publicUrl_in?: String[] | String;
+  publicUrl_not_in?: String[] | String;
+  publicUrl_lt?: String;
+  publicUrl_lte?: String;
+  publicUrl_gt?: String;
+  publicUrl_gte?: String;
+  publicUrl_contains?: String;
+  publicUrl_not_contains?: String;
+  publicUrl_starts_with?: String;
+  publicUrl_not_starts_with?: String;
+  publicUrl_ends_with?: String;
+  publicUrl_not_ends_with?: String;
+  title?: String;
+  title_not?: String;
+  title_in?: String[] | String;
+  title_not_in?: String[] | String;
+  title_lt?: String;
+  title_lte?: String;
+  title_gt?: String;
+  title_gte?: String;
+  title_contains?: String;
+  title_not_contains?: String;
+  title_starts_with?: String;
+  title_not_starts_with?: String;
+  title_ends_with?: String;
+  title_not_ends_with?: String;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  updateInterval?: Int;
+  updateInterval_not?: Int;
+  updateInterval_in?: Int[] | Int;
+  updateInterval_not_in?: Int[] | Int;
+  updateInterval_lt?: Int;
+  updateInterval_lte?: Int;
+  updateInterval_gt?: Int;
+  updateInterval_gte?: Int;
+  AND?: DashboardWhereInput[] | DashboardWhereInput;
+  OR?: DashboardWhereInput[] | DashboardWhereInput;
+  NOT?: DashboardWhereInput[] | DashboardWhereInput;
+}
+
+export interface GraphUpdateWithWhereUniqueWithoutCreatedByInput {
+  where: GraphWhereUniqueInput;
+  data: GraphUpdateWithoutCreatedByDataInput;
+}
+
+export interface LineGeneratorUpdateWithoutLineDataInput {
+  color?: String;
+  createdBy?: UserUpdateOneRequiredWithoutLineGeneratorsInput;
+  dataSource?: DataSourceUpdateOneWithoutLineGeneratorsInput;
+  graph?: GraphUpdateOneRequiredWithoutLineGeneratorsInput;
+  name?: String;
+  parameterAliases?: Json;
+  state?: LineGeneratorState;
+}
+
+export interface GraphUpdateWithoutCreatedByDataInput {
+  dashboard?: DashboardUpdateOneRequiredWithoutGraphsInput;
+  entity?: EntityUpdateOneWithoutGraphsInput;
+  icon?: String;
+  lineGenerators?: LineGeneratorUpdateManyWithoutGraphInput;
+  publicUrl?: String;
+  title?: String;
+  update?: GraphUpdateUpdateOneWithoutGraphInput;
+  updateInterval?: Int;
+  xAxisLabel?: String;
+  yAxisLabel?: String;
+}
+
+export type LineWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface DashboardUpdateOneRequiredWithoutGraphsInput {
+  create?: DashboardCreateWithoutGraphsInput;
+  update?: DashboardUpdateWithoutGraphsDataInput;
+  upsert?: DashboardUpsertWithoutGraphsInput;
+  connect?: DashboardWhereUniqueInput;
+}
+
+export interface LineGeneratorCreateWithoutLineInput {
+  id?: ID_Input;
+  color?: String;
+  createdBy: UserCreateOneWithoutLineGeneratorsInput;
+  dataSource?: DataSourceCreateOneWithoutLineGeneratorsInput;
+  graph: GraphCreateOneWithoutLineGeneratorsInput;
+  name: String;
+  parameterAliases?: Json;
+  state?: LineGeneratorState;
+}
+
+export interface DashboardUpdateWithoutGraphsDataInput {
+  createdBy?: UserUpdateOneRequiredWithoutDashboardsInput;
+  entity?: EntityUpdateOneWithoutDashboardsInput;
+  icon?: String;
+  publicUrl?: String;
+  title?: String;
+  updateInterval?: Int;
+}
+
+export interface LineCreateInput {
+  id?: ID_Input;
+  lineGenerator: LineGeneratorCreateOneWithoutLineInput;
+  points?: PointCreateManyWithoutLineInput;
+}
+
+export interface GraphCreateInput {
+  id?: ID_Input;
+  createdBy: UserCreateOneWithoutGraphsInput;
+  dashboard: DashboardCreateOneWithoutGraphsInput;
+  entity?: EntityCreateOneWithoutGraphsInput;
+  icon?: String;
+  lineGenerators?: LineGeneratorCreateManyWithoutGraphInput;
+  publicUrl?: String;
+  title: String;
+  update?: GraphUpdateCreateOneWithoutGraphInput;
+  updateInterval?: Int;
+  xAxisLabel?: String;
+  yAxisLabel?: String;
+}
+
+export interface GraphUpdateUpdateManyMutationInput {
+  time?: DateTimeInput;
+}
+
+export interface EntityUpdateOneWithoutGraphsInput {
+  create?: EntityCreateWithoutGraphsInput;
+  update?: EntityUpdateWithoutGraphsDataInput;
+  upsert?: EntityUpsertWithoutGraphsInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: EntityWhereUniqueInput;
+}
+
+export interface GraphUpdateWithoutUpdateDataInput {
+  createdBy?: UserUpdateOneRequiredWithoutGraphsInput;
+  dashboard?: DashboardUpdateOneRequiredWithoutGraphsInput;
+  entity?: EntityUpdateOneWithoutGraphsInput;
+  icon?: String;
+  lineGenerators?: LineGeneratorUpdateManyWithoutGraphInput;
+  publicUrl?: String;
+  title?: String;
+  updateInterval?: Int;
+  xAxisLabel?: String;
+  yAxisLabel?: String;
+}
+
+export interface EntityUpdateWithoutGraphsDataInput {
+  createdBy?: UserUpdateOneWithoutEntitiesInput;
+  dashboards?: DashboardUpdateManyWithoutEntityInput;
+  data?: Json;
+  icon?: String;
+  private?: Boolean;
+  title?: String;
+}
+
+export interface GraphUpdateOneRequiredWithoutUpdateInput {
+  create?: GraphCreateWithoutUpdateInput;
+  update?: GraphUpdateWithoutUpdateDataInput;
+  upsert?: GraphUpsertWithoutUpdateInput;
+  connect?: GraphWhereUniqueInput;
+}
+
+export interface DashboardUpdateManyWithoutEntityInput {
+  create?:
+    | DashboardCreateWithoutEntityInput[]
+    | DashboardCreateWithoutEntityInput;
+  delete?: DashboardWhereUniqueInput[] | DashboardWhereUniqueInput;
+  connect?: DashboardWhereUniqueInput[] | DashboardWhereUniqueInput;
+  set?: DashboardWhereUniqueInput[] | DashboardWhereUniqueInput;
+  disconnect?: DashboardWhereUniqueInput[] | DashboardWhereUniqueInput;
+  update?:
+    | DashboardUpdateWithWhereUniqueWithoutEntityInput[]
+    | DashboardUpdateWithWhereUniqueWithoutEntityInput;
+  upsert?:
+    | DashboardUpsertWithWhereUniqueWithoutEntityInput[]
+    | DashboardUpsertWithWhereUniqueWithoutEntityInput;
+  deleteMany?: DashboardScalarWhereInput[] | DashboardScalarWhereInput;
+  updateMany?:
+    | DashboardUpdateManyWithWhereNestedInput[]
+    | DashboardUpdateManyWithWhereNestedInput;
+}
+
+export interface GraphCreateWithoutUpdateInput {
+  id?: ID_Input;
+  createdBy: UserCreateOneWithoutGraphsInput;
+  dashboard: DashboardCreateOneWithoutGraphsInput;
+  entity?: EntityCreateOneWithoutGraphsInput;
+  icon?: String;
+  lineGenerators?: LineGeneratorCreateManyWithoutGraphInput;
+  publicUrl?: String;
+  title: String;
+  updateInterval?: Int;
+  xAxisLabel?: String;
+  yAxisLabel?: String;
+}
+
+export interface DashboardUpdateWithWhereUniqueWithoutEntityInput {
+  where: DashboardWhereUniqueInput;
+  data: DashboardUpdateWithoutEntityDataInput;
+}
+
+export interface GraphCreateOneWithoutUpdateInput {
+  create?: GraphCreateWithoutUpdateInput;
+  connect?: GraphWhereUniqueInput;
+}
+
+export interface DashboardUpdateWithoutEntityDataInput {
+  createdBy?: UserUpdateOneRequiredWithoutDashboardsInput;
+  graphs?: GraphUpdateManyWithoutDashboardInput;
+  icon?: String;
+  publicUrl?: String;
+  title?: String;
+  updateInterval?: Int;
+}
+
+export interface GraphUpdateManyMutationInput {
+  icon?: String;
+  publicUrl?: String;
+  title?: String;
+  updateInterval?: Int;
+  xAxisLabel?: String;
+  yAxisLabel?: String;
+}
+
+export interface GraphUpdateManyWithoutDashboardInput {
+  create?:
+    | GraphCreateWithoutDashboardInput[]
+    | GraphCreateWithoutDashboardInput;
+  delete?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
+  connect?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
+  set?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
+  disconnect?: GraphWhereUniqueInput[] | GraphWhereUniqueInput;
+  update?:
+    | GraphUpdateWithWhereUniqueWithoutDashboardInput[]
+    | GraphUpdateWithWhereUniqueWithoutDashboardInput;
+  upsert?:
+    | GraphUpsertWithWhereUniqueWithoutDashboardInput[]
+    | GraphUpsertWithWhereUniqueWithoutDashboardInput;
+  deleteMany?: GraphScalarWhereInput[] | GraphScalarWhereInput;
+  updateMany?:
+    | GraphUpdateManyWithWhereNestedInput[]
+    | GraphUpdateManyWithWhereNestedInput;
+}
+
+export interface UserCreateOneWithoutDashboardsInput {
+  create?: UserCreateWithoutDashboardsInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface PointWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  hidden?: Boolean;
+  hidden_not?: Boolean;
+  line?: LineWhereInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  x?: DateTimeInput;
+  x_not?: DateTimeInput;
+  x_in?: DateTimeInput[] | DateTimeInput;
+  x_not_in?: DateTimeInput[] | DateTimeInput;
+  x_lt?: DateTimeInput;
+  x_lte?: DateTimeInput;
+  x_gt?: DateTimeInput;
+  x_gte?: DateTimeInput;
+  y?: Float;
+  y_not?: Float;
+  y_in?: Float[] | Float;
+  y_not_in?: Float[] | Float;
+  y_lt?: Float;
+  y_lte?: Float;
+  y_gt?: Float;
+  y_gte?: Float;
+  AND?: PointWhereInput[] | PointWhereInput;
+  OR?: PointWhereInput[] | PointWhereInput;
+  NOT?: PointWhereInput[] | PointWhereInput;
+}
+
+export interface DataSourceCreateManyWithoutCreatedByInput {
+  create?:
+    | DataSourceCreateWithoutCreatedByInput[]
+    | DataSourceCreateWithoutCreatedByInput;
+  connect?: DataSourceWhereUniqueInput[] | DataSourceWhereUniqueInput;
+}
+
+export interface EntityUpdateManyMutationInput {
+  data?: Json;
+  icon?: String;
+  private?: Boolean;
+  title?: String;
+}
+
+export interface LineGeneratorCreateManyWithoutDataSourceInput {
+  create?:
+    | LineGeneratorCreateWithoutDataSourceInput[]
+    | LineGeneratorCreateWithoutDataSourceInput;
+  connect?: LineGeneratorWhereUniqueInput[] | LineGeneratorWhereUniqueInput;
+}
+
+export interface UserUpdateOneRequiredWithoutGraphsInput {
+  create?: UserCreateWithoutGraphsInput;
+  update?: UserUpdateWithoutGraphsDataInput;
+  upsert?: UserUpsertWithoutGraphsInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface UserCreateOneWithoutLineGeneratorsInput {
+  create?: UserCreateWithoutLineGeneratorsInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface UserUpdateWithoutGraphsDataInput {
+  dashboards?: DashboardUpdateManyWithoutCreatedByInput;
+  dataSources?: DataSourceUpdateManyWithoutCreatedByInput;
+  displayName?: String;
+  email?: String;
+  entities?: EntityUpdateManyWithoutCreatedByInput;
+  lineGenerators?: LineGeneratorUpdateManyWithoutCreatedByInput;
+  password?: String;
+  role?: Role;
+}
+
+export interface DashboardCreateManyWithoutCreatedByInput {
+  create?:
+    | DashboardCreateWithoutCreatedByInput[]
+    | DashboardCreateWithoutCreatedByInput;
+  connect?: DashboardWhereUniqueInput[] | DashboardWhereUniqueInput;
+}
+
+export interface EntityUpdateManyWithoutCreatedByInput {
+  create?:
+    | EntityCreateWithoutCreatedByInput[]
+    | EntityCreateWithoutCreatedByInput;
+  delete?: EntityWhereUniqueInput[] | EntityWhereUniqueInput;
+  connect?: EntityWhereUniqueInput[] | EntityWhereUniqueInput;
+  set?: EntityWhereUniqueInput[] | EntityWhereUniqueInput;
+  disconnect?: EntityWhereUniqueInput[] | EntityWhereUniqueInput;
+  update?:
+    | EntityUpdateWithWhereUniqueWithoutCreatedByInput[]
+    | EntityUpdateWithWhereUniqueWithoutCreatedByInput;
+  upsert?:
+    | EntityUpsertWithWhereUniqueWithoutCreatedByInput[]
+    | EntityUpsertWithWhereUniqueWithoutCreatedByInput;
+  deleteMany?: EntityScalarWhereInput[] | EntityScalarWhereInput;
+  updateMany?:
+    | EntityUpdateManyWithWhereNestedInput[]
+    | EntityUpdateManyWithWhereNestedInput;
 }
 
 export interface EntityCreateOneWithoutDashboardsInput {
@@ -2106,45 +2016,7 @@ export interface GraphUpdateUpdateWithoutGraphDataInput {
   time?: DateTimeInput;
 }
 
-export interface UserSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: UserWhereInput;
-  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-}
-
-export interface GraphUpdateUpsertWithoutGraphInput {
-  update: GraphUpdateUpdateWithoutGraphDataInput;
-  create: GraphUpdateCreateWithoutGraphInput;
-}
-
-export interface LineGeneratorSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: LineGeneratorWhereInput;
-  AND?:
-    | LineGeneratorSubscriptionWhereInput[]
-    | LineGeneratorSubscriptionWhereInput;
-  OR?:
-    | LineGeneratorSubscriptionWhereInput[]
-    | LineGeneratorSubscriptionWhereInput;
-  NOT?:
-    | LineGeneratorSubscriptionWhereInput[]
-    | LineGeneratorSubscriptionWhereInput;
-}
-
-export interface GraphUpsertWithoutLineGeneratorsInput {
-  update: GraphUpdateWithoutLineGeneratorsDataInput;
-  create: GraphCreateWithoutLineGeneratorsInput;
-}
-
-export interface DataSourceWhereInput {
+export interface GraphUpdateWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -2159,20 +2031,6 @@ export interface DataSourceWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  author?: String;
-  author_not?: String;
-  author_in?: String[] | String;
-  author_not_in?: String[] | String;
-  author_lt?: String;
-  author_lte?: String;
-  author_gt?: String;
-  author_gte?: String;
-  author_contains?: String;
-  author_not_contains?: String;
-  author_starts_with?: String;
-  author_not_starts_with?: String;
-  author_ends_with?: String;
-  author_not_ends_with?: String;
   createdAt?: DateTimeInput;
   createdAt_not?: DateTimeInput;
   createdAt_in?: DateTimeInput[] | DateTimeInput;
@@ -2181,56 +2039,15 @@ export interface DataSourceWhereInput {
   createdAt_lte?: DateTimeInput;
   createdAt_gt?: DateTimeInput;
   createdAt_gte?: DateTimeInput;
-  createdBy?: UserWhereInput;
-  description?: String;
-  description_not?: String;
-  description_in?: String[] | String;
-  description_not_in?: String[] | String;
-  description_lt?: String;
-  description_lte?: String;
-  description_gt?: String;
-  description_gte?: String;
-  description_contains?: String;
-  description_not_contains?: String;
-  description_starts_with?: String;
-  description_not_starts_with?: String;
-  description_ends_with?: String;
-  description_not_ends_with?: String;
-  lineGenerators_every?: LineGeneratorWhereInput;
-  lineGenerators_some?: LineGeneratorWhereInput;
-  lineGenerators_none?: LineGeneratorWhereInput;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  source?: String;
-  source_not?: String;
-  source_in?: String[] | String;
-  source_not_in?: String[] | String;
-  source_lt?: String;
-  source_lte?: String;
-  source_gt?: String;
-  source_gte?: String;
-  source_contains?: String;
-  source_not_contains?: String;
-  source_starts_with?: String;
-  source_not_starts_with?: String;
-  source_ends_with?: String;
-  source_not_ends_with?: String;
-  type?: DataSourceType;
-  type_not?: DataSourceType;
-  type_in?: DataSourceType[] | DataSourceType;
-  type_not_in?: DataSourceType[] | DataSourceType;
+  graph?: GraphWhereInput;
+  time?: DateTimeInput;
+  time_not?: DateTimeInput;
+  time_in?: DateTimeInput[] | DateTimeInput;
+  time_not_in?: DateTimeInput[] | DateTimeInput;
+  time_lt?: DateTimeInput;
+  time_lte?: DateTimeInput;
+  time_gt?: DateTimeInput;
+  time_gte?: DateTimeInput;
   updatedAt?: DateTimeInput;
   updatedAt_not?: DateTimeInput;
   updatedAt_in?: DateTimeInput[] | DateTimeInput;
@@ -2239,9 +2056,41 @@ export interface DataSourceWhereInput {
   updatedAt_lte?: DateTimeInput;
   updatedAt_gt?: DateTimeInput;
   updatedAt_gte?: DateTimeInput;
-  AND?: DataSourceWhereInput[] | DataSourceWhereInput;
-  OR?: DataSourceWhereInput[] | DataSourceWhereInput;
-  NOT?: DataSourceWhereInput[] | DataSourceWhereInput;
+  AND?: GraphUpdateWhereInput[] | GraphUpdateWhereInput;
+  OR?: GraphUpdateWhereInput[] | GraphUpdateWhereInput;
+  NOT?: GraphUpdateWhereInput[] | GraphUpdateWhereInput;
+}
+
+export interface GraphUpdateUpsertWithoutGraphInput {
+  update: GraphUpdateUpdateWithoutGraphDataInput;
+  create: GraphUpdateCreateWithoutGraphInput;
+}
+
+export interface PointSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: PointWhereInput;
+  AND?: PointSubscriptionWhereInput[] | PointSubscriptionWhereInput;
+  OR?: PointSubscriptionWhereInput[] | PointSubscriptionWhereInput;
+  NOT?: PointSubscriptionWhereInput[] | PointSubscriptionWhereInput;
+}
+
+export interface GraphUpsertWithoutLineGeneratorsInput {
+  update: GraphUpdateWithoutLineGeneratorsDataInput;
+  create: GraphCreateWithoutLineGeneratorsInput;
+}
+
+export interface GraphUpdateSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: GraphUpdateWhereInput;
+  AND?: GraphUpdateSubscriptionWhereInput[] | GraphUpdateSubscriptionWhereInput;
+  OR?: GraphUpdateSubscriptionWhereInput[] | GraphUpdateSubscriptionWhereInput;
+  NOT?: GraphUpdateSubscriptionWhereInput[] | GraphUpdateSubscriptionWhereInput;
 }
 
 export interface LineUpdateOneWithoutLineGeneratorInput {
@@ -2253,19 +2102,31 @@ export interface LineUpdateOneWithoutLineGeneratorInput {
   connect?: LineWhereUniqueInput;
 }
 
-export interface UserUpdateManyMutationInput {
-  displayName?: String;
-  email?: String;
-  password?: String;
-  role?: Role;
+export interface DashboardSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: DashboardWhereInput;
+  AND?: DashboardSubscriptionWhereInput[] | DashboardSubscriptionWhereInput;
+  OR?: DashboardSubscriptionWhereInput[] | DashboardSubscriptionWhereInput;
+  NOT?: DashboardSubscriptionWhereInput[] | DashboardSubscriptionWhereInput;
 }
 
 export interface LineUpdateWithoutLineGeneratorDataInput {
   points?: PointUpdateManyWithoutLineInput;
 }
 
-export interface TestUpdateManyMutationInput {
-  text?: String;
+export interface UserUpdateInput {
+  dashboards?: DashboardUpdateManyWithoutCreatedByInput;
+  dataSources?: DataSourceUpdateManyWithoutCreatedByInput;
+  displayName?: String;
+  email?: String;
+  entities?: EntityUpdateManyWithoutCreatedByInput;
+  graphs?: GraphUpdateManyWithoutCreatedByInput;
+  lineGenerators?: LineGeneratorUpdateManyWithoutCreatedByInput;
+  password?: String;
+  role?: Role;
 }
 
 export interface PointUpdateManyWithoutLineInput {
@@ -2286,23 +2147,19 @@ export interface PointUpdateManyWithoutLineInput {
     | PointUpdateManyWithWhereNestedInput;
 }
 
-export interface PointUpdateManyMutationInput {
-  hidden?: Boolean;
-  x?: DateTimeInput;
-  y?: Float;
-}
+export type DataSourceWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  name?: String;
+}>;
 
 export interface PointUpdateWithWhereUniqueWithoutLineInput {
   where: PointWhereUniqueInput;
   data: PointUpdateWithoutLineDataInput;
 }
 
-export interface LineUpdateOneRequiredWithoutPointsInput {
-  create?: LineCreateWithoutPointsInput;
-  update?: LineUpdateWithoutPointsDataInput;
-  upsert?: LineUpsertWithoutPointsInput;
-  connect?: LineWhereUniqueInput;
-}
+export type EntityWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
 export interface PointUpdateWithoutLineDataInput {
   hidden?: Boolean;
@@ -2310,10 +2167,9 @@ export interface PointUpdateWithoutLineDataInput {
   y?: Float;
 }
 
-export interface LineCreateWithoutPointsInput {
-  id?: ID_Input;
-  lineGenerator: LineGeneratorCreateOneWithoutLineInput;
-}
+export type GraphWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
 export interface PointUpsertWithWhereUniqueWithoutLineInput {
   where: PointWhereUniqueInput;
@@ -2321,13 +2177,9 @@ export interface PointUpsertWithWhereUniqueWithoutLineInput {
   create: PointCreateWithoutLineInput;
 }
 
-export interface PointCreateInput {
-  id?: ID_Input;
-  hidden?: Boolean;
-  line: LineCreateOneWithoutPointsInput;
-  x: DateTimeInput;
-  y: Float;
-}
+export type GraphUpdateWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
 export interface PointScalarWhereInput {
   id?: ID_Input;
@@ -2383,16 +2235,11 @@ export interface PointScalarWhereInput {
   NOT?: PointScalarWhereInput[] | PointScalarWhereInput;
 }
 
-export interface LineGeneratorCreateInput {
-  id?: ID_Input;
-  color?: String;
-  createdBy: UserCreateOneWithoutLineGeneratorsInput;
-  dataSource?: DataSourceCreateOneWithoutLineGeneratorsInput;
-  graph: GraphCreateOneWithoutLineGeneratorsInput;
-  line?: LineCreateOneWithoutLineGeneratorInput;
-  name: String;
-  parameterAliases?: Json;
-  state?: LineGeneratorState;
+export interface LineGeneratorUpdateOneRequiredWithoutLineInput {
+  create?: LineGeneratorCreateWithoutLineInput;
+  update?: LineGeneratorUpdateWithoutLineDataInput;
+  upsert?: LineGeneratorUpsertWithoutLineInput;
+  connect?: LineGeneratorWhereUniqueInput;
 }
 
 export interface PointUpdateManyWithWhereNestedInput {
@@ -2400,10 +2247,8 @@ export interface PointUpdateManyWithWhereNestedInput {
   data: PointUpdateManyDataInput;
 }
 
-export interface LineGeneratorUpdateOneRequiredWithoutLineInput {
+export interface LineGeneratorCreateOneWithoutLineInput {
   create?: LineGeneratorCreateWithoutLineInput;
-  update?: LineGeneratorUpdateWithoutLineDataInput;
-  upsert?: LineGeneratorUpsertWithoutLineInput;
   connect?: LineGeneratorWhereUniqueInput;
 }
 
@@ -2413,9 +2258,9 @@ export interface PointUpdateManyDataInput {
   y?: Float;
 }
 
-export interface LineGeneratorCreateOneWithoutLineInput {
-  create?: LineGeneratorCreateWithoutLineInput;
-  connect?: LineGeneratorWhereUniqueInput;
+export interface GraphUpsertWithoutUpdateInput {
+  update: GraphUpdateWithoutUpdateDataInput;
+  create: GraphCreateWithoutUpdateInput;
 }
 
 export interface LineUpsertWithoutLineGeneratorInput {
@@ -2423,9 +2268,9 @@ export interface LineUpsertWithoutLineGeneratorInput {
   create: LineCreateWithoutLineGeneratorInput;
 }
 
-export interface GraphUpsertWithoutUpdateInput {
-  update: GraphUpdateWithoutUpdateDataInput;
-  create: GraphCreateWithoutUpdateInput;
+export interface GraphUpdateUpdateInput {
+  graph?: GraphUpdateOneRequiredWithoutUpdateInput;
+  time?: DateTimeInput;
 }
 
 export interface LineGeneratorUpsertWithWhereUniqueWithoutCreatedByInput {
@@ -2434,9 +2279,10 @@ export interface LineGeneratorUpsertWithWhereUniqueWithoutCreatedByInput {
   create: LineGeneratorCreateWithoutCreatedByInput;
 }
 
-export interface GraphUpdateUpdateInput {
-  graph?: GraphUpdateOneRequiredWithoutUpdateInput;
-  time?: DateTimeInput;
+export interface GraphUpdateCreateInput {
+  id?: ID_Input;
+  graph: GraphCreateOneWithoutUpdateInput;
+  time: DateTimeInput;
 }
 
 export interface LineGeneratorScalarWhereInput {
@@ -2890,15 +2736,76 @@ export interface EntityScalarWhereInput {
   NOT?: EntityScalarWhereInput[] | EntityScalarWhereInput;
 }
 
-export interface GraphUpdateSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: GraphUpdateWhereInput;
-  AND?: GraphUpdateSubscriptionWhereInput[] | GraphUpdateSubscriptionWhereInput;
-  OR?: GraphUpdateSubscriptionWhereInput[] | GraphUpdateSubscriptionWhereInput;
-  NOT?: GraphUpdateSubscriptionWhereInput[] | GraphUpdateSubscriptionWhereInput;
+export interface LineGeneratorWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  color?: String;
+  color_not?: String;
+  color_in?: String[] | String;
+  color_not_in?: String[] | String;
+  color_lt?: String;
+  color_lte?: String;
+  color_gt?: String;
+  color_gte?: String;
+  color_contains?: String;
+  color_not_contains?: String;
+  color_starts_with?: String;
+  color_not_starts_with?: String;
+  color_ends_with?: String;
+  color_not_ends_with?: String;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  createdBy?: UserWhereInput;
+  dataSource?: DataSourceWhereInput;
+  graph?: GraphWhereInput;
+  line?: LineWhereInput;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  state?: LineGeneratorState;
+  state_not?: LineGeneratorState;
+  state_in?: LineGeneratorState[] | LineGeneratorState;
+  state_not_in?: LineGeneratorState[] | LineGeneratorState;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  AND?: LineGeneratorWhereInput[] | LineGeneratorWhereInput;
+  OR?: LineGeneratorWhereInput[] | LineGeneratorWhereInput;
+  NOT?: LineGeneratorWhereInput[] | LineGeneratorWhereInput;
 }
 
 export interface EntityUpdateManyWithWhereNestedInput {
@@ -2906,14 +2813,9 @@ export interface EntityUpdateManyWithWhereNestedInput {
   data: EntityUpdateManyDataInput;
 }
 
-export interface UserUpdateInput {
-  dashboards?: DashboardUpdateManyWithoutCreatedByInput;
-  dataSources?: DataSourceUpdateManyWithoutCreatedByInput;
+export interface UserUpdateManyMutationInput {
   displayName?: String;
   email?: String;
-  entities?: EntityUpdateManyWithoutCreatedByInput;
-  graphs?: GraphUpdateManyWithoutCreatedByInput;
-  lineGenerators?: LineGeneratorUpdateManyWithoutCreatedByInput;
   password?: String;
   role?: Role;
 }
@@ -2925,9 +2827,11 @@ export interface EntityUpdateManyDataInput {
   title?: String;
 }
 
-export interface LineUpsertWithoutPointsInput {
-  update: LineUpdateWithoutPointsDataInput;
-  create: LineCreateWithoutPointsInput;
+export interface LineUpdateOneRequiredWithoutPointsInput {
+  create?: LineCreateWithoutPointsInput;
+  update?: LineUpdateWithoutPointsDataInput;
+  upsert?: LineUpsertWithoutPointsInput;
+  connect?: LineWhereUniqueInput;
 }
 
 export interface UserUpsertWithoutGraphsInput {
@@ -2935,9 +2839,16 @@ export interface UserUpsertWithoutGraphsInput {
   create: UserCreateWithoutGraphsInput;
 }
 
-export type LineWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface LineGeneratorUpdateInput {
+  color?: String;
+  createdBy?: UserUpdateOneRequiredWithoutLineGeneratorsInput;
+  dataSource?: DataSourceUpdateOneWithoutLineGeneratorsInput;
+  graph?: GraphUpdateOneRequiredWithoutLineGeneratorsInput;
+  line?: LineUpdateOneWithoutLineGeneratorInput;
+  name?: String;
+  parameterAliases?: Json;
+  state?: LineGeneratorState;
+}
 
 export interface GraphUpsertWithWhereUniqueWithoutDashboardInput {
   where: GraphWhereUniqueInput;
@@ -2945,14 +2856,9 @@ export interface GraphUpsertWithWhereUniqueWithoutDashboardInput {
   create: GraphCreateWithoutDashboardInput;
 }
 
-export interface LineGeneratorUpdateWithoutLineDataInput {
-  color?: String;
-  createdBy?: UserUpdateOneRequiredWithoutLineGeneratorsInput;
-  dataSource?: DataSourceUpdateOneWithoutLineGeneratorsInput;
-  graph?: GraphUpdateOneRequiredWithoutLineGeneratorsInput;
-  name?: String;
-  parameterAliases?: Json;
-  state?: LineGeneratorState;
+export interface LineUpdateInput {
+  lineGenerator?: LineGeneratorUpdateOneRequiredWithoutLineInput;
+  points?: PointUpdateManyWithoutLineInput;
 }
 
 export interface DashboardUpsertWithWhereUniqueWithoutEntityInput {
@@ -2961,11 +2867,9 @@ export interface DashboardUpsertWithWhereUniqueWithoutEntityInput {
   create: DashboardCreateWithoutEntityInput;
 }
 
-export interface LineCreateInput {
-  id?: ID_Input;
-  lineGenerator: LineGeneratorCreateOneWithoutLineInput;
-  points?: PointCreateManyWithoutLineInput;
-}
+export type PointWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
 export interface DashboardScalarWhereInput {
   id?: ID_Input;
@@ -3053,9 +2957,18 @@ export interface DashboardScalarWhereInput {
   NOT?: DashboardScalarWhereInput[] | DashboardScalarWhereInput;
 }
 
-export interface GraphCreateOneWithoutUpdateInput {
-  create?: GraphCreateWithoutUpdateInput;
-  connect?: GraphWhereUniqueInput;
+export interface GraphUpdateInput {
+  createdBy?: UserUpdateOneRequiredWithoutGraphsInput;
+  dashboard?: DashboardUpdateOneRequiredWithoutGraphsInput;
+  entity?: EntityUpdateOneWithoutGraphsInput;
+  icon?: String;
+  lineGenerators?: LineGeneratorUpdateManyWithoutGraphInput;
+  publicUrl?: String;
+  title?: String;
+  update?: GraphUpdateUpdateOneWithoutGraphInput;
+  updateInterval?: Int;
+  xAxisLabel?: String;
+  yAxisLabel?: String;
 }
 
 export interface DashboardUpdateManyWithWhereNestedInput {
@@ -3162,15 +3075,15 @@ export interface DashboardUpsertWithWhereUniqueWithoutCreatedByInput {
   create: DashboardCreateWithoutCreatedByInput;
 }
 
-export interface DataSourceSubscriptionWhereInput {
+export interface EntitySubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
   updatedFields_contains_every?: String[] | String;
   updatedFields_contains_some?: String[] | String;
-  node?: DataSourceWhereInput;
-  AND?: DataSourceSubscriptionWhereInput[] | DataSourceSubscriptionWhereInput;
-  OR?: DataSourceSubscriptionWhereInput[] | DataSourceSubscriptionWhereInput;
-  NOT?: DataSourceSubscriptionWhereInput[] | DataSourceSubscriptionWhereInput;
+  node?: EntityWhereInput;
+  AND?: EntitySubscriptionWhereInput[] | EntitySubscriptionWhereInput;
+  OR?: EntitySubscriptionWhereInput[] | EntitySubscriptionWhereInput;
+  NOT?: EntitySubscriptionWhereInput[] | EntitySubscriptionWhereInput;
 }
 
 export interface UserUpsertWithoutLineGeneratorsInput {
@@ -3178,101 +3091,9 @@ export interface UserUpsertWithoutLineGeneratorsInput {
   create: UserCreateWithoutLineGeneratorsInput;
 }
 
-export interface UserWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  dashboards_every?: DashboardWhereInput;
-  dashboards_some?: DashboardWhereInput;
-  dashboards_none?: DashboardWhereInput;
-  dataSources_every?: DataSourceWhereInput;
-  dataSources_some?: DataSourceWhereInput;
-  dataSources_none?: DataSourceWhereInput;
-  displayName?: String;
-  displayName_not?: String;
-  displayName_in?: String[] | String;
-  displayName_not_in?: String[] | String;
-  displayName_lt?: String;
-  displayName_lte?: String;
-  displayName_gt?: String;
-  displayName_gte?: String;
-  displayName_contains?: String;
-  displayName_not_contains?: String;
-  displayName_starts_with?: String;
-  displayName_not_starts_with?: String;
-  displayName_ends_with?: String;
-  displayName_not_ends_with?: String;
-  email?: String;
-  email_not?: String;
-  email_in?: String[] | String;
-  email_not_in?: String[] | String;
-  email_lt?: String;
-  email_lte?: String;
-  email_gt?: String;
-  email_gte?: String;
-  email_contains?: String;
-  email_not_contains?: String;
-  email_starts_with?: String;
-  email_not_starts_with?: String;
-  email_ends_with?: String;
-  email_not_ends_with?: String;
-  entities_every?: EntityWhereInput;
-  entities_some?: EntityWhereInput;
-  entities_none?: EntityWhereInput;
-  graphs_every?: GraphWhereInput;
-  graphs_some?: GraphWhereInput;
-  graphs_none?: GraphWhereInput;
-  lineGenerators_every?: LineGeneratorWhereInput;
-  lineGenerators_some?: LineGeneratorWhereInput;
-  lineGenerators_none?: LineGeneratorWhereInput;
-  password?: String;
-  password_not?: String;
-  password_in?: String[] | String;
-  password_not_in?: String[] | String;
-  password_lt?: String;
-  password_lte?: String;
-  password_gt?: String;
-  password_gte?: String;
-  password_contains?: String;
-  password_not_contains?: String;
-  password_starts_with?: String;
-  password_not_starts_with?: String;
-  password_ends_with?: String;
-  password_not_ends_with?: String;
-  role?: Role;
-  role_not?: Role;
-  role_in?: Role[] | Role;
-  role_not_in?: Role[] | Role;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  AND?: UserWhereInput[] | UserWhereInput;
-  OR?: UserWhereInput[] | UserWhereInput;
-  NOT?: UserWhereInput[] | UserWhereInput;
+export interface LineCreateOneWithoutPointsInput {
+  create?: LineCreateWithoutPointsInput;
+  connect?: LineWhereUniqueInput;
 }
 
 export interface LineGeneratorUpsertWithWhereUniqueWithoutDataSourceInput {
@@ -3281,16 +3102,10 @@ export interface LineGeneratorUpsertWithWhereUniqueWithoutDataSourceInput {
   create: LineGeneratorCreateWithoutDataSourceInput;
 }
 
-export interface LineGeneratorCreateWithoutLineInput {
-  id?: ID_Input;
-  color?: String;
-  createdBy: UserCreateOneWithoutLineGeneratorsInput;
-  dataSource?: DataSourceCreateOneWithoutLineGeneratorsInput;
-  graph: GraphCreateOneWithoutLineGeneratorsInput;
-  name: String;
-  parameterAliases?: Json;
-  state?: LineGeneratorState;
-}
+export type LineGeneratorWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  name?: String;
+}>;
 
 export interface DataSourceUpsertWithWhereUniqueWithoutCreatedByInput {
   where: DataSourceWhereUniqueInput;
@@ -3447,15 +3262,77 @@ export interface DataSourceUpdateManyDataInput {
   type?: DataSourceType;
 }
 
-export interface PointSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: PointWhereInput;
-  AND?: PointSubscriptionWhereInput[] | PointSubscriptionWhereInput;
-  OR?: PointSubscriptionWhereInput[] | PointSubscriptionWhereInput;
-  NOT?: PointSubscriptionWhereInput[] | PointSubscriptionWhereInput;
+export interface EntityWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  createdBy?: UserWhereInput;
+  dashboards_every?: DashboardWhereInput;
+  dashboards_some?: DashboardWhereInput;
+  dashboards_none?: DashboardWhereInput;
+  graphs_every?: GraphWhereInput;
+  graphs_some?: GraphWhereInput;
+  graphs_none?: GraphWhereInput;
+  icon?: String;
+  icon_not?: String;
+  icon_in?: String[] | String;
+  icon_not_in?: String[] | String;
+  icon_lt?: String;
+  icon_lte?: String;
+  icon_gt?: String;
+  icon_gte?: String;
+  icon_contains?: String;
+  icon_not_contains?: String;
+  icon_starts_with?: String;
+  icon_not_starts_with?: String;
+  icon_ends_with?: String;
+  icon_not_ends_with?: String;
+  private?: Boolean;
+  private_not?: Boolean;
+  title?: String;
+  title_not?: String;
+  title_in?: String[] | String;
+  title_not_in?: String[] | String;
+  title_lt?: String;
+  title_lte?: String;
+  title_gt?: String;
+  title_gte?: String;
+  title_contains?: String;
+  title_not_contains?: String;
+  title_starts_with?: String;
+  title_not_starts_with?: String;
+  title_ends_with?: String;
+  title_not_ends_with?: String;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  AND?: EntityWhereInput[] | EntityWhereInput;
+  OR?: EntityWhereInput[] | EntityWhereInput;
+  NOT?: EntityWhereInput[] | EntityWhereInput;
 }
 
 export interface UserUpsertWithoutDashboardsInput {
@@ -3463,15 +3340,9 @@ export interface UserUpsertWithoutDashboardsInput {
   create: UserCreateWithoutDashboardsInput;
 }
 
-export interface LineGeneratorUpdateInput {
-  color?: String;
-  createdBy?: UserUpdateOneRequiredWithoutLineGeneratorsInput;
-  dataSource?: DataSourceUpdateOneWithoutLineGeneratorsInput;
-  graph?: GraphUpdateOneRequiredWithoutLineGeneratorsInput;
-  line?: LineUpdateOneWithoutLineGeneratorInput;
-  name?: String;
-  parameterAliases?: Json;
-  state?: LineGeneratorState;
+export interface LineGeneratorUpsertWithoutLineInput {
+  update: LineGeneratorUpdateWithoutLineDataInput;
+  create: LineGeneratorCreateWithoutLineInput;
 }
 
 export interface DashboardUpdateManyMutationInput {
@@ -3558,8 +3429,10 @@ export type UserWhereUniqueInput = AtLeastOne<{
   email?: String;
 }>;
 
-export interface TestUpdateInput {
-  text?: String;
+export interface PointUpdateManyMutationInput {
+  hidden?: Boolean;
+  x?: DateTimeInput;
+  y?: Float;
 }
 
 export interface GraphUpdateCreateWithoutGraphInput {
@@ -3605,20 +3478,191 @@ export interface UserPreviousValuesSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface AggregateEntity {
+export interface DataSourceEdge {
+  node: DataSource;
+  cursor: String;
+}
+
+export interface DataSourceEdgePromise
+  extends Promise<DataSourceEdge>,
+    Fragmentable {
+  node: <T = DataSourcePromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface DataSourceEdgeSubscription
+  extends Promise<AsyncIterator<DataSourceEdge>>,
+    Fragmentable {
+  node: <T = DataSourceSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface LineGeneratorSubscriptionPayload {
+  mutation: MutationType;
+  node: LineGenerator;
+  updatedFields: String[];
+  previousValues: LineGeneratorPreviousValues;
+}
+
+export interface LineGeneratorSubscriptionPayloadPromise
+  extends Promise<LineGeneratorSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = LineGeneratorPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = LineGeneratorPreviousValuesPromise>() => T;
+}
+
+export interface LineGeneratorSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<LineGeneratorSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = LineGeneratorSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = LineGeneratorPreviousValuesSubscription>() => T;
+}
+
+export interface DataSourceConnection {
+  pageInfo: PageInfo;
+  edges: DataSourceEdge[];
+}
+
+export interface DataSourceConnectionPromise
+  extends Promise<DataSourceConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<DataSourceEdge>>() => T;
+  aggregate: <T = AggregateDataSourcePromise>() => T;
+}
+
+export interface DataSourceConnectionSubscription
+  extends Promise<AsyncIterator<DataSourceConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<DataSourceEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateDataSourceSubscription>() => T;
+}
+
+export interface DashboardEdge {
+  node: Dashboard;
+  cursor: String;
+}
+
+export interface DashboardEdgePromise
+  extends Promise<DashboardEdge>,
+    Fragmentable {
+  node: <T = DashboardPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface DashboardEdgeSubscription
+  extends Promise<AsyncIterator<DashboardEdge>>,
+    Fragmentable {
+  node: <T = DashboardSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateDashboard {
   count: Int;
 }
 
-export interface AggregateEntityPromise
-  extends Promise<AggregateEntity>,
+export interface AggregateDashboardPromise
+  extends Promise<AggregateDashboard>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateEntitySubscription
-  extends Promise<AsyncIterator<AggregateEntity>>,
+export interface AggregateDashboardSubscription
+  extends Promise<AsyncIterator<AggregateDashboard>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface PointPreviousValues {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  hidden?: Boolean;
+  updatedAt: DateTimeOutput;
+  x: DateTimeOutput;
+  y: Float;
+}
+
+export interface PointPreviousValuesPromise
+  extends Promise<PointPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  hidden: () => Promise<Boolean>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  x: () => Promise<DateTimeOutput>;
+  y: () => Promise<Float>;
+}
+
+export interface PointPreviousValuesSubscription
+  extends Promise<AsyncIterator<PointPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  hidden: () => Promise<AsyncIterator<Boolean>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  x: () => Promise<AsyncIterator<DateTimeOutput>>;
+  y: () => Promise<AsyncIterator<Float>>;
+}
+
+export interface BatchPayload {
+  count: Long;
+}
+
+export interface BatchPayloadPromise
+  extends Promise<BatchPayload>,
+    Fragmentable {
+  count: () => Promise<Long>;
+}
+
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayload>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Long>>;
+}
+
+export interface UserEdge {
+  node: User;
+  cursor: String;
+}
+
+export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
+  node: <T = UserPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UserEdgeSubscription
+  extends Promise<AsyncIterator<UserEdge>>,
+    Fragmentable {
+  node: <T = UserSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface PageInfo {
+  hasNextPage: Boolean;
+  hasPreviousPage: Boolean;
+  startCursor?: String;
+  endCursor?: String;
+}
+
+export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
+  hasNextPage: () => Promise<Boolean>;
+  hasPreviousPage: () => Promise<Boolean>;
+  startCursor: () => Promise<String>;
+  endCursor: () => Promise<String>;
+}
+
+export interface PageInfoSubscription
+  extends Promise<AsyncIterator<PageInfo>>,
+    Fragmentable {
+  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
+  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
+  startCursor: () => Promise<AsyncIterator<String>>;
+  endCursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface PointSubscriptionPayload {
@@ -3646,273 +3690,150 @@ export interface PointSubscriptionPayloadSubscription
   previousValues: <T = PointPreviousValuesSubscription>() => T;
 }
 
-export interface EntityEdge {
-  node: Entity;
+export interface DashboardConnection {
+  pageInfo: PageInfo;
+  edges: DashboardEdge[];
+}
+
+export interface DashboardConnectionPromise
+  extends Promise<DashboardConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<DashboardEdge>>() => T;
+  aggregate: <T = AggregateDashboardPromise>() => T;
+}
+
+export interface DashboardConnectionSubscription
+  extends Promise<AsyncIterator<DashboardConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<DashboardEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateDashboardSubscription>() => T;
+}
+
+export interface PointEdge {
+  node: Point;
   cursor: String;
 }
 
-export interface EntityEdgePromise extends Promise<EntityEdge>, Fragmentable {
-  node: <T = EntityPromise>() => T;
+export interface PointEdgePromise extends Promise<PointEdge>, Fragmentable {
+  node: <T = PointPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface EntityEdgeSubscription
-  extends Promise<AsyncIterator<EntityEdge>>,
+export interface PointEdgeSubscription
+  extends Promise<AsyncIterator<PointEdge>>,
     Fragmentable {
-  node: <T = EntitySubscription>() => T;
+  node: <T = PointSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateDataSource {
-  count: Int;
-}
-
-export interface AggregateDataSourcePromise
-  extends Promise<AggregateDataSource>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateDataSourceSubscription
-  extends Promise<AsyncIterator<AggregateDataSource>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface EntityConnection {
-  pageInfo: PageInfo;
-  edges: EntityEdge[];
-}
-
-export interface EntityConnectionPromise
-  extends Promise<EntityConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<EntityEdge>>() => T;
-  aggregate: <T = AggregateEntityPromise>() => T;
-}
-
-export interface EntityConnectionSubscription
-  extends Promise<AsyncIterator<EntityConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<EntityEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateEntitySubscription>() => T;
-}
-
-export interface UserSubscriptionPayload {
-  mutation: MutationType;
-  node: User;
-  updatedFields: String[];
-  previousValues: UserPreviousValues;
-}
-
-export interface UserSubscriptionPayloadPromise
-  extends Promise<UserSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = UserPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = UserPreviousValuesPromise>() => T;
-}
-
-export interface UserSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<UserSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = UserSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = UserPreviousValuesSubscription>() => T;
-}
-
-export interface BatchPayload {
-  count: Long;
-}
-
-export interface BatchPayloadPromise
-  extends Promise<BatchPayload>,
-    Fragmentable {
-  count: () => Promise<Long>;
-}
-
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayload>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
-}
-
-export interface TestPreviousValues {
+export interface Point {
   id: ID_Output;
   createdAt: DateTimeOutput;
-  text?: String;
+  hidden?: Boolean;
   updatedAt: DateTimeOutput;
+  x: DateTimeOutput;
+  y: Float;
 }
 
-export interface TestPreviousValuesPromise
-  extends Promise<TestPreviousValues>,
-    Fragmentable {
+export interface PointPromise extends Promise<Point>, Fragmentable {
   id: () => Promise<ID_Output>;
   createdAt: () => Promise<DateTimeOutput>;
-  text: () => Promise<String>;
+  hidden: () => Promise<Boolean>;
+  line: <T = LinePromise>() => T;
   updatedAt: () => Promise<DateTimeOutput>;
+  x: () => Promise<DateTimeOutput>;
+  y: () => Promise<Float>;
 }
 
-export interface TestPreviousValuesSubscription
-  extends Promise<AsyncIterator<TestPreviousValues>>,
+export interface PointSubscription
+  extends Promise<AsyncIterator<Point>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  text: () => Promise<AsyncIterator<String>>;
+  hidden: () => Promise<AsyncIterator<Boolean>>;
+  line: <T = LineSubscription>() => T;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  x: () => Promise<AsyncIterator<DateTimeOutput>>;
+  y: () => Promise<AsyncIterator<Float>>;
+}
+
+export interface AggregateLineGenerator {
+  count: Int;
+}
+
+export interface AggregateLineGeneratorPromise
+  extends Promise<AggregateLineGenerator>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateLineGeneratorSubscription
+  extends Promise<AsyncIterator<AggregateLineGenerator>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface Line {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface LinePromise extends Promise<Line>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  lineGenerator: <T = LineGeneratorPromise>() => T;
+  points: <T = FragmentableArray<Point>>(args?: {
+    where?: PointWhereInput;
+    orderBy?: PointOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface LineSubscription
+  extends Promise<AsyncIterator<Line>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  lineGenerator: <T = LineGeneratorSubscription>() => T;
+  points: <T = Promise<AsyncIterator<PointSubscription>>>(args?: {
+    where?: PointWhereInput;
+    orderBy?: PointOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface DataSourceEdge {
-  node: DataSource;
-  cursor: String;
-}
-
-export interface DataSourceEdgePromise
-  extends Promise<DataSourceEdge>,
-    Fragmentable {
-  node: <T = DataSourcePromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface DataSourceEdgeSubscription
-  extends Promise<AsyncIterator<DataSourceEdge>>,
-    Fragmentable {
-  node: <T = DataSourceSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateUser {
-  count: Int;
-}
-
-export interface AggregateUserPromise
-  extends Promise<AggregateUser>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateUserSubscription
-  extends Promise<AsyncIterator<AggregateUser>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface DataSourceConnection {
+export interface LineGeneratorConnection {
   pageInfo: PageInfo;
-  edges: DataSourceEdge[];
+  edges: LineGeneratorEdge[];
 }
 
-export interface DataSourceConnectionPromise
-  extends Promise<DataSourceConnection>,
+export interface LineGeneratorConnectionPromise
+  extends Promise<LineGeneratorConnection>,
     Fragmentable {
   pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<DataSourceEdge>>() => T;
-  aggregate: <T = AggregateDataSourcePromise>() => T;
+  edges: <T = FragmentableArray<LineGeneratorEdge>>() => T;
+  aggregate: <T = AggregateLineGeneratorPromise>() => T;
 }
 
-export interface DataSourceConnectionSubscription
-  extends Promise<AsyncIterator<DataSourceConnection>>,
+export interface LineGeneratorConnectionSubscription
+  extends Promise<AsyncIterator<LineGeneratorConnection>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<DataSourceEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateDataSourceSubscription>() => T;
-}
-
-export interface UserConnection {
-  pageInfo: PageInfo;
-  edges: UserEdge[];
-}
-
-export interface UserConnectionPromise
-  extends Promise<UserConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<UserEdge>>() => T;
-  aggregate: <T = AggregateUserPromise>() => T;
-}
-
-export interface UserConnectionSubscription
-  extends Promise<AsyncIterator<UserConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateUserSubscription>() => T;
-}
-
-export interface AggregateDashboard {
-  count: Int;
-}
-
-export interface AggregateDashboardPromise
-  extends Promise<AggregateDashboard>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateDashboardSubscription
-  extends Promise<AsyncIterator<AggregateDashboard>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface AggregateTest {
-  count: Int;
-}
-
-export interface AggregateTestPromise
-  extends Promise<AggregateTest>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateTestSubscription
-  extends Promise<AsyncIterator<AggregateTest>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface DashboardEdge {
-  node: Dashboard;
-  cursor: String;
-}
-
-export interface DashboardEdgePromise
-  extends Promise<DashboardEdge>,
-    Fragmentable {
-  node: <T = DashboardPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface DashboardEdgeSubscription
-  extends Promise<AsyncIterator<DashboardEdge>>,
-    Fragmentable {
-  node: <T = DashboardSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface TestConnection {
-  pageInfo: PageInfo;
-  edges: TestEdge[];
-}
-
-export interface TestConnectionPromise
-  extends Promise<TestConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<TestEdge>>() => T;
-  aggregate: <T = AggregateTestPromise>() => T;
-}
-
-export interface TestConnectionSubscription
-  extends Promise<AsyncIterator<TestConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<TestEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateTestSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<LineGeneratorEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateLineGeneratorSubscription>() => T;
 }
 
 export interface Dashboard {
@@ -3969,27 +3890,21 @@ export interface DashboardSubscription
   updateInterval: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface Test {
-  id: ID_Output;
-  createdAt: DateTimeOutput;
-  text?: String;
-  updatedAt: DateTimeOutput;
+export interface LineEdge {
+  node: Line;
+  cursor: String;
 }
 
-export interface TestPromise extends Promise<Test>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  text: () => Promise<String>;
-  updatedAt: () => Promise<DateTimeOutput>;
+export interface LineEdgePromise extends Promise<LineEdge>, Fragmentable {
+  node: <T = LinePromise>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface TestSubscription
-  extends Promise<AsyncIterator<Test>>,
+export interface LineEdgeSubscription
+  extends Promise<AsyncIterator<LineEdge>>,
     Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  text: () => Promise<AsyncIterator<String>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  node: <T = LineSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface DashboardSubscriptionPayload {
@@ -4015,598 +3930,6 @@ export interface DashboardSubscriptionPayloadSubscription
   node: <T = DashboardSubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
   previousValues: <T = DashboardPreviousValuesSubscription>() => T;
-}
-
-export interface PointEdge {
-  node: Point;
-  cursor: String;
-}
-
-export interface PointEdgePromise extends Promise<PointEdge>, Fragmentable {
-  node: <T = PointPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface PointEdgeSubscription
-  extends Promise<AsyncIterator<PointEdge>>,
-    Fragmentable {
-  node: <T = PointSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface DashboardPreviousValues {
-  id: ID_Output;
-  createdAt: DateTimeOutput;
-  icon?: String;
-  publicUrl?: String;
-  title: String;
-  updatedAt: DateTimeOutput;
-  updateInterval: Int;
-}
-
-export interface DashboardPreviousValuesPromise
-  extends Promise<DashboardPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  icon: () => Promise<String>;
-  publicUrl: () => Promise<String>;
-  title: () => Promise<String>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  updateInterval: () => Promise<Int>;
-}
-
-export interface DashboardPreviousValuesSubscription
-  extends Promise<AsyncIterator<DashboardPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  icon: () => Promise<AsyncIterator<String>>;
-  publicUrl: () => Promise<AsyncIterator<String>>;
-  title: () => Promise<AsyncIterator<String>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updateInterval: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface AggregateLineGenerator {
-  count: Int;
-}
-
-export interface AggregateLineGeneratorPromise
-  extends Promise<AggregateLineGenerator>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateLineGeneratorSubscription
-  extends Promise<AsyncIterator<AggregateLineGenerator>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface PageInfo {
-  hasNextPage: Boolean;
-  hasPreviousPage: Boolean;
-  startCursor?: String;
-  endCursor?: String;
-}
-
-export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
-  hasNextPage: () => Promise<Boolean>;
-  hasPreviousPage: () => Promise<Boolean>;
-  startCursor: () => Promise<String>;
-  endCursor: () => Promise<String>;
-}
-
-export interface PageInfoSubscription
-  extends Promise<AsyncIterator<PageInfo>>,
-    Fragmentable {
-  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
-  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
-  startCursor: () => Promise<AsyncIterator<String>>;
-  endCursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface LineGeneratorConnection {
-  pageInfo: PageInfo;
-  edges: LineGeneratorEdge[];
-}
-
-export interface LineGeneratorConnectionPromise
-  extends Promise<LineGeneratorConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<LineGeneratorEdge>>() => T;
-  aggregate: <T = AggregateLineGeneratorPromise>() => T;
-}
-
-export interface LineGeneratorConnectionSubscription
-  extends Promise<AsyncIterator<LineGeneratorConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<LineGeneratorEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateLineGeneratorSubscription>() => T;
-}
-
-export interface DataSourceSubscriptionPayload {
-  mutation: MutationType;
-  node: DataSource;
-  updatedFields: String[];
-  previousValues: DataSourcePreviousValues;
-}
-
-export interface DataSourceSubscriptionPayloadPromise
-  extends Promise<DataSourceSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = DataSourcePromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = DataSourcePreviousValuesPromise>() => T;
-}
-
-export interface DataSourceSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<DataSourceSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = DataSourceSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = DataSourcePreviousValuesSubscription>() => T;
-}
-
-export interface LineEdge {
-  node: Line;
-  cursor: String;
-}
-
-export interface LineEdgePromise extends Promise<LineEdge>, Fragmentable {
-  node: <T = LinePromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface LineEdgeSubscription
-  extends Promise<AsyncIterator<LineEdge>>,
-    Fragmentable {
-  node: <T = LineSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface DataSourcePreviousValues {
-  id: ID_Output;
-  author?: String;
-  createdAt: DateTimeOutput;
-  description?: String;
-  env?: Json;
-  meta?: Json;
-  name: String;
-  requiredEnvVars: String[];
-  requiredParams: String[];
-  source: String;
-  type: DataSourceType;
-  updatedAt: DateTimeOutput;
-}
-
-export interface DataSourcePreviousValuesPromise
-  extends Promise<DataSourcePreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  author: () => Promise<String>;
-  createdAt: () => Promise<DateTimeOutput>;
-  description: () => Promise<String>;
-  env: () => Promise<Json>;
-  meta: () => Promise<Json>;
-  name: () => Promise<String>;
-  requiredEnvVars: () => Promise<String[]>;
-  requiredParams: () => Promise<String[]>;
-  source: () => Promise<String>;
-  type: () => Promise<DataSourceType>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface DataSourcePreviousValuesSubscription
-  extends Promise<AsyncIterator<DataSourcePreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  author: () => Promise<AsyncIterator<String>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  description: () => Promise<AsyncIterator<String>>;
-  env: () => Promise<AsyncIterator<Json>>;
-  meta: () => Promise<AsyncIterator<Json>>;
-  name: () => Promise<AsyncIterator<String>>;
-  requiredEnvVars: () => Promise<AsyncIterator<String[]>>;
-  requiredParams: () => Promise<AsyncIterator<String[]>>;
-  source: () => Promise<AsyncIterator<String>>;
-  type: () => Promise<AsyncIterator<DataSourceType>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface AggregateGraphUpdate {
-  count: Int;
-}
-
-export interface AggregateGraphUpdatePromise
-  extends Promise<AggregateGraphUpdate>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateGraphUpdateSubscription
-  extends Promise<AsyncIterator<AggregateGraphUpdate>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface DashboardConnection {
-  pageInfo: PageInfo;
-  edges: DashboardEdge[];
-}
-
-export interface DashboardConnectionPromise
-  extends Promise<DashboardConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<DashboardEdge>>() => T;
-  aggregate: <T = AggregateDashboardPromise>() => T;
-}
-
-export interface DashboardConnectionSubscription
-  extends Promise<AsyncIterator<DashboardConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<DashboardEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateDashboardSubscription>() => T;
-}
-
-export interface GraphUpdateConnection {
-  pageInfo: PageInfo;
-  edges: GraphUpdateEdge[];
-}
-
-export interface GraphUpdateConnectionPromise
-  extends Promise<GraphUpdateConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<GraphUpdateEdge>>() => T;
-  aggregate: <T = AggregateGraphUpdatePromise>() => T;
-}
-
-export interface GraphUpdateConnectionSubscription
-  extends Promise<AsyncIterator<GraphUpdateConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<GraphUpdateEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateGraphUpdateSubscription>() => T;
-}
-
-export interface EntitySubscriptionPayload {
-  mutation: MutationType;
-  node: Entity;
-  updatedFields: String[];
-  previousValues: EntityPreviousValues;
-}
-
-export interface EntitySubscriptionPayloadPromise
-  extends Promise<EntitySubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = EntityPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = EntityPreviousValuesPromise>() => T;
-}
-
-export interface EntitySubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<EntitySubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = EntitySubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = EntityPreviousValuesSubscription>() => T;
-}
-
-export interface GraphEdge {
-  node: Graph;
-  cursor: String;
-}
-
-export interface GraphEdgePromise extends Promise<GraphEdge>, Fragmentable {
-  node: <T = GraphPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface GraphEdgeSubscription
-  extends Promise<AsyncIterator<GraphEdge>>,
-    Fragmentable {
-  node: <T = GraphSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface EntityPreviousValues {
-  id: ID_Output;
-  createdAt: DateTimeOutput;
-  data: Json;
-  icon?: String;
-  private: Boolean;
-  title: String;
-  updatedAt: DateTimeOutput;
-}
-
-export interface EntityPreviousValuesPromise
-  extends Promise<EntityPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  data: () => Promise<Json>;
-  icon: () => Promise<String>;
-  private: () => Promise<Boolean>;
-  title: () => Promise<String>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface EntityPreviousValuesSubscription
-  extends Promise<AsyncIterator<EntityPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  data: () => Promise<AsyncIterator<Json>>;
-  icon: () => Promise<AsyncIterator<String>>;
-  private: () => Promise<AsyncIterator<Boolean>>;
-  title: () => Promise<AsyncIterator<String>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface DataSource {
-  id: ID_Output;
-  author?: String;
-  createdAt: DateTimeOutput;
-  description?: String;
-  env?: Json;
-  meta?: Json;
-  name: String;
-  requiredEnvVars: String[];
-  requiredParams: String[];
-  source: String;
-  type: DataSourceType;
-  updatedAt: DateTimeOutput;
-}
-
-export interface DataSourcePromise extends Promise<DataSource>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  author: () => Promise<String>;
-  createdAt: () => Promise<DateTimeOutput>;
-  createdBy: <T = UserPromise>() => T;
-  description: () => Promise<String>;
-  env: () => Promise<Json>;
-  lineGenerators: <T = FragmentableArray<LineGenerator>>(args?: {
-    where?: LineGeneratorWhereInput;
-    orderBy?: LineGeneratorOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  meta: () => Promise<Json>;
-  name: () => Promise<String>;
-  requiredEnvVars: () => Promise<String[]>;
-  requiredParams: () => Promise<String[]>;
-  source: () => Promise<String>;
-  type: () => Promise<DataSourceType>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface DataSourceSubscription
-  extends Promise<AsyncIterator<DataSource>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  author: () => Promise<AsyncIterator<String>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  createdBy: <T = UserSubscription>() => T;
-  description: () => Promise<AsyncIterator<String>>;
-  env: () => Promise<AsyncIterator<Json>>;
-  lineGenerators: <
-    T = Promise<AsyncIterator<LineGeneratorSubscription>>
-  >(args?: {
-    where?: LineGeneratorWhereInput;
-    orderBy?: LineGeneratorOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  meta: () => Promise<AsyncIterator<Json>>;
-  name: () => Promise<AsyncIterator<String>>;
-  requiredEnvVars: () => Promise<AsyncIterator<String[]>>;
-  requiredParams: () => Promise<AsyncIterator<String[]>>;
-  source: () => Promise<AsyncIterator<String>>;
-  type: () => Promise<AsyncIterator<DataSourceType>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface Point {
-  id: ID_Output;
-  createdAt: DateTimeOutput;
-  hidden?: Boolean;
-  updatedAt: DateTimeOutput;
-  x: DateTimeOutput;
-  y: Float;
-}
-
-export interface PointPromise extends Promise<Point>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  hidden: () => Promise<Boolean>;
-  line: <T = LinePromise>() => T;
-  updatedAt: () => Promise<DateTimeOutput>;
-  x: () => Promise<DateTimeOutput>;
-  y: () => Promise<Float>;
-}
-
-export interface PointSubscription
-  extends Promise<AsyncIterator<Point>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  hidden: () => Promise<AsyncIterator<Boolean>>;
-  line: <T = LineSubscription>() => T;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  x: () => Promise<AsyncIterator<DateTimeOutput>>;
-  y: () => Promise<AsyncIterator<Float>>;
-}
-
-export interface TestSubscriptionPayload {
-  mutation: MutationType;
-  node: Test;
-  updatedFields: String[];
-  previousValues: TestPreviousValues;
-}
-
-export interface TestSubscriptionPayloadPromise
-  extends Promise<TestSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = TestPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = TestPreviousValuesPromise>() => T;
-}
-
-export interface TestSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<TestSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = TestSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = TestPreviousValuesSubscription>() => T;
-}
-
-export interface GraphSubscriptionPayload {
-  mutation: MutationType;
-  node: Graph;
-  updatedFields: String[];
-  previousValues: GraphPreviousValues;
-}
-
-export interface GraphSubscriptionPayloadPromise
-  extends Promise<GraphSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = GraphPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = GraphPreviousValuesPromise>() => T;
-}
-
-export interface GraphSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<GraphSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = GraphSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = GraphPreviousValuesSubscription>() => T;
-}
-
-export interface Graph {
-  id: ID_Output;
-  createdAt: DateTimeOutput;
-  icon?: String;
-  publicUrl?: String;
-  title: String;
-  updatedAt: DateTimeOutput;
-  updateInterval: Int;
-  xAxisLabel?: String;
-  yAxisLabel?: String;
-}
-
-export interface GraphPromise extends Promise<Graph>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  createdBy: <T = UserPromise>() => T;
-  dashboard: <T = DashboardPromise>() => T;
-  entity: <T = EntityPromise>() => T;
-  icon: () => Promise<String>;
-  lineGenerators: <T = FragmentableArray<LineGenerator>>(args?: {
-    where?: LineGeneratorWhereInput;
-    orderBy?: LineGeneratorOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  publicUrl: () => Promise<String>;
-  title: () => Promise<String>;
-  update: <T = GraphUpdatePromise>() => T;
-  updatedAt: () => Promise<DateTimeOutput>;
-  updateInterval: () => Promise<Int>;
-  xAxisLabel: () => Promise<String>;
-  yAxisLabel: () => Promise<String>;
-}
-
-export interface GraphSubscription
-  extends Promise<AsyncIterator<Graph>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  createdBy: <T = UserSubscription>() => T;
-  dashboard: <T = DashboardSubscription>() => T;
-  entity: <T = EntitySubscription>() => T;
-  icon: () => Promise<AsyncIterator<String>>;
-  lineGenerators: <
-    T = Promise<AsyncIterator<LineGeneratorSubscription>>
-  >(args?: {
-    where?: LineGeneratorWhereInput;
-    orderBy?: LineGeneratorOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  publicUrl: () => Promise<AsyncIterator<String>>;
-  title: () => Promise<AsyncIterator<String>>;
-  update: <T = GraphUpdateSubscription>() => T;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updateInterval: () => Promise<AsyncIterator<Int>>;
-  xAxisLabel: () => Promise<AsyncIterator<String>>;
-  yAxisLabel: () => Promise<AsyncIterator<String>>;
-}
-
-export interface GraphPreviousValues {
-  id: ID_Output;
-  createdAt: DateTimeOutput;
-  icon?: String;
-  publicUrl?: String;
-  title: String;
-  updatedAt: DateTimeOutput;
-  updateInterval: Int;
-  xAxisLabel?: String;
-  yAxisLabel?: String;
-}
-
-export interface GraphPreviousValuesPromise
-  extends Promise<GraphPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  icon: () => Promise<String>;
-  publicUrl: () => Promise<String>;
-  title: () => Promise<String>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  updateInterval: () => Promise<Int>;
-  xAxisLabel: () => Promise<String>;
-  yAxisLabel: () => Promise<String>;
-}
-
-export interface GraphPreviousValuesSubscription
-  extends Promise<AsyncIterator<GraphPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  icon: () => Promise<AsyncIterator<String>>;
-  publicUrl: () => Promise<AsyncIterator<String>>;
-  title: () => Promise<AsyncIterator<String>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updateInterval: () => Promise<AsyncIterator<Int>>;
-  xAxisLabel: () => Promise<AsyncIterator<String>>;
-  yAxisLabel: () => Promise<AsyncIterator<String>>;
 }
 
 export interface User {
@@ -4733,122 +4056,38 @@ export interface UserSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface PointPreviousValues {
+export interface DashboardPreviousValues {
   id: ID_Output;
   createdAt: DateTimeOutput;
-  hidden?: Boolean;
+  icon?: String;
+  publicUrl?: String;
+  title: String;
   updatedAt: DateTimeOutput;
-  x: DateTimeOutput;
-  y: Float;
+  updateInterval: Int;
 }
 
-export interface PointPreviousValuesPromise
-  extends Promise<PointPreviousValues>,
+export interface DashboardPreviousValuesPromise
+  extends Promise<DashboardPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
   createdAt: () => Promise<DateTimeOutput>;
-  hidden: () => Promise<Boolean>;
+  icon: () => Promise<String>;
+  publicUrl: () => Promise<String>;
+  title: () => Promise<String>;
   updatedAt: () => Promise<DateTimeOutput>;
-  x: () => Promise<DateTimeOutput>;
-  y: () => Promise<Float>;
+  updateInterval: () => Promise<Int>;
 }
 
-export interface PointPreviousValuesSubscription
-  extends Promise<AsyncIterator<PointPreviousValues>>,
+export interface DashboardPreviousValuesSubscription
+  extends Promise<AsyncIterator<DashboardPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  hidden: () => Promise<AsyncIterator<Boolean>>;
+  icon: () => Promise<AsyncIterator<String>>;
+  publicUrl: () => Promise<AsyncIterator<String>>;
+  title: () => Promise<AsyncIterator<String>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  x: () => Promise<AsyncIterator<DateTimeOutput>>;
-  y: () => Promise<AsyncIterator<Float>>;
-}
-
-export interface PointConnection {
-  pageInfo: PageInfo;
-  edges: PointEdge[];
-}
-
-export interface PointConnectionPromise
-  extends Promise<PointConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<PointEdge>>() => T;
-  aggregate: <T = AggregatePointPromise>() => T;
-}
-
-export interface PointConnectionSubscription
-  extends Promise<AsyncIterator<PointConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<PointEdgeSubscription>>>() => T;
-  aggregate: <T = AggregatePointSubscription>() => T;
-}
-
-export interface GraphUpdateSubscriptionPayload {
-  mutation: MutationType;
-  node: GraphUpdate;
-  updatedFields: String[];
-  previousValues: GraphUpdatePreviousValues;
-}
-
-export interface GraphUpdateSubscriptionPayloadPromise
-  extends Promise<GraphUpdateSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = GraphUpdatePromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = GraphUpdatePreviousValuesPromise>() => T;
-}
-
-export interface GraphUpdateSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<GraphUpdateSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = GraphUpdateSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = GraphUpdatePreviousValuesSubscription>() => T;
-}
-
-export interface AggregateLine {
-  count: Int;
-}
-
-export interface AggregateLinePromise
-  extends Promise<AggregateLine>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateLineSubscription
-  extends Promise<AsyncIterator<AggregateLine>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface GraphUpdatePreviousValues {
-  id: ID_Output;
-  createdAt: DateTimeOutput;
-  time: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-}
-
-export interface GraphUpdatePreviousValuesPromise
-  extends Promise<GraphUpdatePreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  time: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface GraphUpdatePreviousValuesSubscription
-  extends Promise<AsyncIterator<GraphUpdatePreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  time: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updateInterval: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface GraphUpdateEdge {
@@ -4870,44 +4109,70 @@ export interface GraphUpdateEdgeSubscription
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface Line {
+export interface GraphUpdate {
   id: ID_Output;
   createdAt: DateTimeOutput;
+  time: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
 
-export interface LinePromise extends Promise<Line>, Fragmentable {
+export interface GraphUpdatePromise extends Promise<GraphUpdate>, Fragmentable {
   id: () => Promise<ID_Output>;
   createdAt: () => Promise<DateTimeOutput>;
-  lineGenerator: <T = LineGeneratorPromise>() => T;
-  points: <T = FragmentableArray<Point>>(args?: {
-    where?: PointWhereInput;
-    orderBy?: PointOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
+  graph: <T = GraphPromise>() => T;
+  time: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
 
-export interface LineSubscription
-  extends Promise<AsyncIterator<Line>>,
+export interface GraphUpdateSubscription
+  extends Promise<AsyncIterator<GraphUpdate>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  lineGenerator: <T = LineGeneratorSubscription>() => T;
-  points: <T = Promise<AsyncIterator<PointSubscription>>>(args?: {
-    where?: PointWhereInput;
-    orderBy?: PointOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
+  graph: <T = GraphSubscription>() => T;
+  time: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface AggregateGraph {
+  count: Int;
+}
+
+export interface AggregateGraphPromise
+  extends Promise<AggregateGraph>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateGraphSubscription
+  extends Promise<AsyncIterator<AggregateGraph>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface DataSourceSubscriptionPayload {
+  mutation: MutationType;
+  node: DataSource;
+  updatedFields: String[];
+  previousValues: DataSourcePreviousValues;
+}
+
+export interface DataSourceSubscriptionPayloadPromise
+  extends Promise<DataSourceSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = DataSourcePromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = DataSourcePreviousValuesPromise>() => T;
+}
+
+export interface DataSourceSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<DataSourceSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = DataSourceSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = DataSourcePreviousValuesSubscription>() => T;
 }
 
 export interface GraphConnection {
@@ -4931,67 +4196,229 @@ export interface GraphConnectionSubscription
   aggregate: <T = AggregateGraphSubscription>() => T;
 }
 
-export interface LineSubscriptionPayload {
-  mutation: MutationType;
-  node: Line;
-  updatedFields: String[];
-  previousValues: LinePreviousValues;
-}
-
-export interface LineSubscriptionPayloadPromise
-  extends Promise<LineSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = LinePromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = LinePreviousValuesPromise>() => T;
-}
-
-export interface LineSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<LineSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = LineSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = LinePreviousValuesSubscription>() => T;
-}
-
-export interface UserEdge {
-  node: User;
-  cursor: String;
-}
-
-export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
-  node: <T = UserPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface UserEdgeSubscription
-  extends Promise<AsyncIterator<UserEdge>>,
-    Fragmentable {
-  node: <T = UserSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface LinePreviousValues {
+export interface DataSourcePreviousValues {
   id: ID_Output;
+  author?: String;
   createdAt: DateTimeOutput;
+  description?: String;
+  env?: Json;
+  meta?: Json;
+  name: String;
+  requiredEnvVars: String[];
+  requiredParams: String[];
+  source: String;
+  type: DataSourceType;
   updatedAt: DateTimeOutput;
 }
 
-export interface LinePreviousValuesPromise
-  extends Promise<LinePreviousValues>,
+export interface DataSourcePreviousValuesPromise
+  extends Promise<DataSourcePreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  author: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
+  description: () => Promise<String>;
+  env: () => Promise<Json>;
+  meta: () => Promise<Json>;
+  name: () => Promise<String>;
+  requiredEnvVars: () => Promise<String[]>;
+  requiredParams: () => Promise<String[]>;
+  source: () => Promise<String>;
+  type: () => Promise<DataSourceType>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
 
-export interface LinePreviousValuesSubscription
-  extends Promise<AsyncIterator<LinePreviousValues>>,
+export interface DataSourcePreviousValuesSubscription
+  extends Promise<AsyncIterator<DataSourcePreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  author: () => Promise<AsyncIterator<String>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  description: () => Promise<AsyncIterator<String>>;
+  env: () => Promise<AsyncIterator<Json>>;
+  meta: () => Promise<AsyncIterator<Json>>;
+  name: () => Promise<AsyncIterator<String>>;
+  requiredEnvVars: () => Promise<AsyncIterator<String[]>>;
+  requiredParams: () => Promise<AsyncIterator<String[]>>;
+  source: () => Promise<AsyncIterator<String>>;
+  type: () => Promise<AsyncIterator<DataSourceType>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface EntityEdge {
+  node: Entity;
+  cursor: String;
+}
+
+export interface EntityEdgePromise extends Promise<EntityEdge>, Fragmentable {
+  node: <T = EntityPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface EntityEdgeSubscription
+  extends Promise<AsyncIterator<EntityEdge>>,
+    Fragmentable {
+  node: <T = EntitySubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface DataSource {
+  id: ID_Output;
+  author?: String;
+  createdAt: DateTimeOutput;
+  description?: String;
+  env?: Json;
+  meta?: Json;
+  name: String;
+  requiredEnvVars: String[];
+  requiredParams: String[];
+  source: String;
+  type: DataSourceType;
+  updatedAt: DateTimeOutput;
+}
+
+export interface DataSourcePromise extends Promise<DataSource>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  author: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+  createdBy: <T = UserPromise>() => T;
+  description: () => Promise<String>;
+  env: () => Promise<Json>;
+  lineGenerators: <T = FragmentableArray<LineGenerator>>(args?: {
+    where?: LineGeneratorWhereInput;
+    orderBy?: LineGeneratorOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  meta: () => Promise<Json>;
+  name: () => Promise<String>;
+  requiredEnvVars: () => Promise<String[]>;
+  requiredParams: () => Promise<String[]>;
+  source: () => Promise<String>;
+  type: () => Promise<DataSourceType>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface DataSourceSubscription
+  extends Promise<AsyncIterator<DataSource>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  author: () => Promise<AsyncIterator<String>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdBy: <T = UserSubscription>() => T;
+  description: () => Promise<AsyncIterator<String>>;
+  env: () => Promise<AsyncIterator<Json>>;
+  lineGenerators: <
+    T = Promise<AsyncIterator<LineGeneratorSubscription>>
+  >(args?: {
+    where?: LineGeneratorWhereInput;
+    orderBy?: LineGeneratorOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  meta: () => Promise<AsyncIterator<Json>>;
+  name: () => Promise<AsyncIterator<String>>;
+  requiredEnvVars: () => Promise<AsyncIterator<String[]>>;
+  requiredParams: () => Promise<AsyncIterator<String[]>>;
+  source: () => Promise<AsyncIterator<String>>;
+  type: () => Promise<AsyncIterator<DataSourceType>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface AggregateDataSource {
+  count: Int;
+}
+
+export interface AggregateDataSourcePromise
+  extends Promise<AggregateDataSource>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateDataSourceSubscription
+  extends Promise<AsyncIterator<AggregateDataSource>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface EntitySubscriptionPayload {
+  mutation: MutationType;
+  node: Entity;
+  updatedFields: String[];
+  previousValues: EntityPreviousValues;
+}
+
+export interface EntitySubscriptionPayloadPromise
+  extends Promise<EntitySubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = EntityPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = EntityPreviousValuesPromise>() => T;
+}
+
+export interface EntitySubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<EntitySubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = EntitySubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = EntityPreviousValuesSubscription>() => T;
+}
+
+export interface AggregateUser {
+  count: Int;
+}
+
+export interface AggregateUserPromise
+  extends Promise<AggregateUser>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUser>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface EntityPreviousValues {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  data: Json;
+  icon?: String;
+  private: Boolean;
+  title: String;
+  updatedAt: DateTimeOutput;
+}
+
+export interface EntityPreviousValuesPromise
+  extends Promise<EntityPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  data: () => Promise<Json>;
+  icon: () => Promise<String>;
+  private: () => Promise<Boolean>;
+  title: () => Promise<String>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface EntityPreviousValuesSubscription
+  extends Promise<AsyncIterator<EntityPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  data: () => Promise<AsyncIterator<Json>>;
+  icon: () => Promise<AsyncIterator<String>>;
+  private: () => Promise<AsyncIterator<Boolean>>;
+  title: () => Promise<AsyncIterator<String>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
@@ -5009,27 +4436,6 @@ export interface AggregatePointSubscription
   extends Promise<AsyncIterator<AggregatePoint>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface LineConnection {
-  pageInfo: PageInfo;
-  edges: LineEdge[];
-}
-
-export interface LineConnectionPromise
-  extends Promise<LineConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<LineEdge>>() => T;
-  aggregate: <T = AggregateLinePromise>() => T;
-}
-
-export interface LineConnectionSubscription
-  extends Promise<AsyncIterator<LineConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<LineEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateLineSubscription>() => T;
 }
 
 export interface Entity {
@@ -5102,6 +4508,326 @@ export interface EntitySubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
+export interface LineGeneratorEdge {
+  node: LineGenerator;
+  cursor: String;
+}
+
+export interface LineGeneratorEdgePromise
+  extends Promise<LineGeneratorEdge>,
+    Fragmentable {
+  node: <T = LineGeneratorPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface LineGeneratorEdgeSubscription
+  extends Promise<AsyncIterator<LineGeneratorEdge>>,
+    Fragmentable {
+  node: <T = LineGeneratorSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface GraphSubscriptionPayload {
+  mutation: MutationType;
+  node: Graph;
+  updatedFields: String[];
+  previousValues: GraphPreviousValues;
+}
+
+export interface GraphSubscriptionPayloadPromise
+  extends Promise<GraphSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = GraphPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = GraphPreviousValuesPromise>() => T;
+}
+
+export interface GraphSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<GraphSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = GraphSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = GraphPreviousValuesSubscription>() => T;
+}
+
+export interface LineConnection {
+  pageInfo: PageInfo;
+  edges: LineEdge[];
+}
+
+export interface LineConnectionPromise
+  extends Promise<LineConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<LineEdge>>() => T;
+  aggregate: <T = AggregateLinePromise>() => T;
+}
+
+export interface LineConnectionSubscription
+  extends Promise<AsyncIterator<LineConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<LineEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateLineSubscription>() => T;
+}
+
+export interface GraphPreviousValues {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  icon?: String;
+  publicUrl?: String;
+  title: String;
+  updatedAt: DateTimeOutput;
+  updateInterval: Int;
+  xAxisLabel?: String;
+  yAxisLabel?: String;
+}
+
+export interface GraphPreviousValuesPromise
+  extends Promise<GraphPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  icon: () => Promise<String>;
+  publicUrl: () => Promise<String>;
+  title: () => Promise<String>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  updateInterval: () => Promise<Int>;
+  xAxisLabel: () => Promise<String>;
+  yAxisLabel: () => Promise<String>;
+}
+
+export interface GraphPreviousValuesSubscription
+  extends Promise<AsyncIterator<GraphPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  icon: () => Promise<AsyncIterator<String>>;
+  publicUrl: () => Promise<AsyncIterator<String>>;
+  title: () => Promise<AsyncIterator<String>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updateInterval: () => Promise<AsyncIterator<Int>>;
+  xAxisLabel: () => Promise<AsyncIterator<String>>;
+  yAxisLabel: () => Promise<AsyncIterator<String>>;
+}
+
+export interface GraphUpdateConnection {
+  pageInfo: PageInfo;
+  edges: GraphUpdateEdge[];
+}
+
+export interface GraphUpdateConnectionPromise
+  extends Promise<GraphUpdateConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<GraphUpdateEdge>>() => T;
+  aggregate: <T = AggregateGraphUpdatePromise>() => T;
+}
+
+export interface GraphUpdateConnectionSubscription
+  extends Promise<AsyncIterator<GraphUpdateConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<GraphUpdateEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateGraphUpdateSubscription>() => T;
+}
+
+export interface Graph {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  icon?: String;
+  publicUrl?: String;
+  title: String;
+  updatedAt: DateTimeOutput;
+  updateInterval: Int;
+  xAxisLabel?: String;
+  yAxisLabel?: String;
+}
+
+export interface GraphPromise extends Promise<Graph>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  createdBy: <T = UserPromise>() => T;
+  dashboard: <T = DashboardPromise>() => T;
+  entity: <T = EntityPromise>() => T;
+  icon: () => Promise<String>;
+  lineGenerators: <T = FragmentableArray<LineGenerator>>(args?: {
+    where?: LineGeneratorWhereInput;
+    orderBy?: LineGeneratorOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  publicUrl: () => Promise<String>;
+  title: () => Promise<String>;
+  update: <T = GraphUpdatePromise>() => T;
+  updatedAt: () => Promise<DateTimeOutput>;
+  updateInterval: () => Promise<Int>;
+  xAxisLabel: () => Promise<String>;
+  yAxisLabel: () => Promise<String>;
+}
+
+export interface GraphSubscription
+  extends Promise<AsyncIterator<Graph>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdBy: <T = UserSubscription>() => T;
+  dashboard: <T = DashboardSubscription>() => T;
+  entity: <T = EntitySubscription>() => T;
+  icon: () => Promise<AsyncIterator<String>>;
+  lineGenerators: <
+    T = Promise<AsyncIterator<LineGeneratorSubscription>>
+  >(args?: {
+    where?: LineGeneratorWhereInput;
+    orderBy?: LineGeneratorOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  publicUrl: () => Promise<AsyncIterator<String>>;
+  title: () => Promise<AsyncIterator<String>>;
+  update: <T = GraphUpdateSubscription>() => T;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updateInterval: () => Promise<AsyncIterator<Int>>;
+  xAxisLabel: () => Promise<AsyncIterator<String>>;
+  yAxisLabel: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateEntity {
+  count: Int;
+}
+
+export interface AggregateEntityPromise
+  extends Promise<AggregateEntity>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateEntitySubscription
+  extends Promise<AsyncIterator<AggregateEntity>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface GraphUpdateSubscriptionPayload {
+  mutation: MutationType;
+  node: GraphUpdate;
+  updatedFields: String[];
+  previousValues: GraphUpdatePreviousValues;
+}
+
+export interface GraphUpdateSubscriptionPayloadPromise
+  extends Promise<GraphUpdateSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = GraphUpdatePromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = GraphUpdatePreviousValuesPromise>() => T;
+}
+
+export interface GraphUpdateSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<GraphUpdateSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = GraphUpdateSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = GraphUpdatePreviousValuesSubscription>() => T;
+}
+
+export interface UserSubscriptionPayload {
+  mutation: MutationType;
+  node: User;
+  updatedFields: String[];
+  previousValues: UserPreviousValues;
+}
+
+export interface UserSubscriptionPayloadPromise
+  extends Promise<UserSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = UserPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = UserPreviousValuesPromise>() => T;
+}
+
+export interface UserSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<UserSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = UserSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = UserPreviousValuesSubscription>() => T;
+}
+
+export interface GraphUpdatePreviousValues {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  time: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface GraphUpdatePreviousValuesPromise
+  extends Promise<GraphUpdatePreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  time: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface GraphUpdatePreviousValuesSubscription
+  extends Promise<AsyncIterator<GraphUpdatePreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  time: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface PointConnection {
+  pageInfo: PageInfo;
+  edges: PointEdge[];
+}
+
+export interface PointConnectionPromise
+  extends Promise<PointConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<PointEdge>>() => T;
+  aggregate: <T = AggregatePointPromise>() => T;
+}
+
+export interface PointConnectionSubscription
+  extends Promise<AsyncIterator<PointConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<PointEdgeSubscription>>>() => T;
+  aggregate: <T = AggregatePointSubscription>() => T;
+}
+
+export interface AggregateGraphUpdate {
+  count: Int;
+}
+
+export interface AggregateGraphUpdatePromise
+  extends Promise<AggregateGraphUpdate>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateGraphUpdateSubscription
+  extends Promise<AsyncIterator<AggregateGraphUpdate>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
 export interface LineGeneratorPreviousValues {
   id: ID_Output;
   color?: String;
@@ -5136,106 +4862,51 @@ export interface LineGeneratorPreviousValuesSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface LineGeneratorSubscriptionPayload {
-  mutation: MutationType;
-  node: LineGenerator;
-  updatedFields: String[];
-  previousValues: LineGeneratorPreviousValues;
-}
-
-export interface LineGeneratorSubscriptionPayloadPromise
-  extends Promise<LineGeneratorSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = LineGeneratorPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = LineGeneratorPreviousValuesPromise>() => T;
-}
-
-export interface LineGeneratorSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<LineGeneratorSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = LineGeneratorSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = LineGeneratorPreviousValuesSubscription>() => T;
-}
-
-export interface GraphUpdate {
+export interface LinePreviousValues {
   id: ID_Output;
   createdAt: DateTimeOutput;
-  time: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
 
-export interface GraphUpdatePromise extends Promise<GraphUpdate>, Fragmentable {
+export interface LinePreviousValuesPromise
+  extends Promise<LinePreviousValues>,
+    Fragmentable {
   id: () => Promise<ID_Output>;
   createdAt: () => Promise<DateTimeOutput>;
-  graph: <T = GraphPromise>() => T;
-  time: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
 
-export interface GraphUpdateSubscription
-  extends Promise<AsyncIterator<GraphUpdate>>,
+export interface LinePreviousValuesSubscription
+  extends Promise<AsyncIterator<LinePreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  graph: <T = GraphSubscription>() => T;
-  time: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface AggregateGraph {
-  count: Int;
+export interface LineSubscriptionPayload {
+  mutation: MutationType;
+  node: Line;
+  updatedFields: String[];
+  previousValues: LinePreviousValues;
 }
 
-export interface AggregateGraphPromise
-  extends Promise<AggregateGraph>,
+export interface LineSubscriptionPayloadPromise
+  extends Promise<LineSubscriptionPayload>,
     Fragmentable {
-  count: () => Promise<Int>;
+  mutation: () => Promise<MutationType>;
+  node: <T = LinePromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = LinePreviousValuesPromise>() => T;
 }
 
-export interface AggregateGraphSubscription
-  extends Promise<AsyncIterator<AggregateGraph>>,
+export interface LineSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<LineSubscriptionPayload>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface LineGeneratorEdge {
-  node: LineGenerator;
-  cursor: String;
-}
-
-export interface LineGeneratorEdgePromise
-  extends Promise<LineGeneratorEdge>,
-    Fragmentable {
-  node: <T = LineGeneratorPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface LineGeneratorEdgeSubscription
-  extends Promise<AsyncIterator<LineGeneratorEdge>>,
-    Fragmentable {
-  node: <T = LineGeneratorSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface TestEdge {
-  node: Test;
-  cursor: String;
-}
-
-export interface TestEdgePromise extends Promise<TestEdge>, Fragmentable {
-  node: <T = TestPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface TestEdgeSubscription
-  extends Promise<AsyncIterator<TestEdge>>,
-    Fragmentable {
-  node: <T = TestSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = LineSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = LinePreviousValuesSubscription>() => T;
 }
 
 export interface LineGenerator {
@@ -5280,14 +4951,87 @@ export interface LineGeneratorSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export type Json = any;
+export interface GraphEdge {
+  node: Graph;
+  cursor: String;
+}
 
-export type Long = string;
+export interface GraphEdgePromise extends Promise<GraphEdge>, Fragmentable {
+  node: <T = GraphPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface GraphEdgeSubscription
+  extends Promise<AsyncIterator<GraphEdge>>,
+    Fragmentable {
+  node: <T = GraphSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateLine {
+  count: Int;
+}
+
+export interface AggregateLinePromise
+  extends Promise<AggregateLine>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateLineSubscription
+  extends Promise<AsyncIterator<AggregateLine>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface UserConnection {
+  pageInfo: PageInfo;
+  edges: UserEdge[];
+}
+
+export interface UserConnectionPromise
+  extends Promise<UserConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<UserEdge>>() => T;
+  aggregate: <T = AggregateUserPromise>() => T;
+}
+
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
+}
+
+export interface EntityConnection {
+  pageInfo: PageInfo;
+  edges: EntityEdge[];
+}
+
+export interface EntityConnectionPromise
+  extends Promise<EntityConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<EntityEdge>>() => T;
+  aggregate: <T = AggregateEntityPromise>() => T;
+}
+
+export interface EntityConnectionSubscription
+  extends Promise<AsyncIterator<EntityConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<EntityEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateEntitySubscription>() => T;
+}
 
 /*
-The `Boolean` scalar type represents `true` or `false`.
+The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point). 
 */
-export type Boolean = boolean;
+export type Float = number;
+
+export type Long = string;
 
 /*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
@@ -5295,9 +5039,9 @@ The `Int` scalar type represents non-fractional signed whole numeric values. Int
 export type Int = number;
 
 /*
-The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point). 
+The `Boolean` scalar type represents `true` or `false`.
 */
-export type Float = number;
+export type Boolean = boolean;
 
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
@@ -5319,6 +5063,8 @@ export type DateTimeOutput = string;
 The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
 export type String = string;
+
+export type Json = any;
 
 /**
  * Model Metadata
@@ -5367,10 +5113,6 @@ export const models: Model[] = [
   },
   {
     name: "Role",
-    embedded: false
-  },
-  {
-    name: "Test",
     embedded: false
   },
   {

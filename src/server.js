@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
-import { GraphQLServer, PubSub } from 'graphql-yoga';
+import { GraphQLServer } from 'graphql-yoga';
 
 import auth from './middlewares/auth';
 import directives from './directives';
@@ -19,8 +19,6 @@ if (process.env.NODE_ENV !== 'production') {
 
 let graphWorker = new GraphWorker();
 
-const pubsub = new PubSub();
-
 const server = new GraphQLServer({
   directiveResolvers: directives.legacy,
   middlewares: [auth.authentication],
@@ -30,23 +28,14 @@ const server = new GraphQLServer({
   context: async (request) => {
     return {
       ...request,
-      prisma, 
-      pubsub,
+      prisma,
     }
   },
 })
 
 server.start({ port: process.env.PORT || 5000 }, (options) => console.log(`Server is running on port ${options.port}`));
 
-setInterval(function() {
-  pubsub.publish('testCreated', {
-    mutation: "CREATED",
-    node: {
-      text: "haha"
-    }
-  })
-}, 1000 * 10);
-// setInterval(graphWorker.findGraphsToUpdate, 1000 * 60);
+// TODO: setInterval(graphWorker.findGraphsToUpdate, 1000 * 60);
 
 // const app = new express();
 // app.use(cors());
