@@ -115,6 +115,13 @@ enum Role {
   SUPER_ADMIN
 }
 
+type Test {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  text: String
+  updatedAt: DateTime! @updatedAt
+}
+
 # if you update this User model remember to do so in ../schema/index.graphql
 type User {
   id: ID! @id

@@ -1,0 +1,8 @@
+{
+    "version": 2,
+    "name": "live-pulse",
+    "builds": [{ "src": "src/server.js", "use": "@now/node" }],
+    "routes": [
+        { "src": "/.*", "dest": "src/server.js" }
+    ]
+  }
