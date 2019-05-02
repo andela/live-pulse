@@ -26,6 +26,7 @@ type Query @isAuthenticated {
 }
 
 type Mutation {
+  createTest(data: TestCreateInput!): Test
   createDashboard(data: DashboardUpdateInput!): Dashboard! @isAuthenticated
   createDataSource(data: DataSourceCreateInput!): DataSource! @hasRole(roles: [ADMIN, SUPER_ADMIN]) @isAuthenticated
   createEntity(data: EntityCreateInput!): Entity! @isAuthenticated
@@ -43,6 +44,11 @@ type Mutation {
   updateEntity(id: ID!, data: EntityUpdateInput!): Entity @isOwner(resource: "Entity") @isAuthenticated
   updateGraph(id: ID!, data: GraphUpdateInput!): Graph @isOwner(resource: "Graph") @isAuthenticated
   updateLineGenerator(id: ID!, data: LineGeneratorUpdateInput!): LineGenerator @isOwner(resource: "LineGenerator") @isAuthenticated
+}
+
+type Subscription {
+  # createdPoint: Point
+  testCreated: Test
 }
 
 type AuthPayload {

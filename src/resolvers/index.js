@@ -8,6 +8,7 @@ import LineGenerator from './LineGenerator';
 import Mutation from './Mutation';
 import Point from './Point';
 import Query from './Query';
+import Subscription from './Subscription';
 import User from './User';
 
 export default {
@@ -50,6 +51,7 @@ export default {
     line: Point.line,
   },
   Query,
+  Subscription,
   User: {
     dashboards: User.dashboards,
     dataSources: User.dataSources,
