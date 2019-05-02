@@ -8,7 +8,6 @@ class TestCreated {
   subscribe(root, args, context, info) {
     try {
       console.log("subscribe")
-      console.log(this.resolve);
       return context.prisma.$subscribe.test({ mutation_in: ["CREATED", "UPDATED"] }).node();
     } catch (e) {
       console.log(e)
