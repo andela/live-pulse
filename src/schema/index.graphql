@@ -45,6 +45,11 @@ type Mutation {
   updateLineGenerator(id: ID!, data: LineGeneratorUpdateInput!): LineGenerator @isOwner(resource: "LineGenerator") @isAuthenticated
 }
 
+type Subscription {
+  createdDashboard: Dashboard
+  # createdPoint: Point
+}
+
 type AuthPayload {
   token: String
   user: User

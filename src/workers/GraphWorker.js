@@ -56,7 +56,7 @@ export default class GraphWorker {
         });
       }
       // create a point for that line // TODO: this should fire the subscription
-      let point = await prisma.createPoint({
+      await prisma.createPoint({
         line: {
           connect: { id: line.id }
         },
