@@ -1,8 +1,5 @@
 import 'babel-polyfill' // eslint-disable-line
-import bodyParser from 'body-parser';
-import cors from 'cors';
 import dotenv from 'dotenv';
-import express from 'express';
 import { GraphQLServer } from 'graphql-yoga';
 
 import auth from './middlewares/auth';
