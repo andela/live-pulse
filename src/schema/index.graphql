@@ -26,7 +26,6 @@ type Query @isAuthenticated {
 }
 
 type Mutation {
-  createTest(data: TestCreateInput!): Test
   createDashboard(data: DashboardUpdateInput!): Dashboard! @isAuthenticated
   createDataSource(data: DataSourceCreateInput!): DataSource! @hasRole(roles: [ADMIN, SUPER_ADMIN]) @isAuthenticated
   createEntity(data: EntityCreateInput!): Entity! @isAuthenticated
