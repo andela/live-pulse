@@ -9,7 +9,7 @@ export default {
   authentication: async (resolve, root, args, context, info) => {
     if (context.request && !context.user) {
       const Authorization = context.request.get('Authorization');
-      let user = null;console.log("got here3")
+      let user = null;
       if (Authorization) {
         const token = Authorization.replace('Bearer ', '');
         const { userId } = jwt.verify(token, process.env.APP_SECRET);

@@ -2,7 +2,6 @@ import Dashboard from './Dashboard';
 import DataSource from './DataSource';
 import Entity from './Entity';
 import Graph from './Graph';
-import GraphUpdate from './GraphUpdate';
 import Line from './Line';
 import LineGenerator from './LineGenerator';
 import Mutation from './Mutation';
@@ -31,10 +30,6 @@ export default {
     dashboard: Graph.dashboard,
     entity: Graph.entity,
     lineGenerators: Graph.lineGenerators,
-    update: Graph.update,
-  },
-  GraphUpdate: {
-    graph: GraphUpdate.graph,
   },
   Line: {
     lineGenerator: Line.lineGenerator,
