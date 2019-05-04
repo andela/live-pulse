@@ -55,7 +55,7 @@ export default class GraphWorker {
           }
         });
       }
-      // create a point for that line // TODO: this should fire the subscription
+      // create a point for that line
       await prisma.createPoint({
         line: {
           connect: { id: line.id }
@@ -86,24 +86,23 @@ export default class GraphWorker {
     }
   }
   async findGraphsToUpdate() {
-    let graphUpdates = await prisma.graphUpdates({
+    let graphs = await prisma.graphs({
       where: {
-        time_lte: new Date()
+        updateTime_lte: new Date()
       }
     });
-    for(let i = 0; i < graphUpdates.length; i++) {
-      let graph = await prisma.graphUpdate({ id: graphUpdates[i].id }).graph();
-      this.updateGraph(graph, graphUpdates[i]);
+    for(let i = 0; i < graphs.length; i++) {
+      this.updateGraph(graphs[i]);
     }
   }
-  async updateGraph(graph, graphUpdate) {
-     // update the graphUpdate for the graph
-    await prisma.updateGraphUpdate({
+  async updateGraph(graph) {
+     // update the graph
+    await prisma.updateGraph({
       where: {
-        id: graphUpdate.id
+        id: graph.id
       },
       data: {
-        time: moment().add(parseInt(graph.updateInterval, 10), 'm').toDate(),
+        updateTime: moment().add(parseInt(graph.updateInterval, 10), 'm').toDate(),
       }
     });
     // get the line generators in the graph

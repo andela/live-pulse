@@ -46,7 +46,7 @@ type Mutation {
 }
 
 type Subscription {
-  pointCreated: PointSubscriptionPayload
+  pointCreated: Point
 }
 
 type AuthPayload {
