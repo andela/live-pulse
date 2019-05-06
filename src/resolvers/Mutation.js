@@ -1,13 +1,13 @@
 import Dashboard from './Dashboard';
-import DataSource from './DataSource';
-import Entity from './Entity';
+import Func from './Func';
+import FunctionContext from './FunctionContext';
 import Graph from './Graph';
 import LineGenerator from './LineGenerator';
 import User from './User';
 
 const { createDashboard, deleteDashboard, updateDashboard } = Dashboard;
-const { createDataSource, deleteDataSource, updateDataSource } = DataSource;
-const { createEntity, deleteEntity, updateEntity } = Entity;
+const { createFunc, deleteFunc, updateFunc } = Func;
+const { createDataSource, createHook, deleteFunctionContext, updateFunctionContext } = FunctionContext;
 const { createGraph, deleteGraph, updateGraph } = Graph;
 const { createLineGenerator, deleteLineGenerator, updateLineGenerator } = LineGenerator;
 const { signIn, signUp } = User;
@@ -15,17 +15,18 @@ const { signIn, signUp } = User;
 export default {
   createDashboard,
   createDataSource,
-  createEntity,
+  createFunc,
   createGraph,
+  createHook,
   createLineGenerator,
   deleteDashboard,
-  deleteDataSource,
-  deleteEntity,
+  deleteFunc,
+  deleteFunctionContext,
   deleteGraph,
   deleteLineGenerator,
   updateDashboard,
-  updateDataSource,
-  updateEntity,
+  updateFunc,
+  updateFunctionContext,
   updateGraph,
   updateLineGenerator,
   signIn,

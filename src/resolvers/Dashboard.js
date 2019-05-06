@@ -9,7 +9,6 @@ export default {
   dashboard: async (root, args, context, info) => await context.prisma.dashboard(args),
   dashboards: async (root, args, context, info) => await context.prisma.dashboards(args),
   deleteDashboard: async (root, args, context, info) => await context.prisma.deleteDashboard(args),
-  entity: async (root, args, context, info) => await context.prisma.dashboard({ id: root.id }).entity(),
   graphs: async (root, args, context, info) => await context.prisma.dashboard({ id: root.id }).graphs(),
   updateDashboard: async (root, args, context, info) => {
     const input = {

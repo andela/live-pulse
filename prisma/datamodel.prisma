@@ -2,48 +2,47 @@ type Dashboard {
   id: ID! @id
   createdAt: DateTime! @createdAt
   createdBy: User! @relation(name: "DashboardByUser")
-  entity: Entity @relation(name: "EntityInDashboard")
   graphs: [Graph!]! @relation(name: "GraphInDashboard" onDelete: CASCADE)
   icon: String
   publicUrl: String
   title: String!
   updatedAt: DateTime! @updatedAt
   updateInterval: Int! @default(value: 15) # 15 minutes
+  variables: Json
 }
 
-type DataSource {
+type Func {
   id: ID! @id
   author: String
   createdAt: DateTime! @createdAt
-  createdBy: User @relation(name: "DataSourceByUser")
+  createdBy: User @relation(name: "FuncByUser")
+  contexts: [FunctionContext!] @relation(name: "FuncInFunctionContext")
   description: String
-  env: Json # environment variables
-  lineGenerators: [LineGenerator!]! @relation(name: "DataSourceInLineGenerator")
   meta: Json # extra info the author wants to provide
   name: String! @unique
-  requiredEnvVars: [String!] @scalarList(strategy: RELATION) # a list of the required env vars
-  requiredParams: [String!] @scalarList(strategy: RELATION) # a list of the required parameters
+  options: Json # environment variables
+  optionsSchema: Json # a schema of options
+  parametersSchema: Json # a schema of parameters
   source: String! # either the POST endpoint or the function source code
-  type: DataSourceType! @default(value: FUNCTION)
+  type: FuncType! @default(value: LOCAL)
   updatedAt: DateTime! @updatedAt
 }
 
-enum DataSourceType {
-  ENDPOINT
-  FUNCTION
-}
-
-type Entity {
+type FunctionContext {
   id: ID! @id
   createdAt: DateTime! @createdAt
-  createdBy: User @relation(name: "EntityByUser")
-  dashboards: [Dashboard!]! @relation(name: "EntityInDashboard")
-  data: Json!
-  graphs: [Graph!]! @relation(name: "EntityInGraph")
-  icon: String
-  private: Boolean! @default(value: false)
-  title: String!
+  createdBy: User! @relation(name: "FunctionContextByUser")
+  func: Func @relation(name: "FuncInFunctionContext")
+  hookedTo: LineGenerator @relation(name: "HookInLineGenerator")
+  lineGenerator: LineGenerator @relation(name: "DataSourceInLineGenerator")
+  logs: [Log!] @relation(name: "LogInFunctionContext" onDelete: CASCADE)
   updatedAt: DateTime! @updatedAt
+  variables: Json
+}
+
+enum FuncType {
+  LOCAL
+  WEB
 }
 
 type Graph {
@@ -51,7 +50,6 @@ type Graph {
   createdAt: DateTime! @createdAt
   createdBy: User! @relation(name: "GraphByUser")
   dashboard: Dashboard! @relation(name: "GraphInDashboard")
-  entity: Entity @relation(name: "EntityInGraph")
   icon: String
   lineGenerators: [LineGenerator!]! @relation(name: "LineGeneratorInGraph" onDelete: CASCADE)
   publicUrl: String
@@ -59,6 +57,7 @@ type Graph {
   updatedAt: DateTime! @updatedAt
   updateInterval: Int! @default(value: 15) # 15 minutes
   updateTime: DateTime
+  variables: Json
   xAxisLabel: String
   yAxisLabel: String
 }
@@ -76,11 +75,11 @@ type LineGenerator {
   color: String @default(value: "#000000")
   createdAt: DateTime! @createdAt
   createdBy: User! @relation(name: "LineGeneratorByUser")
-  dataSource: DataSource @relation(name: "DataSourceInLineGenerator")
+  dataSource: FunctionContext @relation(name: "DataSourceInLineGenerator" onDelete: CASCADE link: TABLE)
   graph: Graph! @relation(name: "LineGeneratorInGraph")
+  hooks: [FunctionContext!] @relation(name: "HookInLineGenerator" onDelete: CASCADE)
   line: Line @relation(name: "LineGeneratorToLine" onDelete: CASCADE link: TABLE)
   name: String! @unique
-  parameterAliases: Json # if the parameter names required by the DataSource cannot be used, specify aliases here
   state: LineGeneratorState! @default(value: ENABLED)
   updatedAt: DateTime! @updatedAt
 }
@@ -89,6 +88,21 @@ enum LineGeneratorState {
   DISABLED
   ENABLED
   HIDDEN
+}
+
+type Log {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  context: FunctionContext! @relation(name: "LogInFunctionContext")
+  message: String!
+  type: LogType! @default(value: INFO)
+  updatedAt: DateTime! @updatedAt
+}
+
+enum LogType {
+  ERROR
+  INFO
+  WARNING
 }
 
 type Point {
@@ -111,13 +125,13 @@ enum Role {
 type User {
   id: ID! @id
   createdAt: DateTime! @createdAt
-  dashboards: [Dashboard!]! @relation(name: "DashboardByUser" onDelete: CASCADE)
-  dataSources: [DataSource!]! @relation(name: "DataSourceByUser")
+  dashboards: [Dashboard!] @relation(name: "DashboardByUser" onDelete: CASCADE)
   displayName: String!
   email: String! @unique
-  entities: [Entity!]! @relation(name: "EntityByUser")
-  graphs: [Graph!]! @relation(name: "GraphByUser" onDelete: CASCADE)
-  lineGenerators: [LineGenerator!]! @relation(name: "LineGeneratorByUser" onDelete: CASCADE)
+  funcs: [Func!] @relation(name: "FuncByUser")
+  functionContexts: [FunctionContext!] @relation(name: "FunctionContextByUser" onDelete: CASCADE)
+  graphs: [Graph!] @relation(name: "GraphByUser" onDelete: CASCADE)
+  lineGenerators: [LineGenerator!] @relation(name: "LineGeneratorByUser" onDelete: CASCADE)
   password: String!
   role: Role! @default(value: MEMBER)
   updatedAt: DateTime! @updatedAt
