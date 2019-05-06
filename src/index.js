@@ -6,7 +6,7 @@ import { createHttpLink } from 'apollo-link-http';
 import { ApolloProvider } from 'react-apollo';
 import { gql } from 'apollo-boost';
 import './index.css';
-import App from './Dashboard';
+import App from './components/auth/SignIn';
 import * as serviceWorker from './serviceWorker';
 
 const HTTPLink = createHttpLink({
