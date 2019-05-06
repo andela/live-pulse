@@ -3,16 +3,16 @@ export default {
     let { options, optionsSchema } = args.data;
     // check for optionsSchema
     if (optionsSchema) {
-      optionsSchema = Object.keys(optionsSchema);
+      let optionsSchemaKeys = Object.keys(optionsSchema);
       // if options is null/undefined
       if (!options) {
-        throw new Error(`Missing required options: ${optionsSchema.join(', ')}`);
+        throw new Error(`Missing required options: ${optionsSchemaKeys.join(', ')}`);
       }
       // if options is NOT null/undefined
       let missingOptions = [];
-      for (let i = 0; i < optionsSchema.length; i++) {
-        if(!options[optionsSchema[i]]) {
-          missingOptions.push(optionsSchema[i]);
+      for (let i = 0; i < optionsSchemaKeys.length; i++) {
+        if(!options[optionsSchemaKeys[i]]) {
+          missingOptions.push(optionsSchemaKeys[i]);
         }
       }
       if (missingOptions.length > 0) {
@@ -37,16 +37,16 @@ export default {
     if (args.data.options || args.data.optionsSchema) {
       let options = args.data.options || currentFunc.options;
       let optionsSchema = args.data.optionsSchema || currentFunc.optionsSchema;
-      optionsSchema = Object.keys(optionsSchema);
+      let optionsSchemaKeys = Object.keys(optionsSchema);
       // if options is null/undefined
       if (!options) {
-        throw new Error(`Missing required options: ${optionsSchema.join(', ')}`);
+        throw new Error(`Missing required options: ${optionsSchemaKeys.join(', ')}`);
       }
       // if options is NOT null/undefined
       let missingOptions = [];
-      for (let i = 0; i < optionsSchema.length; i++) {
-        if(!options[optionsSchema[i]]) {
-          missingOptions.push(optionsSchema[i]);
+      for (let i = 0; i < optionsSchemaKeys.length; i++) {
+        if(!options[optionsSchemaKeys[i]]) {
+          missingOptions.push(optionsSchemaKeys[i]);
         }
       }
       if (missingOptions.length > 0) {
