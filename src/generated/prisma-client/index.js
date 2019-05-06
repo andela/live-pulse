@@ -9,15 +9,15 @@ var models = [
     embedded: false
   },
   {
-    name: "DataSource",
+    name: "Func",
     embedded: false
   },
   {
-    name: "DataSourceType",
+    name: "FunctionContext",
     embedded: false
   },
   {
-    name: "Entity",
+    name: "FuncType",
     embedded: false
   },
   {
@@ -34,6 +34,14 @@ var models = [
   },
   {
     name: "LineGeneratorState",
+    embedded: false
+  },
+  {
+    name: "Log",
+    embedded: false
+  },
+  {
+    name: "LogType",
     embedded: false
   },
   {

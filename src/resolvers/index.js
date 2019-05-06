@@ -1,9 +1,10 @@
 import Dashboard from './Dashboard';
-import DataSource from './DataSource';
-import Entity from './Entity';
+import Func from './Func';
+import FunctionContext from './FunctionContext';
 import Graph from './Graph';
 import Line from './Line';
 import LineGenerator from './LineGenerator';
+import Log from './Log';
 import Mutation from './Mutation';
 import Point from './Point';
 import Query from './Query';
@@ -13,22 +14,22 @@ import User from './User';
 export default {
   Dashboard: {
     createdBy: Dashboard.createdBy,
-    entity: Dashboard.entity,
     graphs: Dashboard.graphs
   },
-  DataSource: {
-    createdBy: DataSource.createdBy,
-    lineGenerators: DataSource.lineGenerators,
+  Func: {
+    createdBy: Func.createdBy,
+    contexts: Func.contexts
   },
-  Entity: {
-    createdBy: Entity.createdBy,
-    dashboards: Entity.dashboards,
-    graphs: Entity.graphs
+  FunctionContext: {
+    createdBy: FunctionContext.createdBy,
+    func: FunctionContext.func,
+    hookedTo: FunctionContext.hookedTo,
+    lineGenerator: FunctionContext.lineGenerator,
+    logs: FunctionContext.logs
   },
   Graph: {
     createdBy: Graph.createdBy,
     dashboard: Graph.dashboard,
-    entity: Graph.entity,
     lineGenerators: Graph.lineGenerators,
   },
   Line: {
@@ -39,7 +40,11 @@ export default {
     createdBy: LineGenerator.createdBy,
     dataSource: LineGenerator.dataSource,
     graph: LineGenerator.graph,
+    hooks: LineGenerator.hooks,
     line: LineGenerator.line,
+  },
+  Log: {
+    context: Log.context,
   },
   Mutation,
   Point: {
@@ -49,8 +54,8 @@ export default {
   Subscription,
   User: {
     dashboards: User.dashboards,
-    dataSources: User.dataSources,
-    entities: User.entities,
+    funcs: User.funcs,
+    functionContexts: User.functionContexts,
     graphs: User.graphs,
     lineGenerators: User.lineGenerators,
   }

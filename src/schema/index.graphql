@@ -8,18 +8,10 @@ directive @isOwner(resource: String!, id: String = "id") on FIELD | FIELD_DEFINI
 type Query @isAuthenticated {
   dashboard(id: ID!): Dashboard
   dashboards(where: DashboardWhereInput): [Dashboard!]!
-  dataSource(id: ID!): DataSource
-  dataSources(where: DataSourceWhereInput): [DataSource!]!
-  entity(id: ID!): Entity
-  entities(where: EntityWhereInput): [Entity!]!
+  func(id: ID!): Func
+  funcs(where: FuncWhereInput): [Func!]!
   graph(id: ID!): Graph
   graphs(where: GraphWhereInput): [Graph!]!
-  line(id: ID!): Line
-  lines(where: LineWhereInput): [Line]!
-  lineGenerator(id: ID!): LineGenerator
-  lineGenerators(where: LineGeneratorWhereInput): [LineGenerator]!
-  point(id: ID!): Point
-  points(where: PointWhereInput): [Point]!
   signedInUser: User
   user(id: ID!): User
   users(where: UserWhereInput): [User!]!
@@ -27,20 +19,21 @@ type Query @isAuthenticated {
 
 type Mutation {
   createDashboard(data: DashboardUpdateInput!): Dashboard! @isAuthenticated
-  createDataSource(data: DataSourceCreateInput!): DataSource! @hasRole(roles: [ADMIN, SUPER_ADMIN]) @isAuthenticated
-  createEntity(data: EntityCreateInput!): Entity! @isAuthenticated
+  createDataSource(lineGeneratorId: ID!, data: FunctionContextUpdateInput!): FunctionContext! @isOwner(resource: "LineGenerator", id: "lineGeneratorId") @isAuthenticated
+  createFunc(data: FuncUpdateInput!): Func! @hasRole(roles: [ADMIN, SUPER_ADMIN]) @isAuthenticated
   createGraph(dashboardId: ID!, data: GraphUpdateInput!): Graph! @isOwner(resource: "Dashboard", id: "dashboardId") @isAuthenticated
+  createHook(lineGeneratorId: ID!, data: FunctionContextUpdateInput!): FunctionContext! @isOwner(resource: "LineGenerator", id: "lineGeneratorId") @isAuthenticated
   createLineGenerator(graphId: ID!, data: LineGeneratorUpdateInput!): LineGenerator! @isOwner(resource: "Graph", id: "graphId") @isAuthenticated
   deleteDashboard(id: ID!): Dashboard @isOwner(resource: "Dashboard") @isAuthenticated
-  deleteDataSource(id: ID!): DataSource @hasRole(roles: [ADMIN, SUPER_ADMIN]) @isAuthenticated
-  deleteEntity(id: ID!): Entity @isOwner(resource: "Entity") @isAuthenticated
+  deleteFunc(id: ID!): Func @hasRole(roles: [ADMIN, SUPER_ADMIN]) @isAuthenticated
+  deleteFunctionContext(id: ID!): FunctionContext @isOwner(resource: "FunctionContext") @isAuthenticated
   deleteGraph(id: ID!): Graph @isOwner(resource: "Graph") @isAuthenticated
   deleteLineGenerator(id: ID!): LineGenerator @isOwner(resource: "LineGenerator") @isAuthenticated
   signIn(email: String!, password: String!): AuthPayload
   signUp(email: String!, password: String!, data: UserUpdateInput!): AuthPayload
   updateDashboard(id: ID!, data: DashboardUpdateInput!): Dashboard @isOwner(resource: "Dashboard") @isAuthenticated
-  updateDataSource(id: ID!, data: DataSourceUpdateInput!): DataSource @hasRole(roles: [ADMIN, SUPER_ADMIN]) @isAuthenticated
-  updateEntity(id: ID!, data: EntityUpdateInput!): Entity @isOwner(resource: "Entity") @isAuthenticated
+  updateFunc(id: ID!, data: FuncUpdateInput!): Func @hasRole(roles: [ADMIN, SUPER_ADMIN]) @isAuthenticated
+  updateFunctionContext(id: ID!, data: FunctionContextUpdateInput!): FunctionContext @isOwner(resource: "FunctionContext") @isAuthenticated
   updateGraph(id: ID!, data: GraphUpdateInput!): Graph @isOwner(resource: "Graph") @isAuthenticated
   updateLineGenerator(id: ID!, data: LineGeneratorUpdateInput!): LineGenerator @isOwner(resource: "LineGenerator") @isAuthenticated
 }
@@ -56,13 +49,13 @@ type AuthPayload {
 
 type User {
   createdAt: DateTime!
-  dashboards: [Dashboard!]!
-  dataSources: [DataSource!]!
+  dashboards: [Dashboard!]
   displayName: String!
   email: String!
-  entities: [Entity!]!
-  graphs: [Graph!]!
-  lineGenerators: [LineGenerator!]!
+  funcs: [Func!]
+  functionContexts: [FunctionContext!]
+  graphs: [Graph!]
+  lineGenerators: [LineGenerator!]
   password: String! @hasRole(roles: [SUPER_ADMIN])
   role: Role!
   updatedAt: DateTime!

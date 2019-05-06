@@ -14,7 +14,6 @@ export default {
   },
   createdBy: async (root, args, context, info) => await context.prisma.graph({ id: root.id }).createdBy(),
   dashboard: async (root, args, context, info) => await context.prisma.graph({ id: root.id }).dashboard(),
-  entity: async (root, args, context, info) => await context.prisma.graph({ id: root.id }).entity(),
   graph: async (root, args, context, info) => await context.prisma.graph(args),
   graphs: async (root, args, context, info) => await context.prisma.graphs(args),
   deleteGraph: async (root, args, context, info) => await context.prisma.deleteGraph(args),

@@ -57,6 +57,7 @@ export default class GraphWorker {
       }
       // create a point for that line
       await prisma.createPoint({
+        hidden: lineGenerator.state === 'HIDDEN',
         line: {
           connect: { id: line.id }
         },
@@ -107,6 +108,7 @@ export default class GraphWorker {
     });
     // get the line generators in the graph
     let lineGenerators = await prisma.graph({ id: graph.id }).lineGenerators();
+    lineGenerators = lineGenerators.filter(l => l.state !== 'DISABLED');
     let entity = await prisma.graph({ id: graph.id }).entity();
     for(let i = 0; i < lineGenerators.length; i++) {
       // get the line generator's data source

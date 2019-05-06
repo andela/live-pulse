@@ -7,11 +7,11 @@ module.exports = {
   count: Int!
 }
 
-type AggregateDataSource {
+type AggregateFunc {
   count: Int!
 }
 
-type AggregateEntity {
+type AggregateFunctionContext {
   count: Int!
 }
 
@@ -24,6 +24,10 @@ type AggregateLine {
 }
 
 type AggregateLineGenerator {
+  count: Int!
+}
+
+type AggregateLog {
   count: Int!
 }
 
@@ -43,13 +47,13 @@ type Dashboard {
   id: ID!
   createdAt: DateTime!
   createdBy: User!
-  entity: Entity
   graphs(where: GraphWhereInput, orderBy: GraphOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Graph!]
   icon: String
   publicUrl: String
   title: String!
   updatedAt: DateTime!
   updateInterval: Int!
+  variables: Json
 }
 
 type DashboardConnection {
@@ -61,21 +65,16 @@ type DashboardConnection {
 input DashboardCreateInput {
   id: ID
   createdBy: UserCreateOneWithoutDashboardsInput!
-  entity: EntityCreateOneWithoutDashboardsInput
   graphs: GraphCreateManyWithoutDashboardInput
   icon: String
   publicUrl: String
   title: String!
   updateInterval: Int
+  variables: Json
 }
 
 input DashboardCreateManyWithoutCreatedByInput {
   create: [DashboardCreateWithoutCreatedByInput!]
-  connect: [DashboardWhereUniqueInput!]
-}
-
-input DashboardCreateManyWithoutEntityInput {
-  create: [DashboardCreateWithoutEntityInput!]
   connect: [DashboardWhereUniqueInput!]
 }
 
@@ -86,32 +85,22 @@ input DashboardCreateOneWithoutGraphsInput {
 
 input DashboardCreateWithoutCreatedByInput {
   id: ID
-  entity: EntityCreateOneWithoutDashboardsInput
   graphs: GraphCreateManyWithoutDashboardInput
   icon: String
   publicUrl: String
   title: String!
   updateInterval: Int
-}
-
-input DashboardCreateWithoutEntityInput {
-  id: ID
-  createdBy: UserCreateOneWithoutDashboardsInput!
-  graphs: GraphCreateManyWithoutDashboardInput
-  icon: String
-  publicUrl: String
-  title: String!
-  updateInterval: Int
+  variables: Json
 }
 
 input DashboardCreateWithoutGraphsInput {
   id: ID
   createdBy: UserCreateOneWithoutDashboardsInput!
-  entity: EntityCreateOneWithoutDashboardsInput
   icon: String
   publicUrl: String
   title: String!
   updateInterval: Int
+  variables: Json
 }
 
 type DashboardEdge {
@@ -134,6 +123,8 @@ enum DashboardOrderByInput {
   updatedAt_DESC
   updateInterval_ASC
   updateInterval_DESC
+  variables_ASC
+  variables_DESC
 }
 
 type DashboardPreviousValues {
@@ -144,6 +135,7 @@ type DashboardPreviousValues {
   title: String!
   updatedAt: DateTime!
   updateInterval: Int!
+  variables: Json
 }
 
 input DashboardScalarWhereInput {
@@ -252,12 +244,12 @@ input DashboardSubscriptionWhereInput {
 
 input DashboardUpdateInput {
   createdBy: UserUpdateOneRequiredWithoutDashboardsInput
-  entity: EntityUpdateOneWithoutDashboardsInput
   graphs: GraphUpdateManyWithoutDashboardInput
   icon: String
   publicUrl: String
   title: String
   updateInterval: Int
+  variables: Json
 }
 
 input DashboardUpdateManyDataInput {
@@ -265,6 +257,7 @@ input DashboardUpdateManyDataInput {
   publicUrl: String
   title: String
   updateInterval: Int
+  variables: Json
 }
 
 input DashboardUpdateManyMutationInput {
@@ -272,6 +265,7 @@ input DashboardUpdateManyMutationInput {
   publicUrl: String
   title: String
   updateInterval: Int
+  variables: Json
 }
 
 input DashboardUpdateManyWithoutCreatedByInput {
@@ -282,18 +276,6 @@ input DashboardUpdateManyWithoutCreatedByInput {
   disconnect: [DashboardWhereUniqueInput!]
   update: [DashboardUpdateWithWhereUniqueWithoutCreatedByInput!]
   upsert: [DashboardUpsertWithWhereUniqueWithoutCreatedByInput!]
-  deleteMany: [DashboardScalarWhereInput!]
-  updateMany: [DashboardUpdateManyWithWhereNestedInput!]
-}
-
-input DashboardUpdateManyWithoutEntityInput {
-  create: [DashboardCreateWithoutEntityInput!]
-  delete: [DashboardWhereUniqueInput!]
-  connect: [DashboardWhereUniqueInput!]
-  set: [DashboardWhereUniqueInput!]
-  disconnect: [DashboardWhereUniqueInput!]
-  update: [DashboardUpdateWithWhereUniqueWithoutEntityInput!]
-  upsert: [DashboardUpsertWithWhereUniqueWithoutEntityInput!]
   deleteMany: [DashboardScalarWhereInput!]
   updateMany: [DashboardUpdateManyWithWhereNestedInput!]
 }
@@ -311,40 +293,26 @@ input DashboardUpdateOneRequiredWithoutGraphsInput {
 }
 
 input DashboardUpdateWithoutCreatedByDataInput {
-  entity: EntityUpdateOneWithoutDashboardsInput
   graphs: GraphUpdateManyWithoutDashboardInput
   icon: String
   publicUrl: String
   title: String
   updateInterval: Int
-}
-
-input DashboardUpdateWithoutEntityDataInput {
-  createdBy: UserUpdateOneRequiredWithoutDashboardsInput
-  graphs: GraphUpdateManyWithoutDashboardInput
-  icon: String
-  publicUrl: String
-  title: String
-  updateInterval: Int
+  variables: Json
 }
 
 input DashboardUpdateWithoutGraphsDataInput {
   createdBy: UserUpdateOneRequiredWithoutDashboardsInput
-  entity: EntityUpdateOneWithoutDashboardsInput
   icon: String
   publicUrl: String
   title: String
   updateInterval: Int
+  variables: Json
 }
 
 input DashboardUpdateWithWhereUniqueWithoutCreatedByInput {
   where: DashboardWhereUniqueInput!
   data: DashboardUpdateWithoutCreatedByDataInput!
-}
-
-input DashboardUpdateWithWhereUniqueWithoutEntityInput {
-  where: DashboardWhereUniqueInput!
-  data: DashboardUpdateWithoutEntityDataInput!
 }
 
 input DashboardUpsertWithoutGraphsInput {
@@ -356,12 +324,6 @@ input DashboardUpsertWithWhereUniqueWithoutCreatedByInput {
   where: DashboardWhereUniqueInput!
   update: DashboardUpdateWithoutCreatedByDataInput!
   create: DashboardCreateWithoutCreatedByInput!
-}
-
-input DashboardUpsertWithWhereUniqueWithoutEntityInput {
-  where: DashboardWhereUniqueInput!
-  update: DashboardUpdateWithoutEntityDataInput!
-  create: DashboardCreateWithoutEntityInput!
 }
 
 input DashboardWhereInput {
@@ -388,7 +350,6 @@ input DashboardWhereInput {
   createdAt_gt: DateTime
   createdAt_gte: DateTime
   createdBy: UserWhereInput
-  entity: EntityWhereInput
   graphs_every: GraphWhereInput
   graphs_some: GraphWhereInput
   graphs_none: GraphWhereInput
@@ -459,96 +420,90 @@ input DashboardWhereUniqueInput {
   id: ID
 }
 
-type DataSource {
+scalar DateTime
+
+type Func {
   id: ID!
   author: String
   createdAt: DateTime!
   createdBy: User
+  contexts(where: FunctionContextWhereInput, orderBy: FunctionContextOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [FunctionContext!]
   description: String
-  env: Json
-  lineGenerators(where: LineGeneratorWhereInput, orderBy: LineGeneratorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [LineGenerator!]
   meta: Json
   name: String!
-  requiredEnvVars: [String!]!
-  requiredParams: [String!]!
+  options: Json
+  optionsSchema: Json
+  parametersSchema: Json
   source: String!
-  type: DataSourceType!
+  type: FuncType!
   updatedAt: DateTime!
 }
 
-type DataSourceConnection {
+type FuncConnection {
   pageInfo: PageInfo!
-  edges: [DataSourceEdge]!
-  aggregate: AggregateDataSource!
+  edges: [FuncEdge]!
+  aggregate: AggregateFunc!
 }
 
-input DataSourceCreateInput {
+input FuncCreateInput {
   id: ID
   author: String
-  createdBy: UserCreateOneWithoutDataSourcesInput
+  createdBy: UserCreateOneWithoutFuncsInput
+  contexts: FunctionContextCreateManyWithoutFuncInput
   description: String
-  env: Json
-  lineGenerators: LineGeneratorCreateManyWithoutDataSourceInput
   meta: Json
   name: String!
-  requiredEnvVars: DataSourceCreaterequiredEnvVarsInput
-  requiredParams: DataSourceCreaterequiredParamsInput
+  options: Json
+  optionsSchema: Json
+  parametersSchema: Json
   source: String!
-  type: DataSourceType
+  type: FuncType
 }
 
-input DataSourceCreateManyWithoutCreatedByInput {
-  create: [DataSourceCreateWithoutCreatedByInput!]
-  connect: [DataSourceWhereUniqueInput!]
+input FuncCreateManyWithoutCreatedByInput {
+  create: [FuncCreateWithoutCreatedByInput!]
+  connect: [FuncWhereUniqueInput!]
 }
 
-input DataSourceCreateOneWithoutLineGeneratorsInput {
-  create: DataSourceCreateWithoutLineGeneratorsInput
-  connect: DataSourceWhereUniqueInput
+input FuncCreateOneWithoutContextsInput {
+  create: FuncCreateWithoutContextsInput
+  connect: FuncWhereUniqueInput
 }
 
-input DataSourceCreaterequiredEnvVarsInput {
-  set: [String!]
-}
-
-input DataSourceCreaterequiredParamsInput {
-  set: [String!]
-}
-
-input DataSourceCreateWithoutCreatedByInput {
+input FuncCreateWithoutContextsInput {
   id: ID
   author: String
+  createdBy: UserCreateOneWithoutFuncsInput
   description: String
-  env: Json
-  lineGenerators: LineGeneratorCreateManyWithoutDataSourceInput
   meta: Json
   name: String!
-  requiredEnvVars: DataSourceCreaterequiredEnvVarsInput
-  requiredParams: DataSourceCreaterequiredParamsInput
+  options: Json
+  optionsSchema: Json
+  parametersSchema: Json
   source: String!
-  type: DataSourceType
+  type: FuncType
 }
 
-input DataSourceCreateWithoutLineGeneratorsInput {
+input FuncCreateWithoutCreatedByInput {
   id: ID
   author: String
-  createdBy: UserCreateOneWithoutDataSourcesInput
+  contexts: FunctionContextCreateManyWithoutFuncInput
   description: String
-  env: Json
   meta: Json
   name: String!
-  requiredEnvVars: DataSourceCreaterequiredEnvVarsInput
-  requiredParams: DataSourceCreaterequiredParamsInput
+  options: Json
+  optionsSchema: Json
+  parametersSchema: Json
   source: String!
-  type: DataSourceType
+  type: FuncType
 }
 
-type DataSourceEdge {
-  node: DataSource!
+type FuncEdge {
+  node: Func!
   cursor: String!
 }
 
-enum DataSourceOrderByInput {
+enum FuncOrderByInput {
   id_ASC
   id_DESC
   author_ASC
@@ -557,12 +512,16 @@ enum DataSourceOrderByInput {
   createdAt_DESC
   description_ASC
   description_DESC
-  env_ASC
-  env_DESC
   meta_ASC
   meta_DESC
   name_ASC
   name_DESC
+  options_ASC
+  options_DESC
+  optionsSchema_ASC
+  optionsSchema_DESC
+  parametersSchema_ASC
+  parametersSchema_DESC
   source_ASC
   source_DESC
   type_ASC
@@ -571,22 +530,22 @@ enum DataSourceOrderByInput {
   updatedAt_DESC
 }
 
-type DataSourcePreviousValues {
+type FuncPreviousValues {
   id: ID!
   author: String
   createdAt: DateTime!
   description: String
-  env: Json
   meta: Json
   name: String!
-  requiredEnvVars: [String!]!
-  requiredParams: [String!]!
+  options: Json
+  optionsSchema: Json
+  parametersSchema: Json
   source: String!
-  type: DataSourceType!
+  type: FuncType!
   updatedAt: DateTime!
 }
 
-input DataSourceScalarWhereInput {
+input FuncScalarWhereInput {
   id: ID
   id_not: ID
   id_in: [ID!]
@@ -665,10 +624,10 @@ input DataSourceScalarWhereInput {
   source_not_starts_with: String
   source_ends_with: String
   source_not_ends_with: String
-  type: DataSourceType
-  type_not: DataSourceType
-  type_in: [DataSourceType!]
-  type_not_in: [DataSourceType!]
+  type: FuncType
+  type_not: FuncType
+  type_in: [FuncType!]
+  type_not_in: [FuncType!]
   updatedAt: DateTime
   updatedAt_not: DateTime
   updatedAt_in: [DateTime!]
@@ -677,363 +636,151 @@ input DataSourceScalarWhereInput {
   updatedAt_lte: DateTime
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
-  AND: [DataSourceScalarWhereInput!]
-  OR: [DataSourceScalarWhereInput!]
-  NOT: [DataSourceScalarWhereInput!]
+  AND: [FuncScalarWhereInput!]
+  OR: [FuncScalarWhereInput!]
+  NOT: [FuncScalarWhereInput!]
 }
 
-type DataSourceSubscriptionPayload {
+type FuncSubscriptionPayload {
   mutation: MutationType!
-  node: DataSource
+  node: Func
   updatedFields: [String!]
-  previousValues: DataSourcePreviousValues
+  previousValues: FuncPreviousValues
 }
 
-input DataSourceSubscriptionWhereInput {
+input FuncSubscriptionWhereInput {
   mutation_in: [MutationType!]
   updatedFields_contains: String
   updatedFields_contains_every: [String!]
   updatedFields_contains_some: [String!]
-  node: DataSourceWhereInput
-  AND: [DataSourceSubscriptionWhereInput!]
-  OR: [DataSourceSubscriptionWhereInput!]
-  NOT: [DataSourceSubscriptionWhereInput!]
+  node: FuncWhereInput
+  AND: [FuncSubscriptionWhereInput!]
+  OR: [FuncSubscriptionWhereInput!]
+  NOT: [FuncSubscriptionWhereInput!]
 }
 
-enum DataSourceType {
-  ENDPOINT
-  FUNCTION
-}
-
-input DataSourceUpdateInput {
-  author: String
-  createdBy: UserUpdateOneWithoutDataSourcesInput
-  description: String
-  env: Json
-  lineGenerators: LineGeneratorUpdateManyWithoutDataSourceInput
-  meta: Json
-  name: String
-  requiredEnvVars: DataSourceUpdaterequiredEnvVarsInput
-  requiredParams: DataSourceUpdaterequiredParamsInput
-  source: String
-  type: DataSourceType
-}
-
-input DataSourceUpdateManyDataInput {
-  author: String
-  description: String
-  env: Json
-  meta: Json
-  name: String
-  requiredEnvVars: DataSourceUpdaterequiredEnvVarsInput
-  requiredParams: DataSourceUpdaterequiredParamsInput
-  source: String
-  type: DataSourceType
-}
-
-input DataSourceUpdateManyMutationInput {
-  author: String
-  description: String
-  env: Json
-  meta: Json
-  name: String
-  requiredEnvVars: DataSourceUpdaterequiredEnvVarsInput
-  requiredParams: DataSourceUpdaterequiredParamsInput
-  source: String
-  type: DataSourceType
-}
-
-input DataSourceUpdateManyWithoutCreatedByInput {
-  create: [DataSourceCreateWithoutCreatedByInput!]
-  delete: [DataSourceWhereUniqueInput!]
-  connect: [DataSourceWhereUniqueInput!]
-  set: [DataSourceWhereUniqueInput!]
-  disconnect: [DataSourceWhereUniqueInput!]
-  update: [DataSourceUpdateWithWhereUniqueWithoutCreatedByInput!]
-  upsert: [DataSourceUpsertWithWhereUniqueWithoutCreatedByInput!]
-  deleteMany: [DataSourceScalarWhereInput!]
-  updateMany: [DataSourceUpdateManyWithWhereNestedInput!]
-}
-
-input DataSourceUpdateManyWithWhereNestedInput {
-  where: DataSourceScalarWhereInput!
-  data: DataSourceUpdateManyDataInput!
-}
-
-input DataSourceUpdateOneWithoutLineGeneratorsInput {
-  create: DataSourceCreateWithoutLineGeneratorsInput
-  update: DataSourceUpdateWithoutLineGeneratorsDataInput
-  upsert: DataSourceUpsertWithoutLineGeneratorsInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: DataSourceWhereUniqueInput
-}
-
-input DataSourceUpdaterequiredEnvVarsInput {
-  set: [String!]
-}
-
-input DataSourceUpdaterequiredParamsInput {
-  set: [String!]
-}
-
-input DataSourceUpdateWithoutCreatedByDataInput {
-  author: String
-  description: String
-  env: Json
-  lineGenerators: LineGeneratorUpdateManyWithoutDataSourceInput
-  meta: Json
-  name: String
-  requiredEnvVars: DataSourceUpdaterequiredEnvVarsInput
-  requiredParams: DataSourceUpdaterequiredParamsInput
-  source: String
-  type: DataSourceType
-}
-
-input DataSourceUpdateWithoutLineGeneratorsDataInput {
-  author: String
-  createdBy: UserUpdateOneWithoutDataSourcesInput
-  description: String
-  env: Json
-  meta: Json
-  name: String
-  requiredEnvVars: DataSourceUpdaterequiredEnvVarsInput
-  requiredParams: DataSourceUpdaterequiredParamsInput
-  source: String
-  type: DataSourceType
-}
-
-input DataSourceUpdateWithWhereUniqueWithoutCreatedByInput {
-  where: DataSourceWhereUniqueInput!
-  data: DataSourceUpdateWithoutCreatedByDataInput!
-}
-
-input DataSourceUpsertWithoutLineGeneratorsInput {
-  update: DataSourceUpdateWithoutLineGeneratorsDataInput!
-  create: DataSourceCreateWithoutLineGeneratorsInput!
-}
-
-input DataSourceUpsertWithWhereUniqueWithoutCreatedByInput {
-  where: DataSourceWhereUniqueInput!
-  update: DataSourceUpdateWithoutCreatedByDataInput!
-  create: DataSourceCreateWithoutCreatedByInput!
-}
-
-input DataSourceWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  author: String
-  author_not: String
-  author_in: [String!]
-  author_not_in: [String!]
-  author_lt: String
-  author_lte: String
-  author_gt: String
-  author_gte: String
-  author_contains: String
-  author_not_contains: String
-  author_starts_with: String
-  author_not_starts_with: String
-  author_ends_with: String
-  author_not_ends_with: String
-  createdAt: DateTime
-  createdAt_not: DateTime
-  createdAt_in: [DateTime!]
-  createdAt_not_in: [DateTime!]
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdBy: UserWhereInput
-  description: String
-  description_not: String
-  description_in: [String!]
-  description_not_in: [String!]
-  description_lt: String
-  description_lte: String
-  description_gt: String
-  description_gte: String
-  description_contains: String
-  description_not_contains: String
-  description_starts_with: String
-  description_not_starts_with: String
-  description_ends_with: String
-  description_not_ends_with: String
-  lineGenerators_every: LineGeneratorWhereInput
-  lineGenerators_some: LineGeneratorWhereInput
-  lineGenerators_none: LineGeneratorWhereInput
-  name: String
-  name_not: String
-  name_in: [String!]
-  name_not_in: [String!]
-  name_lt: String
-  name_lte: String
-  name_gt: String
-  name_gte: String
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
-  source: String
-  source_not: String
-  source_in: [String!]
-  source_not_in: [String!]
-  source_lt: String
-  source_lte: String
-  source_gt: String
-  source_gte: String
-  source_contains: String
-  source_not_contains: String
-  source_starts_with: String
-  source_not_starts_with: String
-  source_ends_with: String
-  source_not_ends_with: String
-  type: DataSourceType
-  type_not: DataSourceType
-  type_in: [DataSourceType!]
-  type_not_in: [DataSourceType!]
-  updatedAt: DateTime
-  updatedAt_not: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_not_in: [DateTime!]
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  AND: [DataSourceWhereInput!]
-  OR: [DataSourceWhereInput!]
-  NOT: [DataSourceWhereInput!]
-}
-
-input DataSourceWhereUniqueInput {
-  id: ID
-  name: String
-}
-
-scalar DateTime
-
-type Entity {
+type FunctionContext {
   id: ID!
   createdAt: DateTime!
-  createdBy: User
-  dashboards(where: DashboardWhereInput, orderBy: DashboardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Dashboard!]
-  data: Json!
-  graphs(where: GraphWhereInput, orderBy: GraphOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Graph!]
-  icon: String
-  private: Boolean!
-  title: String!
+  createdBy: User!
+  func: Func
+  hookedTo: LineGenerator
+  lineGenerator: LineGenerator
+  logs(where: LogWhereInput, orderBy: LogOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Log!]
   updatedAt: DateTime!
+  variables: Json
 }
 
-type EntityConnection {
+type FunctionContextConnection {
   pageInfo: PageInfo!
-  edges: [EntityEdge]!
-  aggregate: AggregateEntity!
+  edges: [FunctionContextEdge]!
+  aggregate: AggregateFunctionContext!
 }
 
-input EntityCreateInput {
+input FunctionContextCreateInput {
   id: ID
-  createdBy: UserCreateOneWithoutEntitiesInput
-  dashboards: DashboardCreateManyWithoutEntityInput
-  data: Json!
-  graphs: GraphCreateManyWithoutEntityInput
-  icon: String
-  private: Boolean
-  title: String!
+  createdBy: UserCreateOneWithoutFunctionContextsInput!
+  func: FuncCreateOneWithoutContextsInput
+  hookedTo: LineGeneratorCreateOneWithoutHooksInput
+  lineGenerator: LineGeneratorCreateOneWithoutDataSourceInput
+  logs: LogCreateManyWithoutContextInput
+  variables: Json
 }
 
-input EntityCreateManyWithoutCreatedByInput {
-  create: [EntityCreateWithoutCreatedByInput!]
-  connect: [EntityWhereUniqueInput!]
+input FunctionContextCreateManyWithoutCreatedByInput {
+  create: [FunctionContextCreateWithoutCreatedByInput!]
+  connect: [FunctionContextWhereUniqueInput!]
 }
 
-input EntityCreateOneWithoutDashboardsInput {
-  create: EntityCreateWithoutDashboardsInput
-  connect: EntityWhereUniqueInput
+input FunctionContextCreateManyWithoutFuncInput {
+  create: [FunctionContextCreateWithoutFuncInput!]
+  connect: [FunctionContextWhereUniqueInput!]
 }
 
-input EntityCreateOneWithoutGraphsInput {
-  create: EntityCreateWithoutGraphsInput
-  connect: EntityWhereUniqueInput
+input FunctionContextCreateManyWithoutHookedToInput {
+  create: [FunctionContextCreateWithoutHookedToInput!]
+  connect: [FunctionContextWhereUniqueInput!]
 }
 
-input EntityCreateWithoutCreatedByInput {
+input FunctionContextCreateOneWithoutLineGeneratorInput {
+  create: FunctionContextCreateWithoutLineGeneratorInput
+  connect: FunctionContextWhereUniqueInput
+}
+
+input FunctionContextCreateOneWithoutLogsInput {
+  create: FunctionContextCreateWithoutLogsInput
+  connect: FunctionContextWhereUniqueInput
+}
+
+input FunctionContextCreateWithoutCreatedByInput {
   id: ID
-  dashboards: DashboardCreateManyWithoutEntityInput
-  data: Json!
-  graphs: GraphCreateManyWithoutEntityInput
-  icon: String
-  private: Boolean
-  title: String!
+  func: FuncCreateOneWithoutContextsInput
+  hookedTo: LineGeneratorCreateOneWithoutHooksInput
+  lineGenerator: LineGeneratorCreateOneWithoutDataSourceInput
+  logs: LogCreateManyWithoutContextInput
+  variables: Json
 }
 
-input EntityCreateWithoutDashboardsInput {
+input FunctionContextCreateWithoutFuncInput {
   id: ID
-  createdBy: UserCreateOneWithoutEntitiesInput
-  data: Json!
-  graphs: GraphCreateManyWithoutEntityInput
-  icon: String
-  private: Boolean
-  title: String!
+  createdBy: UserCreateOneWithoutFunctionContextsInput!
+  hookedTo: LineGeneratorCreateOneWithoutHooksInput
+  lineGenerator: LineGeneratorCreateOneWithoutDataSourceInput
+  logs: LogCreateManyWithoutContextInput
+  variables: Json
 }
 
-input EntityCreateWithoutGraphsInput {
+input FunctionContextCreateWithoutHookedToInput {
   id: ID
-  createdBy: UserCreateOneWithoutEntitiesInput
-  dashboards: DashboardCreateManyWithoutEntityInput
-  data: Json!
-  icon: String
-  private: Boolean
-  title: String!
+  createdBy: UserCreateOneWithoutFunctionContextsInput!
+  func: FuncCreateOneWithoutContextsInput
+  lineGenerator: LineGeneratorCreateOneWithoutDataSourceInput
+  logs: LogCreateManyWithoutContextInput
+  variables: Json
 }
 
-type EntityEdge {
-  node: Entity!
+input FunctionContextCreateWithoutLineGeneratorInput {
+  id: ID
+  createdBy: UserCreateOneWithoutFunctionContextsInput!
+  func: FuncCreateOneWithoutContextsInput
+  hookedTo: LineGeneratorCreateOneWithoutHooksInput
+  logs: LogCreateManyWithoutContextInput
+  variables: Json
+}
+
+input FunctionContextCreateWithoutLogsInput {
+  id: ID
+  createdBy: UserCreateOneWithoutFunctionContextsInput!
+  func: FuncCreateOneWithoutContextsInput
+  hookedTo: LineGeneratorCreateOneWithoutHooksInput
+  lineGenerator: LineGeneratorCreateOneWithoutDataSourceInput
+  variables: Json
+}
+
+type FunctionContextEdge {
+  node: FunctionContext!
   cursor: String!
 }
 
-enum EntityOrderByInput {
+enum FunctionContextOrderByInput {
   id_ASC
   id_DESC
   createdAt_ASC
   createdAt_DESC
-  data_ASC
-  data_DESC
-  icon_ASC
-  icon_DESC
-  private_ASC
-  private_DESC
-  title_ASC
-  title_DESC
   updatedAt_ASC
   updatedAt_DESC
+  variables_ASC
+  variables_DESC
 }
 
-type EntityPreviousValues {
+type FunctionContextPreviousValues {
   id: ID!
   createdAt: DateTime!
-  data: Json!
-  icon: String
-  private: Boolean!
-  title: String!
   updatedAt: DateTime!
+  variables: Json
 }
 
-input EntityScalarWhereInput {
+input FunctionContextScalarWhereInput {
   id: ID
   id_not: ID
   id_in: [ID!]
@@ -1056,36 +803,6 @@ input EntityScalarWhereInput {
   createdAt_lte: DateTime
   createdAt_gt: DateTime
   createdAt_gte: DateTime
-  icon: String
-  icon_not: String
-  icon_in: [String!]
-  icon_not_in: [String!]
-  icon_lt: String
-  icon_lte: String
-  icon_gt: String
-  icon_gte: String
-  icon_contains: String
-  icon_not_contains: String
-  icon_starts_with: String
-  icon_not_starts_with: String
-  icon_ends_with: String
-  icon_not_ends_with: String
-  private: Boolean
-  private_not: Boolean
-  title: String
-  title_not: String
-  title_in: [String!]
-  title_not_in: [String!]
-  title_lt: String
-  title_lte: String
-  title_gt: String
-  title_gte: String
-  title_contains: String
-  title_not_contains: String
-  title_starts_with: String
-  title_not_starts_with: String
-  title_ends_with: String
-  title_not_ends_with: String
   updatedAt: DateTime
   updatedAt_not: DateTime
   updatedAt_in: [DateTime!]
@@ -1094,137 +811,187 @@ input EntityScalarWhereInput {
   updatedAt_lte: DateTime
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
-  AND: [EntityScalarWhereInput!]
-  OR: [EntityScalarWhereInput!]
-  NOT: [EntityScalarWhereInput!]
+  AND: [FunctionContextScalarWhereInput!]
+  OR: [FunctionContextScalarWhereInput!]
+  NOT: [FunctionContextScalarWhereInput!]
 }
 
-type EntitySubscriptionPayload {
+type FunctionContextSubscriptionPayload {
   mutation: MutationType!
-  node: Entity
+  node: FunctionContext
   updatedFields: [String!]
-  previousValues: EntityPreviousValues
+  previousValues: FunctionContextPreviousValues
 }
 
-input EntitySubscriptionWhereInput {
+input FunctionContextSubscriptionWhereInput {
   mutation_in: [MutationType!]
   updatedFields_contains: String
   updatedFields_contains_every: [String!]
   updatedFields_contains_some: [String!]
-  node: EntityWhereInput
-  AND: [EntitySubscriptionWhereInput!]
-  OR: [EntitySubscriptionWhereInput!]
-  NOT: [EntitySubscriptionWhereInput!]
+  node: FunctionContextWhereInput
+  AND: [FunctionContextSubscriptionWhereInput!]
+  OR: [FunctionContextSubscriptionWhereInput!]
+  NOT: [FunctionContextSubscriptionWhereInput!]
 }
 
-input EntityUpdateInput {
-  createdBy: UserUpdateOneWithoutEntitiesInput
-  dashboards: DashboardUpdateManyWithoutEntityInput
-  data: Json
-  graphs: GraphUpdateManyWithoutEntityInput
-  icon: String
-  private: Boolean
-  title: String
+input FunctionContextUpdateInput {
+  createdBy: UserUpdateOneRequiredWithoutFunctionContextsInput
+  func: FuncUpdateOneWithoutContextsInput
+  hookedTo: LineGeneratorUpdateOneWithoutHooksInput
+  lineGenerator: LineGeneratorUpdateOneWithoutDataSourceInput
+  logs: LogUpdateManyWithoutContextInput
+  variables: Json
 }
 
-input EntityUpdateManyDataInput {
-  data: Json
-  icon: String
-  private: Boolean
-  title: String
+input FunctionContextUpdateManyDataInput {
+  variables: Json
 }
 
-input EntityUpdateManyMutationInput {
-  data: Json
-  icon: String
-  private: Boolean
-  title: String
+input FunctionContextUpdateManyMutationInput {
+  variables: Json
 }
 
-input EntityUpdateManyWithoutCreatedByInput {
-  create: [EntityCreateWithoutCreatedByInput!]
-  delete: [EntityWhereUniqueInput!]
-  connect: [EntityWhereUniqueInput!]
-  set: [EntityWhereUniqueInput!]
-  disconnect: [EntityWhereUniqueInput!]
-  update: [EntityUpdateWithWhereUniqueWithoutCreatedByInput!]
-  upsert: [EntityUpsertWithWhereUniqueWithoutCreatedByInput!]
-  deleteMany: [EntityScalarWhereInput!]
-  updateMany: [EntityUpdateManyWithWhereNestedInput!]
+input FunctionContextUpdateManyWithoutCreatedByInput {
+  create: [FunctionContextCreateWithoutCreatedByInput!]
+  delete: [FunctionContextWhereUniqueInput!]
+  connect: [FunctionContextWhereUniqueInput!]
+  set: [FunctionContextWhereUniqueInput!]
+  disconnect: [FunctionContextWhereUniqueInput!]
+  update: [FunctionContextUpdateWithWhereUniqueWithoutCreatedByInput!]
+  upsert: [FunctionContextUpsertWithWhereUniqueWithoutCreatedByInput!]
+  deleteMany: [FunctionContextScalarWhereInput!]
+  updateMany: [FunctionContextUpdateManyWithWhereNestedInput!]
 }
 
-input EntityUpdateManyWithWhereNestedInput {
-  where: EntityScalarWhereInput!
-  data: EntityUpdateManyDataInput!
+input FunctionContextUpdateManyWithoutFuncInput {
+  create: [FunctionContextCreateWithoutFuncInput!]
+  delete: [FunctionContextWhereUniqueInput!]
+  connect: [FunctionContextWhereUniqueInput!]
+  set: [FunctionContextWhereUniqueInput!]
+  disconnect: [FunctionContextWhereUniqueInput!]
+  update: [FunctionContextUpdateWithWhereUniqueWithoutFuncInput!]
+  upsert: [FunctionContextUpsertWithWhereUniqueWithoutFuncInput!]
+  deleteMany: [FunctionContextScalarWhereInput!]
+  updateMany: [FunctionContextUpdateManyWithWhereNestedInput!]
 }
 
-input EntityUpdateOneWithoutDashboardsInput {
-  create: EntityCreateWithoutDashboardsInput
-  update: EntityUpdateWithoutDashboardsDataInput
-  upsert: EntityUpsertWithoutDashboardsInput
+input FunctionContextUpdateManyWithoutHookedToInput {
+  create: [FunctionContextCreateWithoutHookedToInput!]
+  delete: [FunctionContextWhereUniqueInput!]
+  connect: [FunctionContextWhereUniqueInput!]
+  set: [FunctionContextWhereUniqueInput!]
+  disconnect: [FunctionContextWhereUniqueInput!]
+  update: [FunctionContextUpdateWithWhereUniqueWithoutHookedToInput!]
+  upsert: [FunctionContextUpsertWithWhereUniqueWithoutHookedToInput!]
+  deleteMany: [FunctionContextScalarWhereInput!]
+  updateMany: [FunctionContextUpdateManyWithWhereNestedInput!]
+}
+
+input FunctionContextUpdateManyWithWhereNestedInput {
+  where: FunctionContextScalarWhereInput!
+  data: FunctionContextUpdateManyDataInput!
+}
+
+input FunctionContextUpdateOneRequiredWithoutLogsInput {
+  create: FunctionContextCreateWithoutLogsInput
+  update: FunctionContextUpdateWithoutLogsDataInput
+  upsert: FunctionContextUpsertWithoutLogsInput
+  connect: FunctionContextWhereUniqueInput
+}
+
+input FunctionContextUpdateOneWithoutLineGeneratorInput {
+  create: FunctionContextCreateWithoutLineGeneratorInput
+  update: FunctionContextUpdateWithoutLineGeneratorDataInput
+  upsert: FunctionContextUpsertWithoutLineGeneratorInput
   delete: Boolean
   disconnect: Boolean
-  connect: EntityWhereUniqueInput
+  connect: FunctionContextWhereUniqueInput
 }
 
-input EntityUpdateOneWithoutGraphsInput {
-  create: EntityCreateWithoutGraphsInput
-  update: EntityUpdateWithoutGraphsDataInput
-  upsert: EntityUpsertWithoutGraphsInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: EntityWhereUniqueInput
+input FunctionContextUpdateWithoutCreatedByDataInput {
+  func: FuncUpdateOneWithoutContextsInput
+  hookedTo: LineGeneratorUpdateOneWithoutHooksInput
+  lineGenerator: LineGeneratorUpdateOneWithoutDataSourceInput
+  logs: LogUpdateManyWithoutContextInput
+  variables: Json
 }
 
-input EntityUpdateWithoutCreatedByDataInput {
-  dashboards: DashboardUpdateManyWithoutEntityInput
-  data: Json
-  graphs: GraphUpdateManyWithoutEntityInput
-  icon: String
-  private: Boolean
-  title: String
+input FunctionContextUpdateWithoutFuncDataInput {
+  createdBy: UserUpdateOneRequiredWithoutFunctionContextsInput
+  hookedTo: LineGeneratorUpdateOneWithoutHooksInput
+  lineGenerator: LineGeneratorUpdateOneWithoutDataSourceInput
+  logs: LogUpdateManyWithoutContextInput
+  variables: Json
 }
 
-input EntityUpdateWithoutDashboardsDataInput {
-  createdBy: UserUpdateOneWithoutEntitiesInput
-  data: Json
-  graphs: GraphUpdateManyWithoutEntityInput
-  icon: String
-  private: Boolean
-  title: String
+input FunctionContextUpdateWithoutHookedToDataInput {
+  createdBy: UserUpdateOneRequiredWithoutFunctionContextsInput
+  func: FuncUpdateOneWithoutContextsInput
+  lineGenerator: LineGeneratorUpdateOneWithoutDataSourceInput
+  logs: LogUpdateManyWithoutContextInput
+  variables: Json
 }
 
-input EntityUpdateWithoutGraphsDataInput {
-  createdBy: UserUpdateOneWithoutEntitiesInput
-  dashboards: DashboardUpdateManyWithoutEntityInput
-  data: Json
-  icon: String
-  private: Boolean
-  title: String
+input FunctionContextUpdateWithoutLineGeneratorDataInput {
+  createdBy: UserUpdateOneRequiredWithoutFunctionContextsInput
+  func: FuncUpdateOneWithoutContextsInput
+  hookedTo: LineGeneratorUpdateOneWithoutHooksInput
+  logs: LogUpdateManyWithoutContextInput
+  variables: Json
 }
 
-input EntityUpdateWithWhereUniqueWithoutCreatedByInput {
-  where: EntityWhereUniqueInput!
-  data: EntityUpdateWithoutCreatedByDataInput!
+input FunctionContextUpdateWithoutLogsDataInput {
+  createdBy: UserUpdateOneRequiredWithoutFunctionContextsInput
+  func: FuncUpdateOneWithoutContextsInput
+  hookedTo: LineGeneratorUpdateOneWithoutHooksInput
+  lineGenerator: LineGeneratorUpdateOneWithoutDataSourceInput
+  variables: Json
 }
 
-input EntityUpsertWithoutDashboardsInput {
-  update: EntityUpdateWithoutDashboardsDataInput!
-  create: EntityCreateWithoutDashboardsInput!
+input FunctionContextUpdateWithWhereUniqueWithoutCreatedByInput {
+  where: FunctionContextWhereUniqueInput!
+  data: FunctionContextUpdateWithoutCreatedByDataInput!
 }
 
-input EntityUpsertWithoutGraphsInput {
-  update: EntityUpdateWithoutGraphsDataInput!
-  create: EntityCreateWithoutGraphsInput!
+input FunctionContextUpdateWithWhereUniqueWithoutFuncInput {
+  where: FunctionContextWhereUniqueInput!
+  data: FunctionContextUpdateWithoutFuncDataInput!
 }
 
-input EntityUpsertWithWhereUniqueWithoutCreatedByInput {
-  where: EntityWhereUniqueInput!
-  update: EntityUpdateWithoutCreatedByDataInput!
-  create: EntityCreateWithoutCreatedByInput!
+input FunctionContextUpdateWithWhereUniqueWithoutHookedToInput {
+  where: FunctionContextWhereUniqueInput!
+  data: FunctionContextUpdateWithoutHookedToDataInput!
 }
 
-input EntityWhereInput {
+input FunctionContextUpsertWithoutLineGeneratorInput {
+  update: FunctionContextUpdateWithoutLineGeneratorDataInput!
+  create: FunctionContextCreateWithoutLineGeneratorInput!
+}
+
+input FunctionContextUpsertWithoutLogsInput {
+  update: FunctionContextUpdateWithoutLogsDataInput!
+  create: FunctionContextCreateWithoutLogsInput!
+}
+
+input FunctionContextUpsertWithWhereUniqueWithoutCreatedByInput {
+  where: FunctionContextWhereUniqueInput!
+  update: FunctionContextUpdateWithoutCreatedByDataInput!
+  create: FunctionContextCreateWithoutCreatedByInput!
+}
+
+input FunctionContextUpsertWithWhereUniqueWithoutFuncInput {
+  where: FunctionContextWhereUniqueInput!
+  update: FunctionContextUpdateWithoutFuncDataInput!
+  create: FunctionContextCreateWithoutFuncInput!
+}
+
+input FunctionContextUpsertWithWhereUniqueWithoutHookedToInput {
+  where: FunctionContextWhereUniqueInput!
+  update: FunctionContextUpdateWithoutHookedToDataInput!
+  create: FunctionContextCreateWithoutHookedToInput!
+}
+
+input FunctionContextWhereInput {
   id: ID
   id_not: ID
   id_in: [ID!]
@@ -1248,42 +1015,12 @@ input EntityWhereInput {
   createdAt_gt: DateTime
   createdAt_gte: DateTime
   createdBy: UserWhereInput
-  dashboards_every: DashboardWhereInput
-  dashboards_some: DashboardWhereInput
-  dashboards_none: DashboardWhereInput
-  graphs_every: GraphWhereInput
-  graphs_some: GraphWhereInput
-  graphs_none: GraphWhereInput
-  icon: String
-  icon_not: String
-  icon_in: [String!]
-  icon_not_in: [String!]
-  icon_lt: String
-  icon_lte: String
-  icon_gt: String
-  icon_gte: String
-  icon_contains: String
-  icon_not_contains: String
-  icon_starts_with: String
-  icon_not_starts_with: String
-  icon_ends_with: String
-  icon_not_ends_with: String
-  private: Boolean
-  private_not: Boolean
-  title: String
-  title_not: String
-  title_in: [String!]
-  title_not_in: [String!]
-  title_lt: String
-  title_lte: String
-  title_gt: String
-  title_gte: String
-  title_contains: String
-  title_not_contains: String
-  title_starts_with: String
-  title_not_starts_with: String
-  title_ends_with: String
-  title_not_ends_with: String
+  func: FuncWhereInput
+  hookedTo: LineGeneratorWhereInput
+  lineGenerator: LineGeneratorWhereInput
+  logs_every: LogWhereInput
+  logs_some: LogWhereInput
+  logs_none: LogWhereInput
   updatedAt: DateTime
   updatedAt_not: DateTime
   updatedAt_in: [DateTime!]
@@ -1292,13 +1029,229 @@ input EntityWhereInput {
   updatedAt_lte: DateTime
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
-  AND: [EntityWhereInput!]
-  OR: [EntityWhereInput!]
-  NOT: [EntityWhereInput!]
+  AND: [FunctionContextWhereInput!]
+  OR: [FunctionContextWhereInput!]
+  NOT: [FunctionContextWhereInput!]
 }
 
-input EntityWhereUniqueInput {
+input FunctionContextWhereUniqueInput {
   id: ID
+}
+
+enum FuncType {
+  LOCAL
+  WEB
+}
+
+input FuncUpdateInput {
+  author: String
+  createdBy: UserUpdateOneWithoutFuncsInput
+  contexts: FunctionContextUpdateManyWithoutFuncInput
+  description: String
+  meta: Json
+  name: String
+  options: Json
+  optionsSchema: Json
+  parametersSchema: Json
+  source: String
+  type: FuncType
+}
+
+input FuncUpdateManyDataInput {
+  author: String
+  description: String
+  meta: Json
+  name: String
+  options: Json
+  optionsSchema: Json
+  parametersSchema: Json
+  source: String
+  type: FuncType
+}
+
+input FuncUpdateManyMutationInput {
+  author: String
+  description: String
+  meta: Json
+  name: String
+  options: Json
+  optionsSchema: Json
+  parametersSchema: Json
+  source: String
+  type: FuncType
+}
+
+input FuncUpdateManyWithoutCreatedByInput {
+  create: [FuncCreateWithoutCreatedByInput!]
+  delete: [FuncWhereUniqueInput!]
+  connect: [FuncWhereUniqueInput!]
+  set: [FuncWhereUniqueInput!]
+  disconnect: [FuncWhereUniqueInput!]
+  update: [FuncUpdateWithWhereUniqueWithoutCreatedByInput!]
+  upsert: [FuncUpsertWithWhereUniqueWithoutCreatedByInput!]
+  deleteMany: [FuncScalarWhereInput!]
+  updateMany: [FuncUpdateManyWithWhereNestedInput!]
+}
+
+input FuncUpdateManyWithWhereNestedInput {
+  where: FuncScalarWhereInput!
+  data: FuncUpdateManyDataInput!
+}
+
+input FuncUpdateOneWithoutContextsInput {
+  create: FuncCreateWithoutContextsInput
+  update: FuncUpdateWithoutContextsDataInput
+  upsert: FuncUpsertWithoutContextsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: FuncWhereUniqueInput
+}
+
+input FuncUpdateWithoutContextsDataInput {
+  author: String
+  createdBy: UserUpdateOneWithoutFuncsInput
+  description: String
+  meta: Json
+  name: String
+  options: Json
+  optionsSchema: Json
+  parametersSchema: Json
+  source: String
+  type: FuncType
+}
+
+input FuncUpdateWithoutCreatedByDataInput {
+  author: String
+  contexts: FunctionContextUpdateManyWithoutFuncInput
+  description: String
+  meta: Json
+  name: String
+  options: Json
+  optionsSchema: Json
+  parametersSchema: Json
+  source: String
+  type: FuncType
+}
+
+input FuncUpdateWithWhereUniqueWithoutCreatedByInput {
+  where: FuncWhereUniqueInput!
+  data: FuncUpdateWithoutCreatedByDataInput!
+}
+
+input FuncUpsertWithoutContextsInput {
+  update: FuncUpdateWithoutContextsDataInput!
+  create: FuncCreateWithoutContextsInput!
+}
+
+input FuncUpsertWithWhereUniqueWithoutCreatedByInput {
+  where: FuncWhereUniqueInput!
+  update: FuncUpdateWithoutCreatedByDataInput!
+  create: FuncCreateWithoutCreatedByInput!
+}
+
+input FuncWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  author: String
+  author_not: String
+  author_in: [String!]
+  author_not_in: [String!]
+  author_lt: String
+  author_lte: String
+  author_gt: String
+  author_gte: String
+  author_contains: String
+  author_not_contains: String
+  author_starts_with: String
+  author_not_starts_with: String
+  author_ends_with: String
+  author_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdBy: UserWhereInput
+  contexts_every: FunctionContextWhereInput
+  contexts_some: FunctionContextWhereInput
+  contexts_none: FunctionContextWhereInput
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  source: String
+  source_not: String
+  source_in: [String!]
+  source_not_in: [String!]
+  source_lt: String
+  source_lte: String
+  source_gt: String
+  source_gte: String
+  source_contains: String
+  source_not_contains: String
+  source_starts_with: String
+  source_not_starts_with: String
+  source_ends_with: String
+  source_not_ends_with: String
+  type: FuncType
+  type_not: FuncType
+  type_in: [FuncType!]
+  type_not_in: [FuncType!]
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [FuncWhereInput!]
+  OR: [FuncWhereInput!]
+  NOT: [FuncWhereInput!]
+}
+
+input FuncWhereUniqueInput {
+  id: ID
+  name: String
 }
 
 type Graph {
@@ -1306,7 +1259,6 @@ type Graph {
   createdAt: DateTime!
   createdBy: User!
   dashboard: Dashboard!
-  entity: Entity
   icon: String
   lineGenerators(where: LineGeneratorWhereInput, orderBy: LineGeneratorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [LineGenerator!]
   publicUrl: String
@@ -1314,6 +1266,7 @@ type Graph {
   updatedAt: DateTime!
   updateInterval: Int!
   updateTime: DateTime
+  variables: Json
   xAxisLabel: String
   yAxisLabel: String
 }
@@ -1328,13 +1281,13 @@ input GraphCreateInput {
   id: ID
   createdBy: UserCreateOneWithoutGraphsInput!
   dashboard: DashboardCreateOneWithoutGraphsInput!
-  entity: EntityCreateOneWithoutGraphsInput
   icon: String
   lineGenerators: LineGeneratorCreateManyWithoutGraphInput
   publicUrl: String
   title: String!
   updateInterval: Int
   updateTime: DateTime
+  variables: Json
   xAxisLabel: String
   yAxisLabel: String
 }
@@ -1349,11 +1302,6 @@ input GraphCreateManyWithoutDashboardInput {
   connect: [GraphWhereUniqueInput!]
 }
 
-input GraphCreateManyWithoutEntityInput {
-  create: [GraphCreateWithoutEntityInput!]
-  connect: [GraphWhereUniqueInput!]
-}
-
 input GraphCreateOneWithoutLineGeneratorsInput {
   create: GraphCreateWithoutLineGeneratorsInput
   connect: GraphWhereUniqueInput
@@ -1362,13 +1310,13 @@ input GraphCreateOneWithoutLineGeneratorsInput {
 input GraphCreateWithoutCreatedByInput {
   id: ID
   dashboard: DashboardCreateOneWithoutGraphsInput!
-  entity: EntityCreateOneWithoutGraphsInput
   icon: String
   lineGenerators: LineGeneratorCreateManyWithoutGraphInput
   publicUrl: String
   title: String!
   updateInterval: Int
   updateTime: DateTime
+  variables: Json
   xAxisLabel: String
   yAxisLabel: String
 }
@@ -1376,27 +1324,13 @@ input GraphCreateWithoutCreatedByInput {
 input GraphCreateWithoutDashboardInput {
   id: ID
   createdBy: UserCreateOneWithoutGraphsInput!
-  entity: EntityCreateOneWithoutGraphsInput
   icon: String
   lineGenerators: LineGeneratorCreateManyWithoutGraphInput
   publicUrl: String
   title: String!
   updateInterval: Int
   updateTime: DateTime
-  xAxisLabel: String
-  yAxisLabel: String
-}
-
-input GraphCreateWithoutEntityInput {
-  id: ID
-  createdBy: UserCreateOneWithoutGraphsInput!
-  dashboard: DashboardCreateOneWithoutGraphsInput!
-  icon: String
-  lineGenerators: LineGeneratorCreateManyWithoutGraphInput
-  publicUrl: String
-  title: String!
-  updateInterval: Int
-  updateTime: DateTime
+  variables: Json
   xAxisLabel: String
   yAxisLabel: String
 }
@@ -1405,12 +1339,12 @@ input GraphCreateWithoutLineGeneratorsInput {
   id: ID
   createdBy: UserCreateOneWithoutGraphsInput!
   dashboard: DashboardCreateOneWithoutGraphsInput!
-  entity: EntityCreateOneWithoutGraphsInput
   icon: String
   publicUrl: String
   title: String!
   updateInterval: Int
   updateTime: DateTime
+  variables: Json
   xAxisLabel: String
   yAxisLabel: String
 }
@@ -1437,6 +1371,8 @@ enum GraphOrderByInput {
   updateInterval_DESC
   updateTime_ASC
   updateTime_DESC
+  variables_ASC
+  variables_DESC
   xAxisLabel_ASC
   xAxisLabel_DESC
   yAxisLabel_ASC
@@ -1452,6 +1388,7 @@ type GraphPreviousValues {
   updatedAt: DateTime!
   updateInterval: Int!
   updateTime: DateTime
+  variables: Json
   xAxisLabel: String
   yAxisLabel: String
 }
@@ -1599,13 +1536,13 @@ input GraphSubscriptionWhereInput {
 input GraphUpdateInput {
   createdBy: UserUpdateOneRequiredWithoutGraphsInput
   dashboard: DashboardUpdateOneRequiredWithoutGraphsInput
-  entity: EntityUpdateOneWithoutGraphsInput
   icon: String
   lineGenerators: LineGeneratorUpdateManyWithoutGraphInput
   publicUrl: String
   title: String
   updateInterval: Int
   updateTime: DateTime
+  variables: Json
   xAxisLabel: String
   yAxisLabel: String
 }
@@ -1616,6 +1553,7 @@ input GraphUpdateManyDataInput {
   title: String
   updateInterval: Int
   updateTime: DateTime
+  variables: Json
   xAxisLabel: String
   yAxisLabel: String
 }
@@ -1626,6 +1564,7 @@ input GraphUpdateManyMutationInput {
   title: String
   updateInterval: Int
   updateTime: DateTime
+  variables: Json
   xAxisLabel: String
   yAxisLabel: String
 }
@@ -1654,18 +1593,6 @@ input GraphUpdateManyWithoutDashboardInput {
   updateMany: [GraphUpdateManyWithWhereNestedInput!]
 }
 
-input GraphUpdateManyWithoutEntityInput {
-  create: [GraphCreateWithoutEntityInput!]
-  delete: [GraphWhereUniqueInput!]
-  connect: [GraphWhereUniqueInput!]
-  set: [GraphWhereUniqueInput!]
-  disconnect: [GraphWhereUniqueInput!]
-  update: [GraphUpdateWithWhereUniqueWithoutEntityInput!]
-  upsert: [GraphUpsertWithWhereUniqueWithoutEntityInput!]
-  deleteMany: [GraphScalarWhereInput!]
-  updateMany: [GraphUpdateManyWithWhereNestedInput!]
-}
-
 input GraphUpdateManyWithWhereNestedInput {
   where: GraphScalarWhereInput!
   data: GraphUpdateManyDataInput!
@@ -1680,39 +1607,26 @@ input GraphUpdateOneRequiredWithoutLineGeneratorsInput {
 
 input GraphUpdateWithoutCreatedByDataInput {
   dashboard: DashboardUpdateOneRequiredWithoutGraphsInput
-  entity: EntityUpdateOneWithoutGraphsInput
   icon: String
   lineGenerators: LineGeneratorUpdateManyWithoutGraphInput
   publicUrl: String
   title: String
   updateInterval: Int
   updateTime: DateTime
+  variables: Json
   xAxisLabel: String
   yAxisLabel: String
 }
 
 input GraphUpdateWithoutDashboardDataInput {
   createdBy: UserUpdateOneRequiredWithoutGraphsInput
-  entity: EntityUpdateOneWithoutGraphsInput
   icon: String
   lineGenerators: LineGeneratorUpdateManyWithoutGraphInput
   publicUrl: String
   title: String
   updateInterval: Int
   updateTime: DateTime
-  xAxisLabel: String
-  yAxisLabel: String
-}
-
-input GraphUpdateWithoutEntityDataInput {
-  createdBy: UserUpdateOneRequiredWithoutGraphsInput
-  dashboard: DashboardUpdateOneRequiredWithoutGraphsInput
-  icon: String
-  lineGenerators: LineGeneratorUpdateManyWithoutGraphInput
-  publicUrl: String
-  title: String
-  updateInterval: Int
-  updateTime: DateTime
+  variables: Json
   xAxisLabel: String
   yAxisLabel: String
 }
@@ -1720,12 +1634,12 @@ input GraphUpdateWithoutEntityDataInput {
 input GraphUpdateWithoutLineGeneratorsDataInput {
   createdBy: UserUpdateOneRequiredWithoutGraphsInput
   dashboard: DashboardUpdateOneRequiredWithoutGraphsInput
-  entity: EntityUpdateOneWithoutGraphsInput
   icon: String
   publicUrl: String
   title: String
   updateInterval: Int
   updateTime: DateTime
+  variables: Json
   xAxisLabel: String
   yAxisLabel: String
 }
@@ -1738,11 +1652,6 @@ input GraphUpdateWithWhereUniqueWithoutCreatedByInput {
 input GraphUpdateWithWhereUniqueWithoutDashboardInput {
   where: GraphWhereUniqueInput!
   data: GraphUpdateWithoutDashboardDataInput!
-}
-
-input GraphUpdateWithWhereUniqueWithoutEntityInput {
-  where: GraphWhereUniqueInput!
-  data: GraphUpdateWithoutEntityDataInput!
 }
 
 input GraphUpsertWithoutLineGeneratorsInput {
@@ -1760,12 +1669,6 @@ input GraphUpsertWithWhereUniqueWithoutDashboardInput {
   where: GraphWhereUniqueInput!
   update: GraphUpdateWithoutDashboardDataInput!
   create: GraphCreateWithoutDashboardInput!
-}
-
-input GraphUpsertWithWhereUniqueWithoutEntityInput {
-  where: GraphWhereUniqueInput!
-  update: GraphUpdateWithoutEntityDataInput!
-  create: GraphCreateWithoutEntityInput!
 }
 
 input GraphWhereInput {
@@ -1793,7 +1696,6 @@ input GraphWhereInput {
   createdAt_gte: DateTime
   createdBy: UserWhereInput
   dashboard: DashboardWhereInput
-  entity: EntityWhereInput
   icon: String
   icon_not: String
   icon_in: [String!]
@@ -1952,11 +1854,11 @@ type LineGenerator {
   color: String
   createdAt: DateTime!
   createdBy: User!
-  dataSource: DataSource
+  dataSource: FunctionContext
   graph: Graph!
+  hooks(where: FunctionContextWhereInput, orderBy: FunctionContextOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [FunctionContext!]
   line: Line
   name: String!
-  parameterAliases: Json
   state: LineGeneratorState!
   updatedAt: DateTime!
 }
@@ -1971,11 +1873,11 @@ input LineGeneratorCreateInput {
   id: ID
   color: String
   createdBy: UserCreateOneWithoutLineGeneratorsInput!
-  dataSource: DataSourceCreateOneWithoutLineGeneratorsInput
+  dataSource: FunctionContextCreateOneWithoutLineGeneratorInput
   graph: GraphCreateOneWithoutLineGeneratorsInput!
+  hooks: FunctionContextCreateManyWithoutHookedToInput
   line: LineCreateOneWithoutLineGeneratorInput
   name: String!
-  parameterAliases: Json
   state: LineGeneratorState
 }
 
@@ -1984,14 +1886,19 @@ input LineGeneratorCreateManyWithoutCreatedByInput {
   connect: [LineGeneratorWhereUniqueInput!]
 }
 
-input LineGeneratorCreateManyWithoutDataSourceInput {
-  create: [LineGeneratorCreateWithoutDataSourceInput!]
-  connect: [LineGeneratorWhereUniqueInput!]
-}
-
 input LineGeneratorCreateManyWithoutGraphInput {
   create: [LineGeneratorCreateWithoutGraphInput!]
   connect: [LineGeneratorWhereUniqueInput!]
+}
+
+input LineGeneratorCreateOneWithoutDataSourceInput {
+  create: LineGeneratorCreateWithoutDataSourceInput
+  connect: LineGeneratorWhereUniqueInput
+}
+
+input LineGeneratorCreateOneWithoutHooksInput {
+  create: LineGeneratorCreateWithoutHooksInput
+  connect: LineGeneratorWhereUniqueInput
 }
 
 input LineGeneratorCreateOneWithoutLineInput {
@@ -2002,11 +1909,11 @@ input LineGeneratorCreateOneWithoutLineInput {
 input LineGeneratorCreateWithoutCreatedByInput {
   id: ID
   color: String
-  dataSource: DataSourceCreateOneWithoutLineGeneratorsInput
+  dataSource: FunctionContextCreateOneWithoutLineGeneratorInput
   graph: GraphCreateOneWithoutLineGeneratorsInput!
+  hooks: FunctionContextCreateManyWithoutHookedToInput
   line: LineCreateOneWithoutLineGeneratorInput
   name: String!
-  parameterAliases: Json
   state: LineGeneratorState
 }
 
@@ -2015,9 +1922,9 @@ input LineGeneratorCreateWithoutDataSourceInput {
   color: String
   createdBy: UserCreateOneWithoutLineGeneratorsInput!
   graph: GraphCreateOneWithoutLineGeneratorsInput!
+  hooks: FunctionContextCreateManyWithoutHookedToInput
   line: LineCreateOneWithoutLineGeneratorInput
   name: String!
-  parameterAliases: Json
   state: LineGeneratorState
 }
 
@@ -2025,10 +1932,21 @@ input LineGeneratorCreateWithoutGraphInput {
   id: ID
   color: String
   createdBy: UserCreateOneWithoutLineGeneratorsInput!
-  dataSource: DataSourceCreateOneWithoutLineGeneratorsInput
+  dataSource: FunctionContextCreateOneWithoutLineGeneratorInput
+  hooks: FunctionContextCreateManyWithoutHookedToInput
   line: LineCreateOneWithoutLineGeneratorInput
   name: String!
-  parameterAliases: Json
+  state: LineGeneratorState
+}
+
+input LineGeneratorCreateWithoutHooksInput {
+  id: ID
+  color: String
+  createdBy: UserCreateOneWithoutLineGeneratorsInput!
+  dataSource: FunctionContextCreateOneWithoutLineGeneratorInput
+  graph: GraphCreateOneWithoutLineGeneratorsInput!
+  line: LineCreateOneWithoutLineGeneratorInput
+  name: String!
   state: LineGeneratorState
 }
 
@@ -2036,10 +1954,10 @@ input LineGeneratorCreateWithoutLineInput {
   id: ID
   color: String
   createdBy: UserCreateOneWithoutLineGeneratorsInput!
-  dataSource: DataSourceCreateOneWithoutLineGeneratorsInput
+  dataSource: FunctionContextCreateOneWithoutLineGeneratorInput
   graph: GraphCreateOneWithoutLineGeneratorsInput!
+  hooks: FunctionContextCreateManyWithoutHookedToInput
   name: String!
-  parameterAliases: Json
   state: LineGeneratorState
 }
 
@@ -2057,8 +1975,6 @@ enum LineGeneratorOrderByInput {
   createdAt_DESC
   name_ASC
   name_DESC
-  parameterAliases_ASC
-  parameterAliases_DESC
   state_ASC
   state_DESC
   updatedAt_ASC
@@ -2070,7 +1986,6 @@ type LineGeneratorPreviousValues {
   color: String
   createdAt: DateTime!
   name: String!
-  parameterAliases: Json
   state: LineGeneratorState!
   updatedAt: DateTime!
 }
@@ -2170,25 +2085,23 @@ input LineGeneratorSubscriptionWhereInput {
 input LineGeneratorUpdateInput {
   color: String
   createdBy: UserUpdateOneRequiredWithoutLineGeneratorsInput
-  dataSource: DataSourceUpdateOneWithoutLineGeneratorsInput
+  dataSource: FunctionContextUpdateOneWithoutLineGeneratorInput
   graph: GraphUpdateOneRequiredWithoutLineGeneratorsInput
+  hooks: FunctionContextUpdateManyWithoutHookedToInput
   line: LineUpdateOneWithoutLineGeneratorInput
   name: String
-  parameterAliases: Json
   state: LineGeneratorState
 }
 
 input LineGeneratorUpdateManyDataInput {
   color: String
   name: String
-  parameterAliases: Json
   state: LineGeneratorState
 }
 
 input LineGeneratorUpdateManyMutationInput {
   color: String
   name: String
-  parameterAliases: Json
   state: LineGeneratorState
 }
 
@@ -2200,18 +2113,6 @@ input LineGeneratorUpdateManyWithoutCreatedByInput {
   disconnect: [LineGeneratorWhereUniqueInput!]
   update: [LineGeneratorUpdateWithWhereUniqueWithoutCreatedByInput!]
   upsert: [LineGeneratorUpsertWithWhereUniqueWithoutCreatedByInput!]
-  deleteMany: [LineGeneratorScalarWhereInput!]
-  updateMany: [LineGeneratorUpdateManyWithWhereNestedInput!]
-}
-
-input LineGeneratorUpdateManyWithoutDataSourceInput {
-  create: [LineGeneratorCreateWithoutDataSourceInput!]
-  delete: [LineGeneratorWhereUniqueInput!]
-  connect: [LineGeneratorWhereUniqueInput!]
-  set: [LineGeneratorWhereUniqueInput!]
-  disconnect: [LineGeneratorWhereUniqueInput!]
-  update: [LineGeneratorUpdateWithWhereUniqueWithoutDataSourceInput!]
-  upsert: [LineGeneratorUpsertWithWhereUniqueWithoutDataSourceInput!]
   deleteMany: [LineGeneratorScalarWhereInput!]
   updateMany: [LineGeneratorUpdateManyWithWhereNestedInput!]
 }
@@ -2240,13 +2141,31 @@ input LineGeneratorUpdateOneRequiredWithoutLineInput {
   connect: LineGeneratorWhereUniqueInput
 }
 
+input LineGeneratorUpdateOneWithoutDataSourceInput {
+  create: LineGeneratorCreateWithoutDataSourceInput
+  update: LineGeneratorUpdateWithoutDataSourceDataInput
+  upsert: LineGeneratorUpsertWithoutDataSourceInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: LineGeneratorWhereUniqueInput
+}
+
+input LineGeneratorUpdateOneWithoutHooksInput {
+  create: LineGeneratorCreateWithoutHooksInput
+  update: LineGeneratorUpdateWithoutHooksDataInput
+  upsert: LineGeneratorUpsertWithoutHooksInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: LineGeneratorWhereUniqueInput
+}
+
 input LineGeneratorUpdateWithoutCreatedByDataInput {
   color: String
-  dataSource: DataSourceUpdateOneWithoutLineGeneratorsInput
+  dataSource: FunctionContextUpdateOneWithoutLineGeneratorInput
   graph: GraphUpdateOneRequiredWithoutLineGeneratorsInput
+  hooks: FunctionContextUpdateManyWithoutHookedToInput
   line: LineUpdateOneWithoutLineGeneratorInput
   name: String
-  parameterAliases: Json
   state: LineGeneratorState
 }
 
@@ -2254,29 +2173,39 @@ input LineGeneratorUpdateWithoutDataSourceDataInput {
   color: String
   createdBy: UserUpdateOneRequiredWithoutLineGeneratorsInput
   graph: GraphUpdateOneRequiredWithoutLineGeneratorsInput
+  hooks: FunctionContextUpdateManyWithoutHookedToInput
   line: LineUpdateOneWithoutLineGeneratorInput
   name: String
-  parameterAliases: Json
   state: LineGeneratorState
 }
 
 input LineGeneratorUpdateWithoutGraphDataInput {
   color: String
   createdBy: UserUpdateOneRequiredWithoutLineGeneratorsInput
-  dataSource: DataSourceUpdateOneWithoutLineGeneratorsInput
+  dataSource: FunctionContextUpdateOneWithoutLineGeneratorInput
+  hooks: FunctionContextUpdateManyWithoutHookedToInput
   line: LineUpdateOneWithoutLineGeneratorInput
   name: String
-  parameterAliases: Json
+  state: LineGeneratorState
+}
+
+input LineGeneratorUpdateWithoutHooksDataInput {
+  color: String
+  createdBy: UserUpdateOneRequiredWithoutLineGeneratorsInput
+  dataSource: FunctionContextUpdateOneWithoutLineGeneratorInput
+  graph: GraphUpdateOneRequiredWithoutLineGeneratorsInput
+  line: LineUpdateOneWithoutLineGeneratorInput
+  name: String
   state: LineGeneratorState
 }
 
 input LineGeneratorUpdateWithoutLineDataInput {
   color: String
   createdBy: UserUpdateOneRequiredWithoutLineGeneratorsInput
-  dataSource: DataSourceUpdateOneWithoutLineGeneratorsInput
+  dataSource: FunctionContextUpdateOneWithoutLineGeneratorInput
   graph: GraphUpdateOneRequiredWithoutLineGeneratorsInput
+  hooks: FunctionContextUpdateManyWithoutHookedToInput
   name: String
-  parameterAliases: Json
   state: LineGeneratorState
 }
 
@@ -2285,14 +2214,19 @@ input LineGeneratorUpdateWithWhereUniqueWithoutCreatedByInput {
   data: LineGeneratorUpdateWithoutCreatedByDataInput!
 }
 
-input LineGeneratorUpdateWithWhereUniqueWithoutDataSourceInput {
-  where: LineGeneratorWhereUniqueInput!
-  data: LineGeneratorUpdateWithoutDataSourceDataInput!
-}
-
 input LineGeneratorUpdateWithWhereUniqueWithoutGraphInput {
   where: LineGeneratorWhereUniqueInput!
   data: LineGeneratorUpdateWithoutGraphDataInput!
+}
+
+input LineGeneratorUpsertWithoutDataSourceInput {
+  update: LineGeneratorUpdateWithoutDataSourceDataInput!
+  create: LineGeneratorCreateWithoutDataSourceInput!
+}
+
+input LineGeneratorUpsertWithoutHooksInput {
+  update: LineGeneratorUpdateWithoutHooksDataInput!
+  create: LineGeneratorCreateWithoutHooksInput!
 }
 
 input LineGeneratorUpsertWithoutLineInput {
@@ -2304,12 +2238,6 @@ input LineGeneratorUpsertWithWhereUniqueWithoutCreatedByInput {
   where: LineGeneratorWhereUniqueInput!
   update: LineGeneratorUpdateWithoutCreatedByDataInput!
   create: LineGeneratorCreateWithoutCreatedByInput!
-}
-
-input LineGeneratorUpsertWithWhereUniqueWithoutDataSourceInput {
-  where: LineGeneratorWhereUniqueInput!
-  update: LineGeneratorUpdateWithoutDataSourceDataInput!
-  create: LineGeneratorCreateWithoutDataSourceInput!
 }
 
 input LineGeneratorUpsertWithWhereUniqueWithoutGraphInput {
@@ -2356,8 +2284,11 @@ input LineGeneratorWhereInput {
   createdAt_gt: DateTime
   createdAt_gte: DateTime
   createdBy: UserWhereInput
-  dataSource: DataSourceWhereInput
+  dataSource: FunctionContextWhereInput
   graph: GraphWhereInput
+  hooks_every: FunctionContextWhereInput
+  hooks_some: FunctionContextWhereInput
+  hooks_none: FunctionContextWhereInput
   line: LineWhereInput
   name: String
   name_not: String
@@ -2511,6 +2442,251 @@ input LineWhereUniqueInput {
   id: ID
 }
 
+type Log {
+  id: ID!
+  createdAt: DateTime!
+  context: FunctionContext!
+  message: String!
+  type: LogType!
+  updatedAt: DateTime!
+}
+
+type LogConnection {
+  pageInfo: PageInfo!
+  edges: [LogEdge]!
+  aggregate: AggregateLog!
+}
+
+input LogCreateInput {
+  id: ID
+  context: FunctionContextCreateOneWithoutLogsInput!
+  message: String!
+  type: LogType
+}
+
+input LogCreateManyWithoutContextInput {
+  create: [LogCreateWithoutContextInput!]
+  connect: [LogWhereUniqueInput!]
+}
+
+input LogCreateWithoutContextInput {
+  id: ID
+  message: String!
+  type: LogType
+}
+
+type LogEdge {
+  node: Log!
+  cursor: String!
+}
+
+enum LogOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  message_ASC
+  message_DESC
+  type_ASC
+  type_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type LogPreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  message: String!
+  type: LogType!
+  updatedAt: DateTime!
+}
+
+input LogScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  message: String
+  message_not: String
+  message_in: [String!]
+  message_not_in: [String!]
+  message_lt: String
+  message_lte: String
+  message_gt: String
+  message_gte: String
+  message_contains: String
+  message_not_contains: String
+  message_starts_with: String
+  message_not_starts_with: String
+  message_ends_with: String
+  message_not_ends_with: String
+  type: LogType
+  type_not: LogType
+  type_in: [LogType!]
+  type_not_in: [LogType!]
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [LogScalarWhereInput!]
+  OR: [LogScalarWhereInput!]
+  NOT: [LogScalarWhereInput!]
+}
+
+type LogSubscriptionPayload {
+  mutation: MutationType!
+  node: Log
+  updatedFields: [String!]
+  previousValues: LogPreviousValues
+}
+
+input LogSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: LogWhereInput
+  AND: [LogSubscriptionWhereInput!]
+  OR: [LogSubscriptionWhereInput!]
+  NOT: [LogSubscriptionWhereInput!]
+}
+
+enum LogType {
+  ERROR
+  INFO
+  WARNING
+}
+
+input LogUpdateInput {
+  context: FunctionContextUpdateOneRequiredWithoutLogsInput
+  message: String
+  type: LogType
+}
+
+input LogUpdateManyDataInput {
+  message: String
+  type: LogType
+}
+
+input LogUpdateManyMutationInput {
+  message: String
+  type: LogType
+}
+
+input LogUpdateManyWithoutContextInput {
+  create: [LogCreateWithoutContextInput!]
+  delete: [LogWhereUniqueInput!]
+  connect: [LogWhereUniqueInput!]
+  set: [LogWhereUniqueInput!]
+  disconnect: [LogWhereUniqueInput!]
+  update: [LogUpdateWithWhereUniqueWithoutContextInput!]
+  upsert: [LogUpsertWithWhereUniqueWithoutContextInput!]
+  deleteMany: [LogScalarWhereInput!]
+  updateMany: [LogUpdateManyWithWhereNestedInput!]
+}
+
+input LogUpdateManyWithWhereNestedInput {
+  where: LogScalarWhereInput!
+  data: LogUpdateManyDataInput!
+}
+
+input LogUpdateWithoutContextDataInput {
+  message: String
+  type: LogType
+}
+
+input LogUpdateWithWhereUniqueWithoutContextInput {
+  where: LogWhereUniqueInput!
+  data: LogUpdateWithoutContextDataInput!
+}
+
+input LogUpsertWithWhereUniqueWithoutContextInput {
+  where: LogWhereUniqueInput!
+  update: LogUpdateWithoutContextDataInput!
+  create: LogCreateWithoutContextInput!
+}
+
+input LogWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  context: FunctionContextWhereInput
+  message: String
+  message_not: String
+  message_in: [String!]
+  message_not_in: [String!]
+  message_lt: String
+  message_lte: String
+  message_gt: String
+  message_gte: String
+  message_contains: String
+  message_not_contains: String
+  message_starts_with: String
+  message_not_starts_with: String
+  message_ends_with: String
+  message_not_ends_with: String
+  type: LogType
+  type_not: LogType
+  type_in: [LogType!]
+  type_not_in: [LogType!]
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [LogWhereInput!]
+  OR: [LogWhereInput!]
+  NOT: [LogWhereInput!]
+}
+
+input LogWhereUniqueInput {
+  id: ID
+}
+
 scalar Long
 
 type Mutation {
@@ -2520,18 +2696,18 @@ type Mutation {
   upsertDashboard(where: DashboardWhereUniqueInput!, create: DashboardCreateInput!, update: DashboardUpdateInput!): Dashboard!
   deleteDashboard(where: DashboardWhereUniqueInput!): Dashboard
   deleteManyDashboards(where: DashboardWhereInput): BatchPayload!
-  createDataSource(data: DataSourceCreateInput!): DataSource!
-  updateDataSource(data: DataSourceUpdateInput!, where: DataSourceWhereUniqueInput!): DataSource
-  updateManyDataSources(data: DataSourceUpdateManyMutationInput!, where: DataSourceWhereInput): BatchPayload!
-  upsertDataSource(where: DataSourceWhereUniqueInput!, create: DataSourceCreateInput!, update: DataSourceUpdateInput!): DataSource!
-  deleteDataSource(where: DataSourceWhereUniqueInput!): DataSource
-  deleteManyDataSources(where: DataSourceWhereInput): BatchPayload!
-  createEntity(data: EntityCreateInput!): Entity!
-  updateEntity(data: EntityUpdateInput!, where: EntityWhereUniqueInput!): Entity
-  updateManyEntities(data: EntityUpdateManyMutationInput!, where: EntityWhereInput): BatchPayload!
-  upsertEntity(where: EntityWhereUniqueInput!, create: EntityCreateInput!, update: EntityUpdateInput!): Entity!
-  deleteEntity(where: EntityWhereUniqueInput!): Entity
-  deleteManyEntities(where: EntityWhereInput): BatchPayload!
+  createFunc(data: FuncCreateInput!): Func!
+  updateFunc(data: FuncUpdateInput!, where: FuncWhereUniqueInput!): Func
+  updateManyFuncs(data: FuncUpdateManyMutationInput!, where: FuncWhereInput): BatchPayload!
+  upsertFunc(where: FuncWhereUniqueInput!, create: FuncCreateInput!, update: FuncUpdateInput!): Func!
+  deleteFunc(where: FuncWhereUniqueInput!): Func
+  deleteManyFuncs(where: FuncWhereInput): BatchPayload!
+  createFunctionContext(data: FunctionContextCreateInput!): FunctionContext!
+  updateFunctionContext(data: FunctionContextUpdateInput!, where: FunctionContextWhereUniqueInput!): FunctionContext
+  updateManyFunctionContexts(data: FunctionContextUpdateManyMutationInput!, where: FunctionContextWhereInput): BatchPayload!
+  upsertFunctionContext(where: FunctionContextWhereUniqueInput!, create: FunctionContextCreateInput!, update: FunctionContextUpdateInput!): FunctionContext!
+  deleteFunctionContext(where: FunctionContextWhereUniqueInput!): FunctionContext
+  deleteManyFunctionContexts(where: FunctionContextWhereInput): BatchPayload!
   createGraph(data: GraphCreateInput!): Graph!
   updateGraph(data: GraphUpdateInput!, where: GraphWhereUniqueInput!): Graph
   updateManyGraphs(data: GraphUpdateManyMutationInput!, where: GraphWhereInput): BatchPayload!
@@ -2549,6 +2725,12 @@ type Mutation {
   upsertLineGenerator(where: LineGeneratorWhereUniqueInput!, create: LineGeneratorCreateInput!, update: LineGeneratorUpdateInput!): LineGenerator!
   deleteLineGenerator(where: LineGeneratorWhereUniqueInput!): LineGenerator
   deleteManyLineGenerators(where: LineGeneratorWhereInput): BatchPayload!
+  createLog(data: LogCreateInput!): Log!
+  updateLog(data: LogUpdateInput!, where: LogWhereUniqueInput!): Log
+  updateManyLogs(data: LogUpdateManyMutationInput!, where: LogWhereInput): BatchPayload!
+  upsertLog(where: LogWhereUniqueInput!, create: LogCreateInput!, update: LogUpdateInput!): Log!
+  deleteLog(where: LogWhereUniqueInput!): Log
+  deleteManyLogs(where: LogWhereInput): BatchPayload!
   createPoint(data: PointCreateInput!): Point!
   updatePoint(data: PointUpdateInput!, where: PointWhereUniqueInput!): Point
   updateManyPoints(data: PointUpdateManyMutationInput!, where: PointWhereInput): BatchPayload!
@@ -2833,12 +3015,12 @@ type Query {
   dashboard(where: DashboardWhereUniqueInput!): Dashboard
   dashboards(where: DashboardWhereInput, orderBy: DashboardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Dashboard]!
   dashboardsConnection(where: DashboardWhereInput, orderBy: DashboardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DashboardConnection!
-  dataSource(where: DataSourceWhereUniqueInput!): DataSource
-  dataSources(where: DataSourceWhereInput, orderBy: DataSourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [DataSource]!
-  dataSourcesConnection(where: DataSourceWhereInput, orderBy: DataSourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DataSourceConnection!
-  entity(where: EntityWhereUniqueInput!): Entity
-  entities(where: EntityWhereInput, orderBy: EntityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Entity]!
-  entitiesConnection(where: EntityWhereInput, orderBy: EntityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): EntityConnection!
+  func(where: FuncWhereUniqueInput!): Func
+  funcs(where: FuncWhereInput, orderBy: FuncOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Func]!
+  funcsConnection(where: FuncWhereInput, orderBy: FuncOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FuncConnection!
+  functionContext(where: FunctionContextWhereUniqueInput!): FunctionContext
+  functionContexts(where: FunctionContextWhereInput, orderBy: FunctionContextOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [FunctionContext]!
+  functionContextsConnection(where: FunctionContextWhereInput, orderBy: FunctionContextOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FunctionContextConnection!
   graph(where: GraphWhereUniqueInput!): Graph
   graphs(where: GraphWhereInput, orderBy: GraphOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Graph]!
   graphsConnection(where: GraphWhereInput, orderBy: GraphOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GraphConnection!
@@ -2848,6 +3030,9 @@ type Query {
   lineGenerator(where: LineGeneratorWhereUniqueInput!): LineGenerator
   lineGenerators(where: LineGeneratorWhereInput, orderBy: LineGeneratorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [LineGenerator]!
   lineGeneratorsConnection(where: LineGeneratorWhereInput, orderBy: LineGeneratorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LineGeneratorConnection!
+  log(where: LogWhereUniqueInput!): Log
+  logs(where: LogWhereInput, orderBy: LogOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Log]!
+  logsConnection(where: LogWhereInput, orderBy: LogOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LogConnection!
   point(where: PointWhereUniqueInput!): Point
   points(where: PointWhereInput, orderBy: PointOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Point]!
   pointsConnection(where: PointWhereInput, orderBy: PointOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PointConnection!
@@ -2865,11 +3050,12 @@ enum Role {
 
 type Subscription {
   dashboard(where: DashboardSubscriptionWhereInput): DashboardSubscriptionPayload
-  dataSource(where: DataSourceSubscriptionWhereInput): DataSourceSubscriptionPayload
-  entity(where: EntitySubscriptionWhereInput): EntitySubscriptionPayload
+  func(where: FuncSubscriptionWhereInput): FuncSubscriptionPayload
+  functionContext(where: FunctionContextSubscriptionWhereInput): FunctionContextSubscriptionPayload
   graph(where: GraphSubscriptionWhereInput): GraphSubscriptionPayload
   line(where: LineSubscriptionWhereInput): LineSubscriptionPayload
   lineGenerator(where: LineGeneratorSubscriptionWhereInput): LineGeneratorSubscriptionPayload
+  log(where: LogSubscriptionWhereInput): LogSubscriptionPayload
   point(where: PointSubscriptionWhereInput): PointSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
@@ -2878,10 +3064,10 @@ type User {
   id: ID!
   createdAt: DateTime!
   dashboards(where: DashboardWhereInput, orderBy: DashboardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Dashboard!]
-  dataSources(where: DataSourceWhereInput, orderBy: DataSourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [DataSource!]
   displayName: String!
   email: String!
-  entities(where: EntityWhereInput, orderBy: EntityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Entity!]
+  funcs(where: FuncWhereInput, orderBy: FuncOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Func!]
+  functionContexts(where: FunctionContextWhereInput, orderBy: FunctionContextOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [FunctionContext!]
   graphs(where: GraphWhereInput, orderBy: GraphOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Graph!]
   lineGenerators(where: LineGeneratorWhereInput, orderBy: LineGeneratorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [LineGenerator!]
   password: String!
@@ -2898,10 +3084,10 @@ type UserConnection {
 input UserCreateInput {
   id: ID
   dashboards: DashboardCreateManyWithoutCreatedByInput
-  dataSources: DataSourceCreateManyWithoutCreatedByInput
   displayName: String!
   email: String!
-  entities: EntityCreateManyWithoutCreatedByInput
+  funcs: FuncCreateManyWithoutCreatedByInput
+  functionContexts: FunctionContextCreateManyWithoutCreatedByInput
   graphs: GraphCreateManyWithoutCreatedByInput
   lineGenerators: LineGeneratorCreateManyWithoutCreatedByInput
   password: String!
@@ -2913,13 +3099,13 @@ input UserCreateOneWithoutDashboardsInput {
   connect: UserWhereUniqueInput
 }
 
-input UserCreateOneWithoutDataSourcesInput {
-  create: UserCreateWithoutDataSourcesInput
+input UserCreateOneWithoutFuncsInput {
+  create: UserCreateWithoutFuncsInput
   connect: UserWhereUniqueInput
 }
 
-input UserCreateOneWithoutEntitiesInput {
-  create: UserCreateWithoutEntitiesInput
+input UserCreateOneWithoutFunctionContextsInput {
+  create: UserCreateWithoutFunctionContextsInput
   connect: UserWhereUniqueInput
 }
 
@@ -2935,34 +3121,34 @@ input UserCreateOneWithoutLineGeneratorsInput {
 
 input UserCreateWithoutDashboardsInput {
   id: ID
-  dataSources: DataSourceCreateManyWithoutCreatedByInput
   displayName: String!
   email: String!
-  entities: EntityCreateManyWithoutCreatedByInput
+  funcs: FuncCreateManyWithoutCreatedByInput
+  functionContexts: FunctionContextCreateManyWithoutCreatedByInput
   graphs: GraphCreateManyWithoutCreatedByInput
   lineGenerators: LineGeneratorCreateManyWithoutCreatedByInput
   password: String!
   role: Role
 }
 
-input UserCreateWithoutDataSourcesInput {
+input UserCreateWithoutFuncsInput {
   id: ID
   dashboards: DashboardCreateManyWithoutCreatedByInput
   displayName: String!
   email: String!
-  entities: EntityCreateManyWithoutCreatedByInput
+  functionContexts: FunctionContextCreateManyWithoutCreatedByInput
   graphs: GraphCreateManyWithoutCreatedByInput
   lineGenerators: LineGeneratorCreateManyWithoutCreatedByInput
   password: String!
   role: Role
 }
 
-input UserCreateWithoutEntitiesInput {
+input UserCreateWithoutFunctionContextsInput {
   id: ID
   dashboards: DashboardCreateManyWithoutCreatedByInput
-  dataSources: DataSourceCreateManyWithoutCreatedByInput
   displayName: String!
   email: String!
+  funcs: FuncCreateManyWithoutCreatedByInput
   graphs: GraphCreateManyWithoutCreatedByInput
   lineGenerators: LineGeneratorCreateManyWithoutCreatedByInput
   password: String!
@@ -2972,10 +3158,10 @@ input UserCreateWithoutEntitiesInput {
 input UserCreateWithoutGraphsInput {
   id: ID
   dashboards: DashboardCreateManyWithoutCreatedByInput
-  dataSources: DataSourceCreateManyWithoutCreatedByInput
   displayName: String!
   email: String!
-  entities: EntityCreateManyWithoutCreatedByInput
+  funcs: FuncCreateManyWithoutCreatedByInput
+  functionContexts: FunctionContextCreateManyWithoutCreatedByInput
   lineGenerators: LineGeneratorCreateManyWithoutCreatedByInput
   password: String!
   role: Role
@@ -2984,10 +3170,10 @@ input UserCreateWithoutGraphsInput {
 input UserCreateWithoutLineGeneratorsInput {
   id: ID
   dashboards: DashboardCreateManyWithoutCreatedByInput
-  dataSources: DataSourceCreateManyWithoutCreatedByInput
   displayName: String!
   email: String!
-  entities: EntityCreateManyWithoutCreatedByInput
+  funcs: FuncCreateManyWithoutCreatedByInput
+  functionContexts: FunctionContextCreateManyWithoutCreatedByInput
   graphs: GraphCreateManyWithoutCreatedByInput
   password: String!
   role: Role
@@ -3045,10 +3231,10 @@ input UserSubscriptionWhereInput {
 
 input UserUpdateInput {
   dashboards: DashboardUpdateManyWithoutCreatedByInput
-  dataSources: DataSourceUpdateManyWithoutCreatedByInput
   displayName: String
   email: String
-  entities: EntityUpdateManyWithoutCreatedByInput
+  funcs: FuncUpdateManyWithoutCreatedByInput
+  functionContexts: FunctionContextUpdateManyWithoutCreatedByInput
   graphs: GraphUpdateManyWithoutCreatedByInput
   lineGenerators: LineGeneratorUpdateManyWithoutCreatedByInput
   password: String
@@ -3069,6 +3255,13 @@ input UserUpdateOneRequiredWithoutDashboardsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneRequiredWithoutFunctionContextsInput {
+  create: UserCreateWithoutFunctionContextsInput
+  update: UserUpdateWithoutFunctionContextsDataInput
+  upsert: UserUpsertWithoutFunctionContextsInput
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateOneRequiredWithoutGraphsInput {
   create: UserCreateWithoutGraphsInput
   update: UserUpdateWithoutGraphsDataInput
@@ -3083,51 +3276,42 @@ input UserUpdateOneRequiredWithoutLineGeneratorsInput {
   connect: UserWhereUniqueInput
 }
 
-input UserUpdateOneWithoutDataSourcesInput {
-  create: UserCreateWithoutDataSourcesInput
-  update: UserUpdateWithoutDataSourcesDataInput
-  upsert: UserUpsertWithoutDataSourcesInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: UserWhereUniqueInput
-}
-
-input UserUpdateOneWithoutEntitiesInput {
-  create: UserCreateWithoutEntitiesInput
-  update: UserUpdateWithoutEntitiesDataInput
-  upsert: UserUpsertWithoutEntitiesInput
+input UserUpdateOneWithoutFuncsInput {
+  create: UserCreateWithoutFuncsInput
+  update: UserUpdateWithoutFuncsDataInput
+  upsert: UserUpsertWithoutFuncsInput
   delete: Boolean
   disconnect: Boolean
   connect: UserWhereUniqueInput
 }
 
 input UserUpdateWithoutDashboardsDataInput {
-  dataSources: DataSourceUpdateManyWithoutCreatedByInput
   displayName: String
   email: String
-  entities: EntityUpdateManyWithoutCreatedByInput
+  funcs: FuncUpdateManyWithoutCreatedByInput
+  functionContexts: FunctionContextUpdateManyWithoutCreatedByInput
   graphs: GraphUpdateManyWithoutCreatedByInput
   lineGenerators: LineGeneratorUpdateManyWithoutCreatedByInput
   password: String
   role: Role
 }
 
-input UserUpdateWithoutDataSourcesDataInput {
+input UserUpdateWithoutFuncsDataInput {
   dashboards: DashboardUpdateManyWithoutCreatedByInput
   displayName: String
   email: String
-  entities: EntityUpdateManyWithoutCreatedByInput
+  functionContexts: FunctionContextUpdateManyWithoutCreatedByInput
   graphs: GraphUpdateManyWithoutCreatedByInput
   lineGenerators: LineGeneratorUpdateManyWithoutCreatedByInput
   password: String
   role: Role
 }
 
-input UserUpdateWithoutEntitiesDataInput {
+input UserUpdateWithoutFunctionContextsDataInput {
   dashboards: DashboardUpdateManyWithoutCreatedByInput
-  dataSources: DataSourceUpdateManyWithoutCreatedByInput
   displayName: String
   email: String
+  funcs: FuncUpdateManyWithoutCreatedByInput
   graphs: GraphUpdateManyWithoutCreatedByInput
   lineGenerators: LineGeneratorUpdateManyWithoutCreatedByInput
   password: String
@@ -3136,10 +3320,10 @@ input UserUpdateWithoutEntitiesDataInput {
 
 input UserUpdateWithoutGraphsDataInput {
   dashboards: DashboardUpdateManyWithoutCreatedByInput
-  dataSources: DataSourceUpdateManyWithoutCreatedByInput
   displayName: String
   email: String
-  entities: EntityUpdateManyWithoutCreatedByInput
+  funcs: FuncUpdateManyWithoutCreatedByInput
+  functionContexts: FunctionContextUpdateManyWithoutCreatedByInput
   lineGenerators: LineGeneratorUpdateManyWithoutCreatedByInput
   password: String
   role: Role
@@ -3147,10 +3331,10 @@ input UserUpdateWithoutGraphsDataInput {
 
 input UserUpdateWithoutLineGeneratorsDataInput {
   dashboards: DashboardUpdateManyWithoutCreatedByInput
-  dataSources: DataSourceUpdateManyWithoutCreatedByInput
   displayName: String
   email: String
-  entities: EntityUpdateManyWithoutCreatedByInput
+  funcs: FuncUpdateManyWithoutCreatedByInput
+  functionContexts: FunctionContextUpdateManyWithoutCreatedByInput
   graphs: GraphUpdateManyWithoutCreatedByInput
   password: String
   role: Role
@@ -3161,14 +3345,14 @@ input UserUpsertWithoutDashboardsInput {
   create: UserCreateWithoutDashboardsInput!
 }
 
-input UserUpsertWithoutDataSourcesInput {
-  update: UserUpdateWithoutDataSourcesDataInput!
-  create: UserCreateWithoutDataSourcesInput!
+input UserUpsertWithoutFuncsInput {
+  update: UserUpdateWithoutFuncsDataInput!
+  create: UserCreateWithoutFuncsInput!
 }
 
-input UserUpsertWithoutEntitiesInput {
-  update: UserUpdateWithoutEntitiesDataInput!
-  create: UserCreateWithoutEntitiesInput!
+input UserUpsertWithoutFunctionContextsInput {
+  update: UserUpdateWithoutFunctionContextsDataInput!
+  create: UserCreateWithoutFunctionContextsInput!
 }
 
 input UserUpsertWithoutGraphsInput {
@@ -3207,9 +3391,6 @@ input UserWhereInput {
   dashboards_every: DashboardWhereInput
   dashboards_some: DashboardWhereInput
   dashboards_none: DashboardWhereInput
-  dataSources_every: DataSourceWhereInput
-  dataSources_some: DataSourceWhereInput
-  dataSources_none: DataSourceWhereInput
   displayName: String
   displayName_not: String
   displayName_in: [String!]
@@ -3238,9 +3419,12 @@ input UserWhereInput {
   email_not_starts_with: String
   email_ends_with: String
   email_not_ends_with: String
-  entities_every: EntityWhereInput
-  entities_some: EntityWhereInput
-  entities_none: EntityWhereInput
+  funcs_every: FuncWhereInput
+  funcs_some: FuncWhereInput
+  funcs_none: FuncWhereInput
+  functionContexts_every: FunctionContextWhereInput
+  functionContexts_some: FunctionContextWhereInput
+  functionContexts_none: FunctionContextWhereInput
   graphs_every: GraphWhereInput
   graphs_some: GraphWhereInput
   graphs_none: GraphWhereInput

@@ -8,8 +8,8 @@ if (process.env.NODE_ENV !== 'production') {
 
 export default {
   dashboards: async (root, args, context, info) => await context.prisma.user({ id: root.id }).dashboards(),
-  dataSources: async (root, args, context, info) => await context.prisma.user({ id: root.id }).dataSources(),
-  entities: async (root, args, context, info) => await context.prisma.user({ id: root.id }).entities(),
+  funcs: async (root, args, context, info) => await context.prisma.user({ id: root.id }).funcs(),
+  functionContexts: async (root, args, context, info) => await context.prisma.user({ id: root.id }).functionContexts(),
   graphs: async (root, args, context, info) => await context.prisma.user({ id: root.id }).graphs(),
   lineGenerators: async (root, args, context, info) => await context.prisma.user({ id: root.id }).lineGenerators(),
   signedInUser: async (root, args, context, info) => context.user,
