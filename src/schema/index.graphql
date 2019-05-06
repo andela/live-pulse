@@ -39,6 +39,7 @@ type Mutation {
 }
 
 type Subscription {
+  messageLogged: Log,
   pointCreated: Point
 }
 
