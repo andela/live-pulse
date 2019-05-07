@@ -55,11 +55,16 @@ export default class GraphWorker {
     } else if (type === 'WEB') {
       response = await this.executeWebFunction(source, line, args, options);
     }
-    console.log(response);
+    if (isDataSource && !response.errors && isNaN(response.data)) {
+      response.errors = response.errors || [];
+      response.errors.push({
+        message: `Data returned from function '${func.name}' is not a number.`
+      });
+    }
     if (response.errors && response.errors.length > 0) {
       let { errors } = response;
       for (let i = 0; i < errors.length; i++) {
-        prisma.createLog({
+        await prisma.createLog({
           context: {
             connect: { id: context.id }
           },
@@ -85,6 +90,13 @@ export default class GraphWorker {
           },
           x: new Date(),
           y: response.data
+        });
+        // delete old points
+        await prisma.deleteManyPoints({
+          line: {
+            id: line.id
+          },
+          updatedAt_lt: moment().subtract(parseInt(graph.updateInterval, 10) * 120, 'm').toDate()
         });
         // execute hooks
         let hooks = await prisma.lineGenerator({ id: lineGenerator.id }).hooks();
@@ -119,7 +131,6 @@ export default class GraphWorker {
       line,
       options
     };
-    console.log(sandbox)
     try {
       const script = new vm.Script(`(function(){${source}})()`);
       const context = new vm.createContext(sandbox);
@@ -135,7 +146,7 @@ export default class GraphWorker {
   async findGraphsToUpdate() {
     let graphs = await prisma.graphs({
       where: {
-        updateTime_lte: moment().format('YYYY-MM-DDTHH:mm:59Z').toDate()
+        updateTime_lte: moment().format('YYYY-MM-DDTHH:mm:59.999Z')
       }
     });
     for(let i = 0; i < graphs.length; i++) {
@@ -158,7 +169,6 @@ export default class GraphWorker {
         state_not: 'DISABLED'
       }
     });
-    // lineGenerators = lineGenerators.filter(l => l.state !== 'DISABLED');
     for(let i = 0; i < lineGenerators.length; i++) {
       // get the line generator's data source
       let dataSource = await prisma.lineGenerator({ id: lineGenerators[i].id }).dataSource();
