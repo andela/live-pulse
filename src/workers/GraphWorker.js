@@ -13,7 +13,9 @@ export default class GraphWorker {
     this.updateGraph = this.updateGraph.bind(this);
   }
   async executeFunction(func, { context, dashboard, graph, isDataSource, lineGenerator }) {
-    let { options, parametersSchema, source, type } = func;
+    let { options, optionsSchema, parametersSchema, source, type } = func;
+
+    let response = {};
     
     // get args
     let  args = {};
@@ -32,10 +34,35 @@ export default class GraphWorker {
         } else if (dashboardvariables && dashboardvariables[parametersSchemaKeys[i]]) {
           // if args are not found in context variables get them from graph variables
           args[parametersSchemaKeys[i]] = dashboardvariables[parametersSchemaKeys[i]];
+        } else {
+          let schema = parametersSchema[parametersSchemaKeys[i]];
+          if (schema.required === true) {
+            response.errors = response.errors || [];
+            response.errors.push({
+              message: `The variable '${parametersSchemaKeys[i]}' is required but cannot be found.`
+            });
+          }
         }
       }
     }
 
+    // get options
+    if (optionsSchema) {
+      let optionsSchemaKeys = Object.keys(optionsSchema);
+      for (let i = 0; i < optionsSchemaKeys.length; i++) {
+        if (!options[optionsSchemaKeys[i]]) {
+          let schema = optionsSchema[optionsSchemaKeys[i]];
+          if (schema.required === true) {
+            response.errors = response.errors || [];
+            response.errors.push({
+              message: `The option '${optionsSchemaKeys[i]}' is required but cannot be found.`
+            });
+          }
+        }
+      }
+    }
+
+    // get line
     let fragment = `
       fragment LineWithPoints on Line {
         id
@@ -48,14 +75,17 @@ export default class GraphWorker {
       }
     `;
     let line = await prisma.lineGenerator({ id: lineGenerator.id }).line().$fragment(fragment);
-    let response;
-    if (type === 'LOCAL') {
-      // TODO: get responses from web functions and pass them to local functions??
-      response = await this.executeLocalFunction(source, line, args, options);
-    } else if (type === 'WEB') {
-      response = await this.executeWebFunction(source, line, args, options);
+
+    if (!response.errors || response.errors.length === 0) {
+      if (type === 'LOCAL') {
+        // TODO: get responses from web functions and pass them to local functions??
+        response = await this.executeLocalFunction(source, line, args, options);
+      } else if (type === 'WEB') {
+        response = await this.executeWebFunction(source, line, args, options);
+      }
     }
-    if (isDataSource && !response.errors && isNaN(response.data)) {
+
+    if (isDataSource && (!response.errors || response.errors.length === 0) && isNaN(response.data)) {
       response.errors = response.errors || [];
       response.errors.push({
         message: `Data returned from function '${func.name}' is not a number.`
@@ -72,6 +102,10 @@ export default class GraphWorker {
           type: 'ERROR'
         });
       }
+      // delete old logs (not just logs belonging to this context)
+      await prisma.deleteManyLogs({
+        updatedAt_lt: moment().subtract(7, 'days').toDate()
+      });
     } else {
       if (isDataSource) {
         // create a line for the line generator (if no line already exists)
