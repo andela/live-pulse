@@ -130,7 +130,6 @@ export default class GraphWorker {
       line,
       options
     };
-    if(line.points)console.log(line.points.length);
     try {
       const script = new vm.Script(`(function(){${source}})()`);
       const context = new vm.createContext(sandbox);
@@ -205,7 +204,7 @@ export default class GraphWorker {
     let fragment = `
       fragment LineWithPoints on Line {
         id
-        points {
+        points(orderBy: updatedAt_DESC, first: 30) {
           id
           hidden
           x
