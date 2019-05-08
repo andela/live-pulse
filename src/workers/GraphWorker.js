@@ -11,7 +11,9 @@ export default class GraphWorker {
     this.executeLocalFunction = this.executeLocalFunction.bind(this);
     this.executeWebFunction = this.executeWebFunction.bind(this);
     this.findGraphsToUpdate = this.findGraphsToUpdate.bind(this);
+    this.getLine = this.getLine.bind(this);
     this.resolveArgs = this.resolveArgs.bind(this);
+    this.resolveMissingOptions = this.resolveMissingOptions.bind(this);
     this.updateGraph = this.updateGraph.bind(this);
   }
   async executeFunction(func, { context, dashboard, graph, isDataSource, lineGenerator }) {
@@ -21,32 +23,6 @@ export default class GraphWorker {
     
     // get args
     let  args = {};
-    // if (parametersSchema) {
-    //   let parametersSchemaKeys = Object.keys(parametersSchema);
-    //   let contextVariables = context.variables;
-    //   let dashboardvariables = dashboard.variables;
-    //   let graphVariables = graph.variables;
-    //   for (let i = 0; i < parametersSchemaKeys.length; i++) {
-    //     if (contextVariables && contextVariables[parametersSchemaKeys[i]]) {
-    //       // get the args from the context variables
-    //       args[parametersSchemaKeys[i]] = contextVariables[parametersSchemaKeys[i]];
-    //     } else if (graphVariables && graphVariables[parametersSchemaKeys[i]]) {
-    //       // if args are not found in context variables get them from graph variables
-    //       args[parametersSchemaKeys[i]] = graphVariables[parametersSchemaKeys[i]];
-    //     } else if (dashboardvariables && dashboardvariables[parametersSchemaKeys[i]]) {
-    //       // if args are not found in context variables get them from graph variables
-    //       args[parametersSchemaKeys[i]] = dashboardvariables[parametersSchemaKeys[i]];
-    //     } else {
-    //       let schema = parametersSchema[parametersSchemaKeys[i]];
-    //       if (schema.required === true) {
-    //         response.errors = response.errors || [];
-    //         response.errors.push({
-    //           message: `The variable '${parametersSchemaKeys[i]}' is required but cannot be found.`
-    //         });
-    //       }
-    //     }
-    //   }
-    // }
     let r = this.resolveArgs(parametersSchema, { context, dashboard, graph });
     if (r.errors && r.errors.length > 0) {
       response.errors = response.errors || [];
@@ -55,35 +31,15 @@ export default class GraphWorker {
       args = r.args;
     }
 
-    // get options
-    if (optionsSchema) {
-      let optionsSchemaKeys = Object.keys(optionsSchema);
-      for (let i = 0; i < optionsSchemaKeys.length; i++) {
-        if (!options[optionsSchemaKeys[i]]) {
-          let schema = optionsSchema[optionsSchemaKeys[i]];
-          if (schema.required === true) {
-            response.errors = response.errors || [];
-            response.errors.push({
-              message: `The option '${optionsSchemaKeys[i]}' is required but cannot be found.`
-            });
-          }
-        }
-      }
+    // get missing options
+    r = this.resolveMissingOptions(options, optionsSchema);
+    if (r.errors && r.errors.length > 0) {
+      response.errors = response.errors || [];
+      response.errors = response.errors.concat(r.errors);
     }
 
     // get line
-    let fragment = `
-      fragment LineWithPoints on Line {
-        id
-        points {
-          id
-          hidden
-          x
-          y
-        }
-      }
-    `;
-    let line = await prisma.lineGenerator({ id: lineGenerator.id }).line().$fragment(fragment);
+    let line = await this.getLine(lineGenerator);
 
     if (!response.errors || response.errors.length === 0) {
       if (type === 'LOCAL') {
@@ -174,6 +130,7 @@ export default class GraphWorker {
       line,
       options
     };
+    if(line.points)console.log(line.points.length);
     try {
       const script = new vm.Script(`(function(){${source}})()`);
       const context = new vm.createContext(sandbox);
@@ -242,7 +199,24 @@ export default class GraphWorker {
     }
   }
 
-  async resolveArgs(parametersSchema, { context, dashboard, graph }) {
+  // --------helpers-----
+
+  async getLine(lineGenerator) {
+    let fragment = `
+      fragment LineWithPoints on Line {
+        id
+        points {
+          id
+          hidden
+          x
+          y
+        }
+      }
+    `;
+    return await prisma.lineGenerator({ id: lineGenerator.id }).line().$fragment(fragment);
+  }
+
+  resolveArgs(parametersSchema, { context, dashboard, graph }) {
     let args = {};
     let errors = [];
     if (parametersSchema) {
@@ -273,6 +247,26 @@ export default class GraphWorker {
 
     return {
       args,
+      errors
+    };
+  }
+  resolveMissingOptions(options, optionsSchema) {
+    let errors = [];
+    if (optionsSchema) {
+      let optionsSchemaKeys = Object.keys(optionsSchema);
+      for (let i = 0; i < optionsSchemaKeys.length; i++) {
+        if (!options[optionsSchemaKeys[i]]) {
+          let schema = optionsSchema[optionsSchemaKeys[i]];
+          if (schema.required === true) {
+            errors.push({
+              message: `The option '${optionsSchemaKeys[i]}' is required but cannot be found.`
+            });
+          }
+        }
+      }
+    }
+
+    return {
       errors
     };
   }
