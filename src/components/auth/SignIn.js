@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -16,6 +16,7 @@ import { styles } from './auth.styles';
 
 const SignIn = (props) => {
   const { classes } =  props;
+  const [login, setLogin] = useState(true);
   return (
     <main className={classes.main}>
       <CssBaseline />
@@ -24,7 +25,7 @@ const SignIn = (props) => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Log In
+          {login ? 'Log In' : 'Create a live pulse account'}
         </Typography>
         <form className={classes.form}>
           <FormControl margin="normal" required fullWidth>
@@ -35,11 +36,24 @@ const SignIn = (props) => {
             <InputLabel htmlFor="password">Password</InputLabel>
             <Input name="password" type="password" id="password" autoComplete="current-password" />
           </FormControl>
+          {!login && (
+            <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="email">Confirm Email Address</InputLabel>
+              <Input type="email" id="email2" name="email2" autoFocus />
+            </FormControl>
+          )}
+
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
-          <p>Don't have an account? create one <a href="/signup">here </a> </p>
+          <p onClick={() => setLogin(!login)} >
+            {login
+              ? `Don't have an account? create one`
+              : `Already have an account? log in`
+            }
+
+          </p>
           <Button
             type="submit"
             fullWidth
@@ -47,7 +61,7 @@ const SignIn = (props) => {
             color="primary"
             className={classes.submit}
           >
-            Log in
+           {login ? 'Log in' : 'Create account'}
           </Button>
         </form>
       </Paper>
