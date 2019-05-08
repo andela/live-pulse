@@ -6,7 +6,7 @@ import { createHttpLink } from 'apollo-link-http';
 import { ApolloProvider } from 'react-apollo';
 import { gql } from 'apollo-boost';
 import './index.css';
-import App from './components/auth/SignIn';
+import Routes from './Routes';
 import * as serviceWorker from './serviceWorker';
 
 const HTTPLink = createHttpLink({
@@ -32,7 +32,7 @@ client.query({
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <App />
+    <Routes />
   </ApolloProvider>,
   document.getElementById('root')
   

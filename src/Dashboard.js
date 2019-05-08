@@ -13,9 +13,9 @@ import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import Button from '@material-ui/core/Button';
 import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import AddIcon from '@material-ui/icons/Add';
+
 import Highcharts from 'highcharts';
 import HighChartsReact from 'highcharts-react-official';
 import { employmentOption } from './HighChartSamples';
@@ -163,7 +163,7 @@ class Dashboard extends React.Component {
         >
           <div className={classes.toolbarIcon}>
             <IconButton onClick={this.handleDrawerClose}>
-              <ChevronLeftIcon />
+              
             </IconButton>
           </div>
           <Divider />
@@ -175,7 +175,7 @@ class Dashboard extends React.Component {
           <div className={classes.appBarSpacer} />
           <Typography variant="h4" gutterBottom component="h2">
             <Button variant="contained" color="primary" size="large">
-              <AddIcon />
+              
               Add graph 
             </Button>
           </Typography>
