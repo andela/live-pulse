@@ -1,4 +1,5 @@
 import moment from 'moment';
+import request from 'request-promise-native';
 import vm from 'vm';
 
 import { prisma } from '../generated/prisma-client';
@@ -10,6 +11,7 @@ export default class GraphWorker {
     this.executeLocalFunction = this.executeLocalFunction.bind(this);
     this.executeWebFunction = this.executeWebFunction.bind(this);
     this.findGraphsToUpdate = this.findGraphsToUpdate.bind(this);
+    this.resolveArgs = this.resolveArgs.bind(this);
     this.updateGraph = this.updateGraph.bind(this);
   }
   async executeFunction(func, { context, dashboard, graph, isDataSource, lineGenerator }) {
@@ -19,31 +21,38 @@ export default class GraphWorker {
     
     // get args
     let  args = {};
-    if (parametersSchema) {
-      let parametersSchemaKeys = Object.keys(parametersSchema);
-      let contextVariables = context.variables;
-      let dashboardvariables = dashboard.variables;
-      let graphVariables = graph.variables;
-      for (let i = 0; i < parametersSchemaKeys.length; i++) {
-        if (contextVariables && contextVariables[parametersSchemaKeys[i]]) {
-          // get the args from the context variables
-          args[parametersSchemaKeys[i]] = contextVariables[parametersSchemaKeys[i]];
-        } else if (graphVariables && graphVariables[parametersSchemaKeys[i]]) {
-          // if args are not found in context variables get them from graph variables
-          args[parametersSchemaKeys[i]] = graphVariables[parametersSchemaKeys[i]];
-        } else if (dashboardvariables && dashboardvariables[parametersSchemaKeys[i]]) {
-          // if args are not found in context variables get them from graph variables
-          args[parametersSchemaKeys[i]] = dashboardvariables[parametersSchemaKeys[i]];
-        } else {
-          let schema = parametersSchema[parametersSchemaKeys[i]];
-          if (schema.required === true) {
-            response.errors = response.errors || [];
-            response.errors.push({
-              message: `The variable '${parametersSchemaKeys[i]}' is required but cannot be found.`
-            });
-          }
-        }
-      }
+    // if (parametersSchema) {
+    //   let parametersSchemaKeys = Object.keys(parametersSchema);
+    //   let contextVariables = context.variables;
+    //   let dashboardvariables = dashboard.variables;
+    //   let graphVariables = graph.variables;
+    //   for (let i = 0; i < parametersSchemaKeys.length; i++) {
+    //     if (contextVariables && contextVariables[parametersSchemaKeys[i]]) {
+    //       // get the args from the context variables
+    //       args[parametersSchemaKeys[i]] = contextVariables[parametersSchemaKeys[i]];
+    //     } else if (graphVariables && graphVariables[parametersSchemaKeys[i]]) {
+    //       // if args are not found in context variables get them from graph variables
+    //       args[parametersSchemaKeys[i]] = graphVariables[parametersSchemaKeys[i]];
+    //     } else if (dashboardvariables && dashboardvariables[parametersSchemaKeys[i]]) {
+    //       // if args are not found in context variables get them from graph variables
+    //       args[parametersSchemaKeys[i]] = dashboardvariables[parametersSchemaKeys[i]];
+    //     } else {
+    //       let schema = parametersSchema[parametersSchemaKeys[i]];
+    //       if (schema.required === true) {
+    //         response.errors = response.errors || [];
+    //         response.errors.push({
+    //           message: `The variable '${parametersSchemaKeys[i]}' is required but cannot be found.`
+    //         });
+    //       }
+    //     }
+    //   }
+    // }
+    let r = this.resolveArgs(parametersSchema, { context, dashboard, graph });
+    if (r.errors && r.errors.length > 0) {
+      response.errors = response.errors || [];
+      response.errors = response.errors.concat(r.errors);
+    } else {
+      args = r.args;
     }
 
     // get options
@@ -175,7 +184,25 @@ export default class GraphWorker {
     }
   }
   async executeWebFunction(source, line, args, options) {
-    // TODO
+    try {
+      let response = await request({
+        source,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: {
+          args,
+          line,
+          options
+        },
+        json: true,
+        resolveWithFullResponse: true
+      });
+      return response.body;
+    } catch (error) {
+      return { errors: [error] };
+    }
   }
   async findGraphsToUpdate() {
     let graphs = await prisma.graphs({
@@ -213,5 +240,40 @@ export default class GraphWorker {
         lineGenerator: lineGenerators[i]
       });
     }
+  }
+
+  async resolveArgs(parametersSchema, { context, dashboard, graph }) {
+    let args = {};
+    let errors = [];
+    if (parametersSchema) {
+      let parametersSchemaKeys = Object.keys(parametersSchema);
+      let contextVariables = context.variables;
+      let graphVariables = graph.variables;
+      let dashboardvariables = dashboard.variables;
+      for (let i = 0; i < parametersSchemaKeys.length; i++) {
+        if (contextVariables && contextVariables[parametersSchemaKeys[i]]) {
+          // get the args from the context variables
+          args[parametersSchemaKeys[i]] = contextVariables[parametersSchemaKeys[i]];
+        } else if (graphVariables && graphVariables[parametersSchemaKeys[i]]) {
+          // if args are not found in context variables get them from graph variables
+          args[parametersSchemaKeys[i]] = graphVariables[parametersSchemaKeys[i]];
+        } else if (dashboardvariables && dashboardvariables[parametersSchemaKeys[i]]) {
+          // if args are not found in context variables get them from graph variables
+          args[parametersSchemaKeys[i]] = dashboardvariables[parametersSchemaKeys[i]];
+        } else {
+          let schema = parametersSchema[parametersSchemaKeys[i]];
+          if (schema.required === true) {
+            errors.push({
+              message: `The variable '${parametersSchemaKeys[i]}' is required but cannot be found.`
+            });
+          }
+        }
+      }
+    }
+
+    return {
+      args,
+      errors
+    };
   }
 }
