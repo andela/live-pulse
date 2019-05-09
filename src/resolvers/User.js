@@ -34,6 +34,8 @@ export default {
   signUp: async (root, args, context, info) => {
     const password = await bcrypt.hash(args.password, 10);
 
+    // TODO: if this is the first user make them ADMIN
+
     const user = await context.prisma.createUser({
       email: args.email,
       ...args.data,

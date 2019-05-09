@@ -142,7 +142,7 @@ export default class GraphWorker {
   async executeWebFunction(source, line, args, options) {
     try {
       let response = await request({
-        source,
+        url: source,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

@@ -27,7 +27,6 @@ export default {
         ...json
       }
     };
-    console.log(args2);
 
     return await create(root, args2, context, info);
   },
