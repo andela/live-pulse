@@ -6,7 +6,7 @@ import LineGenerator from './LineGenerator';
 import User from './User';
 
 const { createDashboard, deleteDashboard, updateDashboard } = Dashboard;
-const { createFunc, deleteFunc, updateFunc } = Func;
+const { createFunc, createFuncFromUrl, deleteFunc, updateFunc } = Func;
 const { createDataSource, createHook, deleteFunctionContext, updateFunctionContext } = FunctionContext;
 const { createGraph, deleteGraph, updateGraph } = Graph;
 const { createLineGenerator, deleteLineGenerator, updateLineGenerator } = LineGenerator;
@@ -16,6 +16,7 @@ export default {
   createDashboard,
   createDataSource,
   createFunc,
+  createFuncFromUrl,
   createGraph,
   createHook,
   createLineGenerator,
