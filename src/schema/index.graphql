@@ -21,7 +21,7 @@ type Mutation {
   createDashboard(data: DashboardUpdateInput!): Dashboard! @isAuthenticated
   createDataSource(lineGeneratorId: ID!, data: FunctionContextUpdateInput!): FunctionContext! @isOwner(resource: "LineGenerator", id: "lineGeneratorId") @isAuthenticated
   createFunc(data: FuncUpdateInput!): Func! @hasRole(roles: [ADMIN, SUPER_ADMIN]) @isAuthenticated
-  createFuncFromUrl(url: String!): Func! @hasRole(roles: [ADMIN, SUPER_ADMIN, MEMBER]) @isAuthenticated
+  createFuncFromUrl(url: String!): Func! @hasRole(roles: [ADMIN, SUPER_ADMIN]) @isAuthenticated
   createGraph(dashboardId: ID!, data: GraphUpdateInput!): Graph! @isOwner(resource: "Dashboard", id: "dashboardId") @isAuthenticated
   createHook(lineGeneratorId: ID!, data: FunctionContextUpdateInput!): FunctionContext! @isOwner(resource: "LineGenerator", id: "lineGeneratorId") @isAuthenticated
   createLineGenerator(graphId: ID!, data: LineGeneratorUpdateInput!): LineGenerator! @isOwner(resource: "Graph", id: "graphId") @isAuthenticated
@@ -50,6 +50,7 @@ type AuthPayload {
 }
 
 type User {
+  id: ID!
   createdAt: DateTime!
   dashboards: [Dashboard!]
   displayName: String!

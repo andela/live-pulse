@@ -34,13 +34,21 @@ export default {
   signUp: async (root, args, context, info) => {
     const password = await bcrypt.hash(args.password, 10);
 
-    // TODO: if this is the first user make them ADMIN
+    // if there's no ADMIN in the system, make this user an ADMIN
+    let role = 'MEMBER';
+    const adminExists = await context.prisma.$exists.user({
+      role: 'ADMIN'
+    });
+    if (!adminExists) {
+      role = 'ADMIN';
+    }
 
     const user = await context.prisma.createUser({
       email: args.email,
       ...args.data,
       displayName: args.data.displayName || args.email,
-      password
+      password,
+      role
     });
 
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
