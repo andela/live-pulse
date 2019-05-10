@@ -19,6 +19,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import Highcharts from 'highcharts';
 import HighChartsReact from 'highcharts-react-official';
 import { employmentOption } from './HighChartSamples';
+import { AUTH_TOKEN } from './constants';
 
 // import { mainListItems, secondaryListItems } from './listItems';
 // import SimpleLineChart from './SimpleLineChart';
@@ -104,6 +105,15 @@ const styles = theme => ({
 });
 
 class Dashboard extends React.Component {
+  constructor(props) {
+    super(props);
+    // check if user has token else redirect to login page
+    const authToken = localStorage.getItem(AUTH_TOKEN);
+    if (!authToken) {
+      window.location.href = '/'
+    }
+  }
+
   state = {
     open: true,
   };

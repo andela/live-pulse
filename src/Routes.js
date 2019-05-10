@@ -1,14 +1,20 @@
 import React from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
+import { Router } from 'react-router';
+import { createBrowserHistory } from 'history';
 import SignIn from './components/auth/SignIn';
 import Dashboard from './Dashboard';
 
+const history = createBrowserHistory();
+
 export default () => {
   return (
-    <Router>
-      <Route exact path="/" component={SignIn} />
-      <Route path="/signin" component={SignIn} />
-      <Route path="/dashboard" component={Dashboard} />
+    <Router history={history}>
+      <Switch>
+        <Route exact path="/" component={SignIn} />
+        <Route exact path="/signin" component={SignIn} />
+        <Route exact path="/dashboard" component={Dashboard} />
+      </Switch>
     </Router>
   )
 }
