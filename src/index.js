@@ -6,15 +6,27 @@ import { createHttpLink } from 'apollo-link-http';
 import { ApolloProvider } from 'react-apollo';
 import { gql } from 'apollo-boost';
 import './index.css';
-import App from './Dashboard';
+import Routes from './Routes';
 import * as serviceWorker from './serviceWorker';
+import { setContext } from 'apollo-link-context';
+import { AUTH_TOKEN } from './constants';
+
+const authLink = setContext((_,{ headers }) => {
+  const token = localStorage.getItem(AUTH_TOKEN)
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : ''
+    }
+  }
+});
 
 const HTTPLink = createHttpLink({
   uri: 'https://live-pulse-server.herokuapp.com/'
 });
 
 const client = new ApolloClient({
-  link: HTTPLink,
+  link: authLink.concat(HTTPLink),
   cache: new InMemoryCache()
 });
 
@@ -32,7 +44,7 @@ client.query({
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <App />
+    <Routes />
   </ApolloProvider>,
   document.getElementById('root')
   
