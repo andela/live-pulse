@@ -30,6 +30,6 @@ const server = new GraphQLServer({
   },
 })
 
-server.start({ port: process.env.PORT || 5000 }, (options) => console.log(`Server is running on port ${options.port}`));
+server.start({ port: process.env.PORT || 3000 }, (options) => console.log(`Server is running on port ${options.port}`));
 
 //setInterval(graphWorker.findGraphsToUpdate, 1000 * 60);
