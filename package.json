@@ -4,7 +4,7 @@
   "description": "The server for Live Pulse",
   "main": "server.js",
   "engines": {
-    "node": "9.7.1",
+    "node": "10.15.3",
     "npm": "6.6.0"
   },
   "scripts": {
@@ -12,14 +12,6 @@
     "build": "npm run remove-build && npm run build:server",
     "build:server": "./node_modules/.bin/babel -d ./build ./src -s --copy-files",
     "build-and-start": "npm run build && npm start",
-    "db:migrate": "./node_modules/.bin/sequelize db:migrate",
-    "db:migrate:test": "NODE_ENV=test ./node_modules/.bin/sequelize db:migrate",
-    "db:migrate:seed": "./node_modules/.bin/sequelize db:seed --seed [name of file in /seeders folder]",
-    "db:migrate:seed:test": "NODE_ENV=test ./node_modules/.bin/sequelize db:seed --seed [name of file in /seeders folder]",
-    "db:reset": "./node_modules/.bin/sequelize db:migrate:undo:all && ./node_modules/.bin/sequelize db:migrate && npm run db:reset:seed",
-    "db:reset:test": "NODE_ENV=test ./node_modules/.bin/sequelize db:migrate:undo:all && NODE_ENV=test ./node_modules/.bin/sequelize db:migrate && npm run db:reset:seed:test",
-    "db:reset:seed": "./node_modules/.bin/sequelize db:seed:undo:all && ./node_modules/.bin/sequelize db:seed:all",
-    "db:reset:seed:test": "NODE_ENV=test ./node_modules/.bin/sequelize db:seed:undo:all && NODE_ENV=test ./node_modules/.bin/sequelize db:seed:all",
     "heroku-postbuild": "npm run build",
     "remove-build": "./node_modules/.bin/rimraf ./build",
     "start": "NODE_ENV=production ./node_modules/.bin/forever -m 5 ./build/server.js",
@@ -50,14 +42,10 @@
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
-    "pg": "^7.8.0",
-    "pg-hstore": "^2.3.2",
     "prisma-client-lib": "^1.32.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5",
-    "rimraf": "^2.6.2",
-    "sequelize": "^4.42.0",
-    "sequelize-cli": "^5.4.0"
+    "rimraf": "^2.6.2"
   },
   "devDependencies": {
     "babel-preset-env": "^1.7.0",
