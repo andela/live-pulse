@@ -18,6 +18,7 @@ export default {
     });
     let json = response.body;
     delete json.id;
+    delete json.options;
     if (json.type) {
       json.type = json.type.toUpperCase();
     }
