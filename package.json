@@ -9,7 +9,7 @@
   },
   "scripts": {
     "babel-node": "babel-node ./src/server --presets=env",
-    "build": "npm run remove-build && npm run build:server && npm run db:migrate",
+    "build": "npm run remove-build && npm run build:server",
     "build:server": "./node_modules/.bin/babel -d ./build ./src -s --copy-files",
     "build-and-start": "npm run build && npm start",
     "db:migrate": "./node_modules/.bin/sequelize db:migrate",
