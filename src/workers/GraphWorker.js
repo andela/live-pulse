@@ -67,8 +67,11 @@ export default class GraphWorker {
           type: 'ERROR'
         });
       }
-      // delete old logs (not just logs belonging to this context)
+      // delete old logs
       await prisma.deleteManyLogs({
+        context: {
+          id: context.id
+        },
         updatedAt_lt: moment().subtract(7, 'days').toDate()
       });
     } else {
