@@ -61,5 +61,6 @@ type User {
   lineGenerators: [LineGenerator!]
   password: String! @hasRole(roles: [SUPER_ADMIN])
   role: Role!
+  settings: Settings
   updatedAt: DateTime!
 }

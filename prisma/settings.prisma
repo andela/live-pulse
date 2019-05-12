@@ -1,0 +1,22 @@
+type NotificationsSettings {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  sendEmailOnDataSourceData: Boolean! @default(value: false) # send email when a DataSource returns data
+  sendEmailOnDataSourceError: Boolean! @default(value: false) # send email when a DataSource returns error
+  sendEmailOnHookData: Boolean! @default(value: true) # send email when a Hook returns data
+  sendEmailOnHookError: Boolean! @default(value: false) # send email when a Hook returns error
+  sendPushOnDataSourceData: Boolean! @default(value: false) # send push notification when a DataSource returns data
+  sendPushOnDataSourceError: Boolean! @default(value: false) # send push notification when a DataSource returns error
+  sendPushOnHookData: Boolean! @default(value: true) # send push notification when a Hook returns data
+  sendPushOnHookError: Boolean! @default(value: false) # send push notification when a Hook returns error
+  settings: Settings @relation(name: "NotificationsUserSettings")
+  updatedAt: DateTime! @updatedAt
+}
+
+type Settings {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  notifications: NotificationsSettings @relation(name: "NotificationsUserSettings" onDelete: CASCADE link: TABLE)
+  updatedAt: DateTime! @updatedAt
+  user: User! @relation(name: "UserSettings")
+}

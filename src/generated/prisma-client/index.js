@@ -53,6 +53,14 @@ var models = [
     embedded: false
   },
   {
+    name: "NotificationsSettings",
+    embedded: false
+  },
+  {
+    name: "Settings",
+    embedded: false
+  },
+  {
     name: "User",
     embedded: false
   }
