@@ -104,7 +104,7 @@ const styles = theme => ({
   },
 });
 
-class Dashboard extends React.Component {
+class App extends React.Component {
   constructor(props) {
     super(props);
     // check if user has token else redirect to login page
@@ -198,8 +198,8 @@ class Dashboard extends React.Component {
   }
 }
 
-Dashboard.propTypes = {
+App.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Dashboard);
+export default withStyles(styles)(App);
