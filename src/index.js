@@ -31,15 +31,15 @@ const client = new ApolloClient({
 });
 
 // test the apollo query client, remove afterwards
-client.query({
-  query: gql`{
-    dashboard(id: $ID) {
-      title
-      icon
-      createdAt
-    }
-  }`
-}).then(result => console.log(result));
+// client.query({
+//   query: gql`{
+//     dashboard(id: $ID) {
+//       title
+//       icon
+//       createdAt
+//     }
+//   }`
+// }).then(result => console.log(result));
 //  end testing
 
 ReactDOM.render(
