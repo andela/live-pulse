@@ -120,19 +120,3 @@ enum Role {
   MEMBER
   SUPER_ADMIN
 }
-
-# if you update this User model remember to do so in ../schema/index.graphql
-type User {
-  id: ID! @id
-  createdAt: DateTime! @createdAt
-  dashboards: [Dashboard!] @relation(name: "DashboardByUser" onDelete: CASCADE)
-  displayName: String!
-  email: String! @unique
-  funcs: [Func!] @relation(name: "FuncByUser")
-  functionContexts: [FunctionContext!] @relation(name: "FunctionContextByUser" onDelete: CASCADE)
-  graphs: [Graph!] @relation(name: "GraphByUser" onDelete: CASCADE)
-  lineGenerators: [LineGenerator!] @relation(name: "LineGeneratorByUser" onDelete: CASCADE)
-  password: String!
-  role: Role! @default(value: MEMBER)
-  updatedAt: DateTime! @updatedAt
-}

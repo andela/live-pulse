@@ -26,7 +26,15 @@ type AggregateLog {
   count: Int!
 }
 
+type AggregateNotificationsSettings {
+  count: Int!
+}
+
 type AggregatePoint {
+  count: Int!
+}
+
+type AggregateSettings {
   count: Int!
 }
 
@@ -2726,12 +2734,23 @@ type Mutation {
   upsertLog(where: LogWhereUniqueInput!, create: LogCreateInput!, update: LogUpdateInput!): Log!
   deleteLog(where: LogWhereUniqueInput!): Log
   deleteManyLogs(where: LogWhereInput): BatchPayload!
+  createNotificationsSettings(data: NotificationsSettingsCreateInput!): NotificationsSettings!
+  updateNotificationsSettings(data: NotificationsSettingsUpdateInput!, where: NotificationsSettingsWhereUniqueInput!): NotificationsSettings
+  updateManyNotificationsSettingses(data: NotificationsSettingsUpdateManyMutationInput!, where: NotificationsSettingsWhereInput): BatchPayload!
+  upsertNotificationsSettings(where: NotificationsSettingsWhereUniqueInput!, create: NotificationsSettingsCreateInput!, update: NotificationsSettingsUpdateInput!): NotificationsSettings!
+  deleteNotificationsSettings(where: NotificationsSettingsWhereUniqueInput!): NotificationsSettings
+  deleteManyNotificationsSettingses(where: NotificationsSettingsWhereInput): BatchPayload!
   createPoint(data: PointCreateInput!): Point!
   updatePoint(data: PointUpdateInput!, where: PointWhereUniqueInput!): Point
   updateManyPoints(data: PointUpdateManyMutationInput!, where: PointWhereInput): BatchPayload!
   upsertPoint(where: PointWhereUniqueInput!, create: PointCreateInput!, update: PointUpdateInput!): Point!
   deletePoint(where: PointWhereUniqueInput!): Point
   deleteManyPoints(where: PointWhereInput): BatchPayload!
+  createSettings(data: SettingsCreateInput!): Settings!
+  updateSettings(data: SettingsUpdateInput!, where: SettingsWhereUniqueInput!): Settings
+  upsertSettings(where: SettingsWhereUniqueInput!, create: SettingsCreateInput!, update: SettingsUpdateInput!): Settings!
+  deleteSettings(where: SettingsWhereUniqueInput!): Settings
+  deleteManySettingses(where: SettingsWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -2748,6 +2767,224 @@ enum MutationType {
 
 interface Node {
   id: ID!
+}
+
+type NotificationsSettings {
+  id: ID!
+  createdAt: DateTime!
+  sendEmailOnDataSourceData: Boolean!
+  sendEmailOnDataSourceError: Boolean!
+  sendEmailOnHookData: Boolean!
+  sendEmailOnHookError: Boolean!
+  sendPushOnDataSourceData: Boolean!
+  sendPushOnDataSourceError: Boolean!
+  sendPushOnHookData: Boolean!
+  sendPushOnHookError: Boolean!
+  settings: Settings
+  updatedAt: DateTime!
+}
+
+type NotificationsSettingsConnection {
+  pageInfo: PageInfo!
+  edges: [NotificationsSettingsEdge]!
+  aggregate: AggregateNotificationsSettings!
+}
+
+input NotificationsSettingsCreateInput {
+  id: ID
+  sendEmailOnDataSourceData: Boolean
+  sendEmailOnDataSourceError: Boolean
+  sendEmailOnHookData: Boolean
+  sendEmailOnHookError: Boolean
+  sendPushOnDataSourceData: Boolean
+  sendPushOnDataSourceError: Boolean
+  sendPushOnHookData: Boolean
+  sendPushOnHookError: Boolean
+  settings: SettingsCreateOneWithoutNotificationsInput
+}
+
+input NotificationsSettingsCreateOneWithoutSettingsInput {
+  create: NotificationsSettingsCreateWithoutSettingsInput
+  connect: NotificationsSettingsWhereUniqueInput
+}
+
+input NotificationsSettingsCreateWithoutSettingsInput {
+  id: ID
+  sendEmailOnDataSourceData: Boolean
+  sendEmailOnDataSourceError: Boolean
+  sendEmailOnHookData: Boolean
+  sendEmailOnHookError: Boolean
+  sendPushOnDataSourceData: Boolean
+  sendPushOnDataSourceError: Boolean
+  sendPushOnHookData: Boolean
+  sendPushOnHookError: Boolean
+}
+
+type NotificationsSettingsEdge {
+  node: NotificationsSettings!
+  cursor: String!
+}
+
+enum NotificationsSettingsOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  sendEmailOnDataSourceData_ASC
+  sendEmailOnDataSourceData_DESC
+  sendEmailOnDataSourceError_ASC
+  sendEmailOnDataSourceError_DESC
+  sendEmailOnHookData_ASC
+  sendEmailOnHookData_DESC
+  sendEmailOnHookError_ASC
+  sendEmailOnHookError_DESC
+  sendPushOnDataSourceData_ASC
+  sendPushOnDataSourceData_DESC
+  sendPushOnDataSourceError_ASC
+  sendPushOnDataSourceError_DESC
+  sendPushOnHookData_ASC
+  sendPushOnHookData_DESC
+  sendPushOnHookError_ASC
+  sendPushOnHookError_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type NotificationsSettingsPreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  sendEmailOnDataSourceData: Boolean!
+  sendEmailOnDataSourceError: Boolean!
+  sendEmailOnHookData: Boolean!
+  sendEmailOnHookError: Boolean!
+  sendPushOnDataSourceData: Boolean!
+  sendPushOnDataSourceError: Boolean!
+  sendPushOnHookData: Boolean!
+  sendPushOnHookError: Boolean!
+  updatedAt: DateTime!
+}
+
+type NotificationsSettingsSubscriptionPayload {
+  mutation: MutationType!
+  node: NotificationsSettings
+  updatedFields: [String!]
+  previousValues: NotificationsSettingsPreviousValues
+}
+
+input NotificationsSettingsSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: NotificationsSettingsWhereInput
+  AND: [NotificationsSettingsSubscriptionWhereInput!]
+  OR: [NotificationsSettingsSubscriptionWhereInput!]
+  NOT: [NotificationsSettingsSubscriptionWhereInput!]
+}
+
+input NotificationsSettingsUpdateInput {
+  sendEmailOnDataSourceData: Boolean
+  sendEmailOnDataSourceError: Boolean
+  sendEmailOnHookData: Boolean
+  sendEmailOnHookError: Boolean
+  sendPushOnDataSourceData: Boolean
+  sendPushOnDataSourceError: Boolean
+  sendPushOnHookData: Boolean
+  sendPushOnHookError: Boolean
+  settings: SettingsUpdateOneWithoutNotificationsInput
+}
+
+input NotificationsSettingsUpdateManyMutationInput {
+  sendEmailOnDataSourceData: Boolean
+  sendEmailOnDataSourceError: Boolean
+  sendEmailOnHookData: Boolean
+  sendEmailOnHookError: Boolean
+  sendPushOnDataSourceData: Boolean
+  sendPushOnDataSourceError: Boolean
+  sendPushOnHookData: Boolean
+  sendPushOnHookError: Boolean
+}
+
+input NotificationsSettingsUpdateOneWithoutSettingsInput {
+  create: NotificationsSettingsCreateWithoutSettingsInput
+  update: NotificationsSettingsUpdateWithoutSettingsDataInput
+  upsert: NotificationsSettingsUpsertWithoutSettingsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: NotificationsSettingsWhereUniqueInput
+}
+
+input NotificationsSettingsUpdateWithoutSettingsDataInput {
+  sendEmailOnDataSourceData: Boolean
+  sendEmailOnDataSourceError: Boolean
+  sendEmailOnHookData: Boolean
+  sendEmailOnHookError: Boolean
+  sendPushOnDataSourceData: Boolean
+  sendPushOnDataSourceError: Boolean
+  sendPushOnHookData: Boolean
+  sendPushOnHookError: Boolean
+}
+
+input NotificationsSettingsUpsertWithoutSettingsInput {
+  update: NotificationsSettingsUpdateWithoutSettingsDataInput!
+  create: NotificationsSettingsCreateWithoutSettingsInput!
+}
+
+input NotificationsSettingsWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  sendEmailOnDataSourceData: Boolean
+  sendEmailOnDataSourceData_not: Boolean
+  sendEmailOnDataSourceError: Boolean
+  sendEmailOnDataSourceError_not: Boolean
+  sendEmailOnHookData: Boolean
+  sendEmailOnHookData_not: Boolean
+  sendEmailOnHookError: Boolean
+  sendEmailOnHookError_not: Boolean
+  sendPushOnDataSourceData: Boolean
+  sendPushOnDataSourceData_not: Boolean
+  sendPushOnDataSourceError: Boolean
+  sendPushOnDataSourceError_not: Boolean
+  sendPushOnHookData: Boolean
+  sendPushOnHookData_not: Boolean
+  sendPushOnHookError: Boolean
+  sendPushOnHookError_not: Boolean
+  settings: SettingsWhereInput
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [NotificationsSettingsWhereInput!]
+  OR: [NotificationsSettingsWhereInput!]
+  NOT: [NotificationsSettingsWhereInput!]
+}
+
+input NotificationsSettingsWhereUniqueInput {
+  id: ID
 }
 
 type PageInfo {
@@ -3028,9 +3265,15 @@ type Query {
   log(where: LogWhereUniqueInput!): Log
   logs(where: LogWhereInput, orderBy: LogOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Log]!
   logsConnection(where: LogWhereInput, orderBy: LogOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LogConnection!
+  notificationsSettings(where: NotificationsSettingsWhereUniqueInput!): NotificationsSettings
+  notificationsSettingses(where: NotificationsSettingsWhereInput, orderBy: NotificationsSettingsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [NotificationsSettings]!
+  notificationsSettingsesConnection(where: NotificationsSettingsWhereInput, orderBy: NotificationsSettingsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): NotificationsSettingsConnection!
   point(where: PointWhereUniqueInput!): Point
   points(where: PointWhereInput, orderBy: PointOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Point]!
   pointsConnection(where: PointWhereInput, orderBy: PointOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PointConnection!
+  settings(where: SettingsWhereUniqueInput!): Settings
+  settingses(where: SettingsWhereInput, orderBy: SettingsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Settings]!
+  settingsesConnection(where: SettingsWhereInput, orderBy: SettingsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SettingsConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
@@ -3043,6 +3286,167 @@ enum Role {
   SUPER_ADMIN
 }
 
+type Settings {
+  id: ID!
+  createdAt: DateTime!
+  notifications: NotificationsSettings
+  updatedAt: DateTime!
+  user: User!
+}
+
+type SettingsConnection {
+  pageInfo: PageInfo!
+  edges: [SettingsEdge]!
+  aggregate: AggregateSettings!
+}
+
+input SettingsCreateInput {
+  id: ID
+  notifications: NotificationsSettingsCreateOneWithoutSettingsInput
+  user: UserCreateOneWithoutSettingsInput!
+}
+
+input SettingsCreateOneWithoutNotificationsInput {
+  create: SettingsCreateWithoutNotificationsInput
+  connect: SettingsWhereUniqueInput
+}
+
+input SettingsCreateOneWithoutUserInput {
+  create: SettingsCreateWithoutUserInput
+  connect: SettingsWhereUniqueInput
+}
+
+input SettingsCreateWithoutNotificationsInput {
+  id: ID
+  user: UserCreateOneWithoutSettingsInput!
+}
+
+input SettingsCreateWithoutUserInput {
+  id: ID
+  notifications: NotificationsSettingsCreateOneWithoutSettingsInput
+}
+
+type SettingsEdge {
+  node: Settings!
+  cursor: String!
+}
+
+enum SettingsOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type SettingsPreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type SettingsSubscriptionPayload {
+  mutation: MutationType!
+  node: Settings
+  updatedFields: [String!]
+  previousValues: SettingsPreviousValues
+}
+
+input SettingsSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: SettingsWhereInput
+  AND: [SettingsSubscriptionWhereInput!]
+  OR: [SettingsSubscriptionWhereInput!]
+  NOT: [SettingsSubscriptionWhereInput!]
+}
+
+input SettingsUpdateInput {
+  notifications: NotificationsSettingsUpdateOneWithoutSettingsInput
+  user: UserUpdateOneRequiredWithoutSettingsInput
+}
+
+input SettingsUpdateOneWithoutNotificationsInput {
+  create: SettingsCreateWithoutNotificationsInput
+  update: SettingsUpdateWithoutNotificationsDataInput
+  upsert: SettingsUpsertWithoutNotificationsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: SettingsWhereUniqueInput
+}
+
+input SettingsUpdateOneWithoutUserInput {
+  create: SettingsCreateWithoutUserInput
+  update: SettingsUpdateWithoutUserDataInput
+  upsert: SettingsUpsertWithoutUserInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: SettingsWhereUniqueInput
+}
+
+input SettingsUpdateWithoutNotificationsDataInput {
+  user: UserUpdateOneRequiredWithoutSettingsInput
+}
+
+input SettingsUpdateWithoutUserDataInput {
+  notifications: NotificationsSettingsUpdateOneWithoutSettingsInput
+}
+
+input SettingsUpsertWithoutNotificationsInput {
+  update: SettingsUpdateWithoutNotificationsDataInput!
+  create: SettingsCreateWithoutNotificationsInput!
+}
+
+input SettingsUpsertWithoutUserInput {
+  update: SettingsUpdateWithoutUserDataInput!
+  create: SettingsCreateWithoutUserInput!
+}
+
+input SettingsWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  notifications: NotificationsSettingsWhereInput
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  user: UserWhereInput
+  AND: [SettingsWhereInput!]
+  OR: [SettingsWhereInput!]
+  NOT: [SettingsWhereInput!]
+}
+
+input SettingsWhereUniqueInput {
+  id: ID
+}
+
 type Subscription {
   dashboard(where: DashboardSubscriptionWhereInput): DashboardSubscriptionPayload
   func(where: FuncSubscriptionWhereInput): FuncSubscriptionPayload
@@ -3051,7 +3455,9 @@ type Subscription {
   line(where: LineSubscriptionWhereInput): LineSubscriptionPayload
   lineGenerator(where: LineGeneratorSubscriptionWhereInput): LineGeneratorSubscriptionPayload
   log(where: LogSubscriptionWhereInput): LogSubscriptionPayload
+  notificationsSettings(where: NotificationsSettingsSubscriptionWhereInput): NotificationsSettingsSubscriptionPayload
   point(where: PointSubscriptionWhereInput): PointSubscriptionPayload
+  settings(where: SettingsSubscriptionWhereInput): SettingsSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
@@ -3067,6 +3473,7 @@ type User {
   lineGenerators(where: LineGeneratorWhereInput, orderBy: LineGeneratorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [LineGenerator!]
   password: String!
   role: Role!
+  settings: Settings
   updatedAt: DateTime!
 }
 
@@ -3087,6 +3494,7 @@ input UserCreateInput {
   lineGenerators: LineGeneratorCreateManyWithoutCreatedByInput
   password: String!
   role: Role
+  settings: SettingsCreateOneWithoutUserInput
 }
 
 input UserCreateOneWithoutDashboardsInput {
@@ -3114,6 +3522,11 @@ input UserCreateOneWithoutLineGeneratorsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutSettingsInput {
+  create: UserCreateWithoutSettingsInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateWithoutDashboardsInput {
   id: ID
   displayName: String!
@@ -3124,6 +3537,7 @@ input UserCreateWithoutDashboardsInput {
   lineGenerators: LineGeneratorCreateManyWithoutCreatedByInput
   password: String!
   role: Role
+  settings: SettingsCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutFuncsInput {
@@ -3136,6 +3550,7 @@ input UserCreateWithoutFuncsInput {
   lineGenerators: LineGeneratorCreateManyWithoutCreatedByInput
   password: String!
   role: Role
+  settings: SettingsCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutFunctionContextsInput {
@@ -3148,6 +3563,7 @@ input UserCreateWithoutFunctionContextsInput {
   lineGenerators: LineGeneratorCreateManyWithoutCreatedByInput
   password: String!
   role: Role
+  settings: SettingsCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutGraphsInput {
@@ -3160,6 +3576,7 @@ input UserCreateWithoutGraphsInput {
   lineGenerators: LineGeneratorCreateManyWithoutCreatedByInput
   password: String!
   role: Role
+  settings: SettingsCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutLineGeneratorsInput {
@@ -3170,6 +3587,20 @@ input UserCreateWithoutLineGeneratorsInput {
   funcs: FuncCreateManyWithoutCreatedByInput
   functionContexts: FunctionContextCreateManyWithoutCreatedByInput
   graphs: GraphCreateManyWithoutCreatedByInput
+  password: String!
+  role: Role
+  settings: SettingsCreateOneWithoutUserInput
+}
+
+input UserCreateWithoutSettingsInput {
+  id: ID
+  dashboards: DashboardCreateManyWithoutCreatedByInput
+  displayName: String!
+  email: String!
+  funcs: FuncCreateManyWithoutCreatedByInput
+  functionContexts: FunctionContextCreateManyWithoutCreatedByInput
+  graphs: GraphCreateManyWithoutCreatedByInput
+  lineGenerators: LineGeneratorCreateManyWithoutCreatedByInput
   password: String!
   role: Role
 }
@@ -3234,6 +3665,7 @@ input UserUpdateInput {
   lineGenerators: LineGeneratorUpdateManyWithoutCreatedByInput
   password: String
   role: Role
+  settings: SettingsUpdateOneWithoutUserInput
 }
 
 input UserUpdateManyMutationInput {
@@ -3271,6 +3703,13 @@ input UserUpdateOneRequiredWithoutLineGeneratorsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneRequiredWithoutSettingsInput {
+  create: UserCreateWithoutSettingsInput
+  update: UserUpdateWithoutSettingsDataInput
+  upsert: UserUpsertWithoutSettingsInput
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateOneWithoutFuncsInput {
   create: UserCreateWithoutFuncsInput
   update: UserUpdateWithoutFuncsDataInput
@@ -3289,6 +3728,7 @@ input UserUpdateWithoutDashboardsDataInput {
   lineGenerators: LineGeneratorUpdateManyWithoutCreatedByInput
   password: String
   role: Role
+  settings: SettingsUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutFuncsDataInput {
@@ -3300,6 +3740,7 @@ input UserUpdateWithoutFuncsDataInput {
   lineGenerators: LineGeneratorUpdateManyWithoutCreatedByInput
   password: String
   role: Role
+  settings: SettingsUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutFunctionContextsDataInput {
@@ -3311,6 +3752,7 @@ input UserUpdateWithoutFunctionContextsDataInput {
   lineGenerators: LineGeneratorUpdateManyWithoutCreatedByInput
   password: String
   role: Role
+  settings: SettingsUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutGraphsDataInput {
@@ -3322,6 +3764,7 @@ input UserUpdateWithoutGraphsDataInput {
   lineGenerators: LineGeneratorUpdateManyWithoutCreatedByInput
   password: String
   role: Role
+  settings: SettingsUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutLineGeneratorsDataInput {
@@ -3331,6 +3774,19 @@ input UserUpdateWithoutLineGeneratorsDataInput {
   funcs: FuncUpdateManyWithoutCreatedByInput
   functionContexts: FunctionContextUpdateManyWithoutCreatedByInput
   graphs: GraphUpdateManyWithoutCreatedByInput
+  password: String
+  role: Role
+  settings: SettingsUpdateOneWithoutUserInput
+}
+
+input UserUpdateWithoutSettingsDataInput {
+  dashboards: DashboardUpdateManyWithoutCreatedByInput
+  displayName: String
+  email: String
+  funcs: FuncUpdateManyWithoutCreatedByInput
+  functionContexts: FunctionContextUpdateManyWithoutCreatedByInput
+  graphs: GraphUpdateManyWithoutCreatedByInput
+  lineGenerators: LineGeneratorUpdateManyWithoutCreatedByInput
   password: String
   role: Role
 }
@@ -3358,6 +3814,11 @@ input UserUpsertWithoutGraphsInput {
 input UserUpsertWithoutLineGeneratorsInput {
   update: UserUpdateWithoutLineGeneratorsDataInput!
   create: UserCreateWithoutLineGeneratorsInput!
+}
+
+input UserUpsertWithoutSettingsInput {
+  update: UserUpdateWithoutSettingsDataInput!
+  create: UserCreateWithoutSettingsInput!
 }
 
 input UserWhereInput {
@@ -3444,6 +3905,7 @@ input UserWhereInput {
   role_not: Role
   role_in: [Role!]
   role_not_in: [Role!]
+  settings: SettingsWhereInput
   updatedAt: DateTime
   updatedAt_not: DateTime
   updatedAt_in: [DateTime!]
