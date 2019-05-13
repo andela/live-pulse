@@ -11,15 +11,16 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
-import Button from '@material-ui/core/Button';
 import MenuIcon from '@material-ui/icons/Menu';
 
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
-import Highcharts from 'highcharts';
-import HighChartsReact from 'highcharts-react-official';
-import { employmentOption } from './HighChartSamples';
+// import Highcharts from 'highcharts';
+// import HighChartsReact from 'highcharts-react-official';
+// import { employmentOption } from './HighChartSamples';
 import { AUTH_TOKEN } from './constants';
+import DashboardModal from './components/dashboard/DashboardModal';
+import CreateDashboard from './components/dashboard/CreateDashboard';
 
 // import { mainListItems, secondaryListItems } from './listItems';
 // import SimpleLineChart from './SimpleLineChart';
@@ -173,7 +174,7 @@ class App extends React.Component {
         >
           <div className={classes.toolbarIcon}>
             <IconButton onClick={this.handleDrawerClose}>
-              
+              =
             </IconButton>
           </div>
           <Divider />
@@ -184,13 +185,11 @@ class App extends React.Component {
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           <Typography variant="h4" gutterBottom component="h2">
-            <Button variant="contained" color="primary" size="large">
-              
-              Add graph 
-            </Button>
+            <DashboardModal />
           </Typography>
           <Typography component="div" className={classes.chartContainer}>
-            <HighChartsReact highcharts={Highcharts} options={employmentOption} />  {/* Higchart component */}
+            <CreateDashboard />
+            {/* <HighChartsReact highcharts={Highcharts} options={employmentOption} />  Higchart component */}
           </Typography>
         </main>
       </div>
