@@ -6,6 +6,7 @@ import gql from "graphql-tag";
 export const DASHBOARDS_QUERY = gql`
 {
   dashboards {
+    id,
     title,
     icon,
     updatedAt,

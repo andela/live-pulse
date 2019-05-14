@@ -3,7 +3,6 @@ import { FormControl, InputLabel, Button, Input } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { Mutation } from 'react-apollo';
 import { DASHBOARD_MUTATION } from '../../mutations/dashboardMutations';
-import { DASHBOARDS_QUERY } from '../../queries';
 
 const rand = () => {
    return Math.round(Math.random() * 20) - 10;
@@ -35,12 +34,12 @@ const styles = theme => ({
   },
 });
 
-const [title, setTitle] = useState('');
-const [interval, setInterval] = useState(15);
-const [icon, setIcon] = useState('');
-
 const ModalContent = (props) => {
   const { classes } = props;
+  const [title, setTitle] = useState('');
+  const [interval, setInterval] = useState(15);
+  const [icon, setIcon] = useState('');
+
   return (
     <div style={getModalStyle()} className={classes.paper}>
       <div className={classes.form}>
@@ -55,21 +54,14 @@ const ModalContent = (props) => {
           <InputLabel htmlFor="interval">Interval in minutes</InputLabel>
           <Input type="number" id="interval" name="interval" autoFocus required 
             value={interval}
-            onChange={e => setInterval(e.target.vale)}
+            onChange={e => setInterval(e.target.value)}
           />
         </FormControl>
         <Mutation
           mutation={DASHBOARD_MUTATION}
           variables={{ title, updateInterval:interval, icon}}
           onError={error => handleError(error)}
-          update={( store, { data: { dashboards } }) => {
-            const data = store.readQuery({ query: DASHBOARDS_QUERY})
-            data.dashboards.unshift(dashboards)
-            store.writeQuery({
-              query: DASHBOARDS_QUERY,
-              data
-            })
-          }}
+          onCompleted={data => onSuccess(data)}
         >
           {createDashboardMutation => (
             <Button
@@ -87,6 +79,11 @@ const ModalContent = (props) => {
 
 const handleError = async error => {
   console.log(error);
+}
+
+const onSuccess = async (data) => {
+  window.alert(`${data.createDashboard.title} added`);
+  window.location.reload();
 }
 
 export default withStyles(styles)(ModalContent)
