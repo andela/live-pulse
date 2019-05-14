@@ -85,14 +85,14 @@ const SignIn = (props) => {
               onCompleted={data => authenticate(data, login)}
               onError={error => handleError(error)}
             >
-              {mutation => (
+              {authMutation => (
                 <Button
                   type="submit"
                   fullWidth
                   variant="contained"
                   color="primary"
                   className={classes.submit}
-                  onClick={mutation}
+                  onClick={authMutation}
                 >
                   {login ? 'Log in' : 'Create account'}
                 </Button>

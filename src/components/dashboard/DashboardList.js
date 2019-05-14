@@ -10,7 +10,7 @@ const styles = () => ({
   root: { flexGrow: 1 },
 });
 
-const DASHBOARD_QUERY = gql`
+const DASHBOARD_QUERYS = gql`
   {
     dashboards {
       title,
@@ -32,7 +32,7 @@ class DashboardList extends React.Component {
     return (
       <Grid container className={classes.root} spacing={16}>
         <Grid item xs={12}>
-          <Query query={DASHBOARD_QUERY}>
+          <Query query={DASHBOARD_QUERYS}>
             {({ loading, error, data }) => {
               if (loading) return <Typography>Fetching...</Typography>
               if (error) return <Typography>Error! no dashboard created yet.</Typography>
