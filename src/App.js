@@ -11,11 +11,17 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
-import Button from '@material-ui/core/Button';
 import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import AddIcon from '@material-ui/icons/Add';
+
+// import Highcharts from 'highcharts';
+// import HighChartsReact from 'highcharts-react-official';
+// import { employmentOption } from './HighChartSamples';
+import { AUTH_TOKEN } from './constants';
+import DashboardModal from './components/dashboard/DashboardModal';
+import DashboardList from './components/dashboard/DashboardList';
+
 // import { mainListItems, secondaryListItems } from './listItems';
 // import SimpleLineChart from './SimpleLineChart';
 // import SimpleTable from './SimpleTable';
@@ -99,9 +105,18 @@ const styles = theme => ({
   },
 });
 
-class Dashboard extends React.Component {
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    // check if user has token else redirect to login page
+    const authToken = localStorage.getItem(AUTH_TOKEN);
+    if (!authToken) {
+      window.location.href = '/'
+    }
+  }
+
   state = {
-    open: true,
+    open: false,
   };
 
   handleDrawerOpen = () => {
@@ -159,39 +174,31 @@ class Dashboard extends React.Component {
         >
           <div className={classes.toolbarIcon}>
             <IconButton onClick={this.handleDrawerClose}>
-              <ChevronLeftIcon />
+              =
             </IconButton>
           </div>
           <Divider />
           <List>Menu list</List>
           <Divider />
-          <List>secondary list</List>
+          <List></List>
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           <Typography variant="h4" gutterBottom component="h2">
-            <Button variant="contained" color="primary" size="large">
-              <AddIcon />
-              Add graph 
-            </Button>
+            <DashboardModal />
           </Typography>
           <Typography component="div" className={classes.chartContainer}>
-            line chart be here
+            <DashboardList />
+            {/* <HighChartsReact highcharts={Highcharts} options={employmentOption} />  Higchart component */}
           </Typography>
-          <Typography variant="h4" gutterBottom component="h2">
-            Products
-          </Typography>
-          <div className={classes.tableContainer}>
-            SimpleTable
-          </div>
         </main>
       </div>
     );
   }
 }
 
-Dashboard.propTypes = {
+App.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Dashboard);
+export default withStyles(styles)(App);
