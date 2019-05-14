@@ -6,7 +6,7 @@ import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import { Typography } from '@material-ui/core';
 
-const styles = theme => ({
+const styles = () => ({
   root: { flexGrow: 1 },
 });
 
@@ -48,11 +48,6 @@ class DashboardList extends React.Component {
                 </Grid>
               )
             }}
-            {/* {iterate.map(value => (
-              <Grid item xs={4}>
-                <DashboardCard key={value} val={value} />
-              </Grid>
-            ))} */}
           </Query>
         </Grid>
       </Grid>
