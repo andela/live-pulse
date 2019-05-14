@@ -4,7 +4,6 @@ import { ApolloClient } from 'apollo-boost';
 import { InMemoryCache } from 'apollo-boost';
 import { createHttpLink } from 'apollo-link-http';
 import { ApolloProvider } from 'react-apollo';
-import { gql } from 'apollo-boost';
 import './index.css';
 import Routes from './Routes';
 import * as serviceWorker from './serviceWorker';
@@ -29,18 +28,6 @@ const client = new ApolloClient({
   link: authLink.concat(HTTPLink),
   cache: new InMemoryCache()
 });
-
-// test the apollo query client, remove afterwards
-// client.query({
-//   query: gql`{
-//     dashboard(id: $ID) {
-//       title
-//       icon
-//       createdAt
-//     }
-//   }`
-// }).then(result => console.log(result));
-//  end testing
 
 ReactDOM.render(
   <ApolloProvider client={client}>
