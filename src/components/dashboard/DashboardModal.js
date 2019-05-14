@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Modal, Button } from '@material-ui/core';
-
-import DashModalElement from './DashModalElement';
+import ModalContent from './ModalContent';
 
 const DashboardModal = () => {
   const [open, setOpen] = useState(false);
@@ -16,7 +15,7 @@ const DashboardModal = () => {
       open={open}
       onClose={() => setOpen(!open)}
     >
-      <DashModalElement />
+      <ModalContent />
     </Modal>
     </div>
     

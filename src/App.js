@@ -20,7 +20,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 // import { employmentOption } from './HighChartSamples';
 import { AUTH_TOKEN } from './constants';
 import DashboardModal from './components/dashboard/DashboardModal';
-import CreateDashboard from './components/dashboard/CreateDashboard';
+import DashboardList from './components/dashboard/DashboardList';
 
 // import { mainListItems, secondaryListItems } from './listItems';
 // import SimpleLineChart from './SimpleLineChart';
@@ -116,7 +116,7 @@ class App extends React.Component {
   }
 
   state = {
-    open: true,
+    open: false,
   };
 
   handleDrawerOpen = () => {
@@ -188,7 +188,7 @@ class App extends React.Component {
             <DashboardModal />
           </Typography>
           <Typography component="div" className={classes.chartContainer}>
-            <CreateDashboard />
+            <DashboardList />
             {/* <HighChartsReact highcharts={Highcharts} options={employmentOption} />  Higchart component */}
           </Typography>
         </main>

@@ -12,7 +12,7 @@ const styles = theme => ({
   title: { fontSize: 14 }
 })
 
-const Dashboard = (props) => {
+const DashboardCard = (props) => {
   const { val, classes } = props;
   return (
     <Card className={classes.card}>
@@ -29,4 +29,4 @@ const Dashboard = (props) => {
   );
 }
 
-export default withStyles(styles)(Dashboard);
+export default withStyles(styles)(DashboardCard);
