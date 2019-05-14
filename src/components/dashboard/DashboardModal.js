@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Modal, Button } from '@material-ui/core';
-
-import DashModalElement from './DashModalElement';
+import ModalContent from './ModalContent';
 
 const DashboardModal = () => {
   const [open, setOpen] = useState(false);
@@ -11,13 +10,12 @@ const DashboardModal = () => {
         Add graph 
       </Button>
       <Modal
-      arial-labelledby="Create Dashboard"
-      arial-describedby="Create a new Dashboard"
-      open={open}
-      onClose={() => setOpen(!open)}
-    >
-      <DashModalElement />
-    </Modal>
+        arial-labelledby="Create Dashboard"
+        arial-describedby="Create a new Dashboard"
+        open={open}
+        onClose={() => setOpen(!open)}>
+        <ModalContent />
+      </Modal>
     </div>
     
   );

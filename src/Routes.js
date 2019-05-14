@@ -4,7 +4,7 @@ import { Router } from 'react-router';
 import { createBrowserHistory } from 'history';
 import SignIn from './components/auth/SignIn';
 import App from './App';
-import CreateDashboard from './components/dashboard/CreateDashboard';
+import DashboardList from './components/dashboard/DashboardList';
 
 const history = createBrowserHistory();
 
@@ -15,7 +15,7 @@ export default () => {
         <Route exact path="/" component={SignIn} />
         <Route exact path="/signin" component={SignIn} />
         <Route exact path="/dashboard" component={App} />
-        <Route exact path="/createdashboard" component={CreateDashboard} />
+        <Route exact path="/createdashboard" component={DashboardList} />
       </Switch>
     </Router>
   )

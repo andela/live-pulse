@@ -32,7 +32,7 @@ const styles = theme => ({
   },
 });
 
-const DashModalElement = (props) => {
+const ModalContent = (props) => {
   const { classes } = props;
   return (
     <div style={getModalStyle()} className={classes.paper}>
@@ -51,4 +51,4 @@ const DashModalElement = (props) => {
   )
 }
 
-export default withStyles(styles)(DashModalElement)
+export default withStyles(styles)(ModalContent)
