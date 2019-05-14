@@ -10,13 +10,12 @@ const DashboardModal = () => {
         Add graph 
       </Button>
       <Modal
-      arial-labelledby="Create Dashboard"
-      arial-describedby="Create a new Dashboard"
-      open={open}
-      onClose={() => setOpen(!open)}
-    >
-      <ModalContent />
-    </Modal>
+        arial-labelledby="Create Dashboard"
+        arial-describedby="Create a new Dashboard"
+        open={open}
+        onClose={() => setOpen(!open)}>
+        <ModalContent />
+      </Modal>
     </div>
     
   );
