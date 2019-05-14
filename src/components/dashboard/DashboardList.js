@@ -22,17 +22,13 @@ const DASHBOARD_QUERY = gql`
 `;
 
 class DashboardList extends React.Component {
+  // eslint-disable-next-line no-useless-constructor
   constructor(props) {
     super(props);
-    this.state = {
-      iterate: ['a', 'b', 'c']
-    }
   }
 
   render() {
     const { classes } = this.props;
-    const { spacing } = this.state;
-    
     return (
       <Grid container className={classes.root} spacing={16}>
         <Grid item xs={12}>
@@ -43,7 +39,7 @@ class DashboardList extends React.Component {
               
               const dashboards = data.dashboards;
               return (
-                <Grid container spacing={16} justify="center" spacing={Number(spacing)}>
+                <Grid container spacing={16} justify="center">
                   {dashboards.map(dashboard => (
                     <Grid item xs={4}>
                       <DashboardCard key={dashboard.id} dashboard={dashboard} />
