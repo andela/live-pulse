@@ -1,0 +1,16 @@
+type Notification {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  link: String
+  message: String!
+  read: Boolean! @default(value: false)
+  type: NotificationType!
+  updatedAt: DateTime! @updatedAt
+  user: User! @relation(name: "UserNotification")
+}
+
+enum NotificationType {
+  ERROR
+  INFO
+  WARNING
+}

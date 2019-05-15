@@ -9,6 +9,7 @@ type User {
   functionContexts: [FunctionContext!] @relation(name: "FunctionContextByUser" onDelete: CASCADE)
   graphs: [Graph!] @relation(name: "GraphByUser" onDelete: CASCADE)
   lineGenerators: [LineGenerator!] @relation(name: "LineGeneratorByUser" onDelete: CASCADE)
+  notifications: [Notification!] @relation(name: "UserNotification" onDelete: CASCADE)
   password: String!
   role: Role! @default(value: MEMBER)
   settings: Settings @relation(name: "UserSettings" onDelete: CASCADE link: TABLE)
