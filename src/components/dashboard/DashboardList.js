@@ -10,6 +10,10 @@ const styles = () => ({
   root: { flexGrow: 1 },
 });
 
+/**
+ * An iterable component to display a list of queried dashboards
+ * for an authenticated user
+ */
 class DashboardList extends React.Component {
   // eslint-disable-next-line no-useless-constructor
   constructor(props) {

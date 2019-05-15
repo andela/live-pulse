@@ -7,12 +7,14 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 
-const styles = theme => ({
+const styles = () => ({
   card: { minWidth: 100, margin: 12 },
   title: { fontSize: 14 },
   interval: { fontSize: 10,}
 })
-
+/**
+ * Card component for displaying created dashboards.
+ */
 const DashboardCard = (props) => {
   const { dashboard, classes } = props;
   return (
