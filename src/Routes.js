@@ -4,7 +4,6 @@ import { Router } from 'react-router';
 import { createBrowserHistory } from 'history';
 import SignIn from './components/auth/SignIn';
 import App from './App';
-import DashboardList from './components/dashboard/DashboardList';
 
 const history = createBrowserHistory();
 

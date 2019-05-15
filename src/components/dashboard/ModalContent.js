@@ -38,6 +38,7 @@ const ModalContent = (props) => {
   const { classes } = props;
   const [title, setTitle] = useState('');
   const [interval, setInterval] = useState(15);
+  // eslint-disable-next-line no-unused-vars
   const [icon, setIcon] = useState('');
 
   return (
