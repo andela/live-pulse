@@ -59,6 +59,7 @@ type User {
   functionContexts: [FunctionContext!]
   graphs: [Graph!]
   lineGenerators: [LineGenerator!]
+  notifications: [Notification!]
   password: String! @hasRole(roles: [SUPER_ADMIN])
   role: Role!
   settings: Settings

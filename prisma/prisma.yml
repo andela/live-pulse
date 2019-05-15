@@ -6,7 +6,8 @@ endpoint: https://eu1.prisma.sh/chieze-franklin-40314f/live-pulse-prisma-1/dev
 
 # Points to the file(s) that contain(s) your datamodel(s)
 datamodel:
-  - datamodel.prisma
+  - dashboard.prisma
+  - notifications.prisma
   - settings.prisma
   - user.prisma
 
