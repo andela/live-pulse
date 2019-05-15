@@ -18,9 +18,8 @@ const DashboardCard = (props) => {
   return (
     <Card className={classes.card}>
       <CardContent>
-        <Typography variant="h5" component="h2">Title</Typography>
+        <Typography variant="h6" component="h3">{dashboard.title}</Typography>
         <Divider />
-        <Typography className={classes.title}>{dashboard.title}</Typography>
         <Typography className={classes.title}>{dashboard.updateInterval}</Typography>
       </CardContent>
       <CardActions>

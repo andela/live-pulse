@@ -5,9 +5,13 @@ import ModalContent from './ModalContent';
 const DashboardModal = () => {
   const [open, setOpen] = useState(false);
   return (
-    <div>
-      <Button onClick={() => setOpen(true)} variant="contained" color="primary" size="large">
-        Add graph 
+    <div style={{ textAlign: 'right', }}>
+      <Button
+        onClick={() => setOpen(true)} 
+        variant="contained" 
+        color="primary" 
+        size="large">
+        Create Dashboard 
       </Button>
       <Modal
         arial-labelledby="Create Dashboard"

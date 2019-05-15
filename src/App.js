@@ -184,9 +184,10 @@ class App extends React.Component {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
-          <Typography variant="h4" gutterBottom component="h2">
+          <div>
+            <Typography variant="h4" color="textSecondary" >My Dashboards</Typography>
             <DashboardModal />
-          </Typography>
+          </div>
           <Typography component="div" className={classes.chartContainer}>
             <DashboardList />
             {/* <HighChartsReact highcharts={Highcharts} options={employmentOption} />  Higchart component */}
