@@ -10,10 +10,7 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
 import MenuIcon from '@material-ui/icons/Menu';
-
-import NotificationsIcon from '@material-ui/icons/Notifications';
 
 // import Highcharts from 'highcharts';
 // import HighChartsReact from 'highcharts-react-official';
@@ -28,6 +25,7 @@ import DashboardList from './components/dashboard/DashboardList';
 
 const drawerWidth = 240;
 
+// styling for component from material-ui elements
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -136,7 +134,8 @@ class App extends React.Component {
         <AppBar
           position="absolute"
           className={classNames(classes.appBar, this.state.open && classes.appBarShift)}
-        >
+        > 
+        {/* Header menu-tool bar */}
           <Toolbar disableGutters={!this.state.open} className={classes.toolbar}>
             <IconButton
               color="inherit"
@@ -158,11 +157,6 @@ class App extends React.Component {
             >
               Dashboard
             </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
           </Toolbar>
         </AppBar>
         <Drawer
@@ -184,11 +178,12 @@ class App extends React.Component {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
-          <Typography variant="h4" gutterBottom component="h2">
-            <DashboardModal />
-          </Typography>
+          <div> {/* Dashboard Modal button and form */}
+            <Typography variant="h4" color="textSecondary" >My Dashboards</Typography>
+            <DashboardModal /> 
+          </div>
           <Typography component="div" className={classes.chartContainer}>
-            <DashboardList />
+            <DashboardList /> {/* List of Dashboards owned by a user */}
             {/* <HighChartsReact highcharts={Highcharts} options={employmentOption} />  Higchart component */}
           </Typography>
         </main>

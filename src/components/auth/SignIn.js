@@ -85,14 +85,14 @@ const SignIn = (props) => {
               onCompleted={data => authenticate(data, login)}
               onError={error => handleError(error)}
             >
-              {mutation => (
+              {authMutation => (
                 <Button
                   type="submit"
                   fullWidth
                   variant="contained"
                   color="primary"
                   className={classes.submit}
-                  onClick={mutation}
+                  onClick={authMutation}
                 >
                   {login ? 'Log in' : 'Create account'}
                 </Button>
@@ -115,6 +115,11 @@ const authenticate = async (data, login) => {
   window.location.href = '/dashboard'; // react-router-redirect failed to work so improvising for now
 }
 
+/**
+ * handles error on failed login or signup attempts.
+ * does nothing serious for nm=ow, just logs the error to console 
+ * for debugging purposes.
+ */
 const handleError = async error => {
   console.log(error);
 }
