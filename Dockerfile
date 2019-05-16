@@ -4,7 +4,6 @@ WORKDIR /app
 
 COPY ./src /app/src
 COPY .babelrc /app
-COPY .env /app
 COPY package.json /app
 
 RUN npm install
