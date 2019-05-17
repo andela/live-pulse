@@ -4,7 +4,6 @@ import { ApolloClient } from 'apollo-boost';
 import { InMemoryCache } from 'apollo-boost';
 import { createHttpLink } from 'apollo-link-http';
 import { ApolloProvider } from 'react-apollo';
-import './index.css';
 import Routes from './Routes';
 import * as serviceWorker from './serviceWorker';
 import { setContext } from 'apollo-link-context';

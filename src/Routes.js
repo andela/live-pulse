@@ -15,7 +15,10 @@ export default () => {
         <Route exact path="/" component={SignIn} />
         <Route exact path="/signin" component={SignIn} />
         <Route exact path="/dashboard" component={App} />
-        <Route exact path="/testdashview" component={DashboardSingleView} />
+        <Route 
+          path="/dashboard/:id/:title/:updateInt/:date?" 
+          component={DashboardSingleView} 
+        />
       </Switch>
     </Router>
   )
