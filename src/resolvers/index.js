@@ -6,8 +6,10 @@ import Line from './Line';
 import LineGenerator from './LineGenerator';
 import Log from './Log';
 import Mutation from './Mutation';
+import NotificationsSettings from './NotificationsSettings';
 import Point from './Point';
 import Query from './Query';
+import Settings from './Settings';
 import Subscription from './Subscription';
 import User from './User';
 
@@ -47,10 +49,17 @@ export default {
     context: Log.context,
   },
   Mutation,
+  NotificationsSettings: {
+    settings: NotificationsSettings.settings,
+  },
   Point: {
     line: Point.line,
   },
   Query,
+  Settings: {
+    notifications: Settings.notifications,
+    user: Settings.user,
+  },
   Subscription,
   User: {
     dashboards: User.dashboards,
@@ -58,5 +67,6 @@ export default {
     functionContexts: User.functionContexts,
     graphs: User.graphs,
     lineGenerators: User.lineGenerators,
+    settings: User.settings,
   }
 }
