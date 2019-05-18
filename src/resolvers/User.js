@@ -12,6 +12,7 @@ export default {
   functionContexts: async (root, args, context, info) => await context.prisma.user({ id: root.id }).functionContexts(),
   graphs: async (root, args, context, info) => await context.prisma.user({ id: root.id }).graphs(),
   lineGenerators: async (root, args, context, info) => await context.prisma.user({ id: root.id }).lineGenerators(),
+  notifications: async (root, args, context, info) => await context.prisma.user({ id: root.id }).notifications(),
   settings: async (root, args, context, info) => await context.prisma.user({ id: root.id }).settings(),
   signedInUser: async (root, args, context, info) => context.user,
   signIn: async (root, args, context, info) => {
