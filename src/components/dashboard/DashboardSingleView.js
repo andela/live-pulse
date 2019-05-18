@@ -9,15 +9,15 @@ import { styles } from '../../appStyle';
 import GraphModal from '../graph/GraphModal';
 import { Paper, Grid, Select, OutlinedInput, MenuItem, Button } from '@material-ui/core';
 
-import Highcharts from 'highcharts';
-import HighChartsReact from 'highcharts-react-official';
-import { employmentOption } from '../../HighChartSamples';
 import { Query } from 'react-apollo';
 import { DASHBOARD_QUERY } from '../../queries';
+import BasicChart from '../../charts/BasicChart';
 
 const history = createBrowserHistory();
 
-let graphData;
+let graphData = {
+  title: 'A chart option component'
+};
 
 const DashboardSingleView = (props) => {
   const { match, classes } = props
@@ -79,7 +79,8 @@ const DashboardSingleView = (props) => {
               }}
             </Query>
               {/* List of Graphs attached to this dashboard */}
-              <HighChartsReact highcharts={Highcharts} options={employmentOption} />
+              {/* <HighChartsReact highcharts={Highcharts} options={employmentOption} /> */}
+              <BasicChart data={graphData} />
           </Grid>
         </main>
     </div>
