@@ -6,6 +6,7 @@ import Line from './Line';
 import LineGenerator from './LineGenerator';
 import Log from './Log';
 import Mutation from './Mutation';
+import Notification from './Notification';
 import NotificationsSettings from './NotificationsSettings';
 import Point from './Point';
 import Query from './Query';
@@ -49,6 +50,9 @@ export default {
     context: Log.context,
   },
   Mutation,
+  Notification: {
+    user: Notification.user,
+  },
   NotificationsSettings: {
     settings: NotificationsSettings.settings,
   },
@@ -67,6 +71,7 @@ export default {
     functionContexts: User.functionContexts,
     graphs: User.graphs,
     lineGenerators: User.lineGenerators,
+    notifications: User.notifications,
     settings: User.settings,
   }
 }
