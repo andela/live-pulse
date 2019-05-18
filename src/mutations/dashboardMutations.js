@@ -9,10 +9,10 @@ import gql from "graphql-tag";
  * @returns created dashboard
  */
 export const DASHBOARD_MUTATION = gql`
-  mutation createDashboard ($title: String!, $upInt: Int, $icon: String) {
+  mutation createDashboard ($title: String!, $updateInterval: Int, $icon: String) {
     createDashboard (data: {
-      title:$title
-      updateInterval:$upInt
+      title:$title,
+      updateInterval:$updateInterval,
       icon:$icon
     })
     {

@@ -31,7 +31,7 @@ const DashboardCard = (props) => {
       <CardContent>
         <Typography variant="h6" component="h3">{title}</Typography>
         <Divider />
-        <Typography className={classes.title}>{updateInterval}</Typography>
+        <Typography className={classes.title}>update interval: {updateInterval}</Typography>
       </CardContent>
       <CardActions>
         <Link size="small" color="primary" 

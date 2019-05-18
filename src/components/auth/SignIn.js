@@ -15,9 +15,11 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import { styles } from './auth.styles';
 import { Mutation } from 'react-apollo';
 import { SIGNIN_MUTATION, SIGNUP_MUTATION } from '../../mutations/authMutation';
-import { AUTH_TOKEN } from '../../constants';
+import { AUTH_TOKEN, UID, U_EMAIL } from '../../constants';
 
 const authToken = localStorage.getItem(AUTH_TOKEN);
+const uid = localStorage.getItem(UID);
+const uemail = localStorage.getItem(U_EMAIL);
 
 const SignIn = (props) => {
   const { classes } =  props;
@@ -27,7 +29,7 @@ const SignIn = (props) => {
   const [confirmEmail, setConfirmEmail] = useState('');
 
   //bruteforce fix for authentication redirecting
-  if (authToken) {
+  if (authToken && uid && uemail) {
     window.location.href = '/dashboard'
     return (<div>redirecting</div>);
   }
@@ -110,8 +112,10 @@ const SignIn = (props) => {
  */
 const authenticate = async (data, login) => {
   console.log(data);
-  const { token } = (login ? data.signIn : data.signUp);
+  const { token, user:{ id, email} } = (login ? data.signIn : data.signUp);
   localStorage.setItem(AUTH_TOKEN, token);
+  localStorage.setItem(UID, id);
+  localStorage.setItem(U_EMAIL, email);
   window.location.href = '/dashboard'; // react-router-redirect failed to work so improvising for now
 }
 

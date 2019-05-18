@@ -21,20 +21,20 @@ class DashboardList extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, user } = this.props;
     return (
-      <Grid container className={classes.root} spacing={16}>
-        <Grid item xs={12}>
-          <Query query={DASHBOARDS_QUERY}>
+      <Grid className={classes.root} spacing={16}>
+        <Grid >
+          <Query query={DASHBOARDS_QUERY} variables={{uid:user}}>
             {({ loading, error, data }) => {
               if (loading) return <Typography>Fetching...</Typography>
               if (error) return <Typography>Error! no dashboard created yet.</Typography>
               
               const dashboards = data.dashboards;
               return (
-                <Grid container spacing={16} justify="center">
+                <Grid container item xs={12}>
                   {dashboards.map(dashboard => (
-                    <Grid key={dashboard.id} item xs="auto">
+                    <Grid key={dashboard.id} item xs={4}>
                       <DashboardCard key={dashboard.id} dashboard={dashboard} />
                     </Grid>
                   ))}

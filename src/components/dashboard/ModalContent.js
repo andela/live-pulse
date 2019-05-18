@@ -37,7 +37,7 @@ const styles = theme => ({
 const ModalContent = (props) => {
   const { classes } = props;
   const [title, setTitle] = useState('');
-  const [interval, setInterval] = useState(15);
+  const [updateInterval, setInterval] = useState(0);
   // eslint-disable-next-line no-unused-vars
   const [icon, setIcon] = useState('');
 
@@ -52,17 +52,17 @@ const ModalContent = (props) => {
           />
         </FormControl>
         <FormControl margin="normal" required fullWidth>
-          <InputLabel htmlFor="interval">Interval in minutes</InputLabel>
-          <Input type="number" id="interval" name="interval" autoFocus required 
-            value={interval}
-            onChange={e => setInterval(e.target.value)}
+          <InputLabel htmlFor="updateInterval">Interval in minutes</InputLabel>
+          <Input type="number" id="updateInterval" name="updateInterval" autoFocus required 
+            value={updateInterval}
+            onChange={e => setInterval(Number(e.target.value))}
           />
         </FormControl>
         <Mutation
           mutation={DASHBOARD_MUTATION}
-          variables={{ title, updateInterval:interval, icon}}
+          variables={{ title, updateInterval, icon}}
           onError={error => handleError(error)}
-          onCompleted={data => onSuccess(data)}
+          onCompleted={data => onSuccess( data)}
         >
           {createDashboardMutation => (
             <Button

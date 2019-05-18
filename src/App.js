@@ -16,7 +16,7 @@ import { styles } from './appStyle';
 // import Highcharts from 'highcharts';
 // import HighChartsReact from 'highcharts-react-official';
 // import { employmentOption } from './HighChartSamples';
-import { AUTH_TOKEN } from './constants';
+import { AUTH_TOKEN, UID, U_EMAIL } from './constants';
 import DashboardModal from './components/dashboard/DashboardModal';
 import DashboardList from './components/dashboard/DashboardList';
 
@@ -28,9 +28,14 @@ import DashboardList from './components/dashboard/DashboardList';
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      authToken: localStorage.getItem(AUTH_TOKEN),
+      uid: localStorage.getItem(UID),
+      email: localStorage.getItem(U_EMAIL)
+    }
     // check if user has token else redirect to login page
-    const authToken = localStorage.getItem(AUTH_TOKEN);
-    if (!authToken) {
+    const { authToken, uid, email } = this.state;
+    if (!authToken || !uid || !email) {
       window.location.href = '/'
     }
   }
@@ -49,7 +54,7 @@ class App extends React.Component {
 
   render() {
     const { classes } = this.props;
-
+    const { uid } = this.state;
     return (
       <div className={classes.root}>
         <CssBaseline />
@@ -105,7 +110,7 @@ class App extends React.Component {
             <DashboardModal /> 
           </div>
           <Typography component="div" className={classes.chartContainer}>
-            <DashboardList /> {/* List of Dashboards owned by a user */}
+            <DashboardList user={uid} /> {/* List of Dashboards owned by a user */}
             {/* <HighChartsReact highcharts={Highcharts} options={employmentOption} />  Higchart component */}
           </Typography>
         </main>
