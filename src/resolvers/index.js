@@ -8,6 +8,7 @@ import Log from './Log';
 import Mutation from './Mutation';
 import Point from './Point';
 import Query from './Query';
+import Settings from './Settings';
 import Subscription from './Subscription';
 import User from './User';
 
@@ -51,6 +52,10 @@ export default {
     line: Point.line,
   },
   Query,
+  Settings: {
+    notifications: Settings.notifications,
+    user: Settings.user,
+  },
   Subscription,
   User: {
     dashboards: User.dashboards,
@@ -58,5 +63,6 @@ export default {
     functionContexts: User.functionContexts,
     graphs: User.graphs,
     lineGenerators: User.lineGenerators,
+    settings: User.settings,
   }
 }
