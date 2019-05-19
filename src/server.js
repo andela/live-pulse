@@ -8,6 +8,8 @@ import { prisma } from './generated/prisma-client';
 import GraphWorker from './workers/GraphWorker';
 import resolvers from './resolvers';
 
+import email from './integrations/Email';
+
 let src = 'build'
 if (process.env.NODE_ENV !== 'production') {
   dotenv.config();
@@ -29,6 +31,8 @@ const server = new GraphQLServer({
     }
   },
 })
+
+// email.send();
 
 server.start({ port: process.env.PORT || 3000 }, (options) => console.log(`Server is running on port ${options.port}`));
 
