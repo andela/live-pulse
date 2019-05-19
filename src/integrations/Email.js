@@ -33,12 +33,17 @@ export default {
         reply_to: {
           email: `no-reply@livepulse.com`,
           name: 'Live Pulse'
+        },
+        mail_settings: {
+          footer: {
+            enable: false,
+            html: 'This is the <b>footer</b>'
+          }
         }
       },
       json: true,
       resolveWithFullResponse: true
     });
-    console.log(response.body)
     return response.body;
   }
 }

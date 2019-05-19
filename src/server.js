@@ -32,7 +32,7 @@ const server = new GraphQLServer({
   },
 })
 
-// email.send();
+//email.send();
 
 server.start({ port: process.env.PORT || 3000 }, (options) => console.log(`Server is running on port ${options.port}`));
 
