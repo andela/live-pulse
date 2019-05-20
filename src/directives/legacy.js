@@ -6,7 +6,13 @@ const hasRole = async (next, source, {roles}, context, info) => {
 }
 
 const isOwner = async (next, source, {resource, id}, context, info) => {
-  let resourceId = info.fieldNodes[0].arguments.find(a => a.name.value === id).value.value;
+  let resourceId;
+  let resourceIdArg = info.fieldNodes[0].arguments.find(a => a.name.value === id);
+  if (resourceIdArg.value.kind === 'StringValue') {
+    resourceId = resourceIdArg.value.value;
+  } else if (resourceIdArg.value.kind === 'Variable') {
+    resourceId = info.variableValues[id];
+  }
   let owner;
   if (resource.toLowerCase() === 'dashboard') {
     owner = await context.prisma.dashboard({ id: resourceId }).createdBy();
