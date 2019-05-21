@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createBrowserHistory } from 'history';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -8,19 +8,28 @@ import Typography from '@material-ui/core/Typography';
 import { styles } from '../../appStyle';
 import GraphModal from '../graph/GraphModal';
 import { Paper, Grid, Select, OutlinedInput, MenuItem, Button } from '@material-ui/core';
-
 import { Query } from 'react-apollo';
 import { DASHBOARD_QUERY } from '../../queries';
 import BasicChart from '../../charts/BasicChart';
 
 const history = createBrowserHistory();
-
-let graphData = {
-  title: 'A chart option component'
-};
+let graphData = null;
 
 const DashboardSingleView = (props) => {
-  const { match, classes } = props
+  const { match, classes } = props;
+  const [graph, setGraph] = useState('Non selected');
+  
+  /**
+  * handle select change
+  */
+  const handleChange = (e) => {
+    const { value } = e.target;
+    graphData = {
+      title: value
+    };  
+    setGraph(value);
+  }
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -40,7 +49,7 @@ const DashboardSingleView = (props) => {
       </AppBar>
       <main style={{ margin:20 }} className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <Button size="big" onClick={() => history.goBack()} color="primary">
+        <Button size="large" onClick={() => history.goBack()} color="primary">
            {`<< Back to Dashbaords`}
         </Button>
           <div> {/* Dashboard Modal button and form */}
@@ -50,11 +59,11 @@ const DashboardSingleView = (props) => {
                 Update Interval: <span style={{fontSize: 15, color: 'grey'}} color="textSecondary">{match.params.updateInt}</span> <br />
                 Date updated: <span style={{fontSize: 15, color: 'grey'}} color="textSecondary">{match.params.date}</span>
               </Paper>
-              <Typography> <GraphModal /> </Typography>
+              <GraphModal dashboard={match.params.id}/>
             </div>
             <Typography style={{ marginTop:20}} variant="h3" color="textSecondary">Graphs</Typography>
           </div>
-          <Grid  item xs="auto">
+          <Grid item xs="auto">
             <Query query={DASHBOARD_QUERY} variables={{id: match.params.id}}>
               {({ loading, error, data }) => {
                 if (loading) return <Typography>Fetching dashboard details...</Typography>
@@ -63,16 +72,18 @@ const DashboardSingleView = (props) => {
                 const graphs = data.dashboard.graphs;
                 return (
                   <Select style={{ minWidth: 200}}
+                    name="graph"
+                    value={graph}
+                    onChange={e => handleChange(e)}
                     input={
                       <OutlinedInput
-                        labelWidth="auto"
-                        name="age"
+                        labelWidth={0}
                         id="outlined-age-simple"
                       />
                     }
                   >
                     {graphs.map(graph => (
-                      <MenuItem key={graph.id} value={graph.id}>{graph.title}</MenuItem>
+                      <MenuItem key={graph.id} value={graph.id} name={graph.title} >{graph.title}</MenuItem>
                     ))}
                   </Select>
                 )

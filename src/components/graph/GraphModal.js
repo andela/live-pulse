@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Modal, Button } from '@material-ui/core';
 import ModalContent from './ModalContent';
 
-const GraphModal = () => {
+const GraphModal = (dashboard) => {
   const [open, setOpen] = useState(false);
   return (
     <div style={{ textAlign: 'right', }}>
@@ -18,7 +18,7 @@ const GraphModal = () => {
         arial-describedby="Create a new Graph data"
         open={open}
         onClose={() => setOpen(!open)}>
-        <ModalContent />
+        <ModalContent dashboard={dashboard} />
       </Modal>
     </div>
     

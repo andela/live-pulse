@@ -3,9 +3,17 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 
 const BasicChart = ({data}) => {
+  if(data === null ){
+    return (
+      <div>
+        No charts data
+      </div>
+    )
+  }else {
+  
   const chartOptions = {
     title: {
-      text: data.title
+      text: data.title || 'No graph selected yet'
     },
     yAxis: {
       title: {
@@ -35,11 +43,13 @@ const BasicChart = ({data}) => {
       data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
     }],
   }
+  console.log(data);
   return (
     <div>
       <HighchartsReact highcharts={Highcharts} options={chartOptions} />
     </div>
   )
+  }
 }
 
 export default BasicChart;
