@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import { FormControl, InputLabel, Button, Input } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { Mutation } from 'react-apollo';
-import { DASHBOARD_MUTATION } from '../../mutations/dashboardMutations';
+import { GRAPH_MUTATION } from '../../mutations/dashboardMutations';
+import { UID } from '../../constants';
 
 const rand = () => {
    return Math.round(Math.random() * 20) - 10;
@@ -35,9 +36,10 @@ const styles = theme => ({
 });
 
 const ModalContent = (props) => {
+  console.log(props.dashboard.dashboard);
   const { classes } = props;
   const [title, setTitle] = useState('');
-  const [updateInterval, setInterval] = useState(0);
+  const [interval, setInterval] = useState(15);
   // eslint-disable-next-line no-unused-vars
   const [icon, setIcon] = useState('');
 
@@ -52,24 +54,30 @@ const ModalContent = (props) => {
           />
         </FormControl>
         <FormControl margin="normal" required fullWidth>
-          <InputLabel htmlFor="updateInterval">Interval in minutes</InputLabel>
-          <Input type="number" id="updateInterval" name="updateInterval" autoFocus required 
-            value={updateInterval}
+          <InputLabel htmlFor="interval">Interval in minutes</InputLabel>
+          <Input type="number" id="interval" name="interval" autoFocus required 
+            value={interval}
             onChange={e => setInterval(Number(e.target.value))}
           />
         </FormControl>
         <Mutation
-          mutation={DASHBOARD_MUTATION}
-          variables={{ title, updateInterval, icon}}
+          mutation={GRAPH_MUTATION}
+          variables={{
+            dashboardId: props.dashboard.dashboard,
+            data:{ title,
+              updateInterval:interval
+              // createdBy: { create: { id: localStorage.getItem(UID) } } 
+            }
+          }}
           onError={error => handleError(error)}
-          onCompleted={data => onSuccess( data)}
+          onCompleted={data => onSuccess(data)}
         >
-          {createDashboardMutation => (
+          {createGraphMutation => (
             <Button
               color="primary"
-              onClick={createDashboardMutation}
+              onClick={createGraphMutation}
             >
-              create dashboard
+              create graph
             </Button>
           )}
         </Mutation>
@@ -83,7 +91,7 @@ const handleError = async error => {
 }
 
 const onSuccess = async (data) => {
-  window.alert(`${data.createDashboard.title} added`);
+  window.alert(`${data.createGraph.title} added`);
   window.location.reload();
 }
 

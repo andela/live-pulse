@@ -4,6 +4,7 @@ import { Router } from 'react-router';
 import { createBrowserHistory } from 'history';
 import SignIn from './components/auth/SignIn';
 import App from './App';
+import DashboardSingleView from './components/dashboard/DashboardSingleView';
 
 const history = createBrowserHistory();
 
@@ -14,6 +15,10 @@ export default () => {
         <Route exact path="/" component={SignIn} />
         <Route exact path="/signin" component={SignIn} />
         <Route exact path="/dashboard" component={App} />
+        <Route 
+          path="/dashboard/:id/:title/:updateInt/:date?" 
+          component={DashboardSingleView} 
+        />
       </Switch>
     </Router>
   )

@@ -13,6 +13,7 @@ export const SIGNUP_MUTATION = gql `
     signUp (email:$email, password:$password, data: $data) {
       token,
       user {
+        id,
         email,
         displayName,
         updatedAt,
@@ -37,6 +38,7 @@ export const SIGNIN_MUTATION = gql`
     signIn (email:$email, password:$password) {
       token,
       user {
+        id,
         email,
         displayName,
         dashboards {
