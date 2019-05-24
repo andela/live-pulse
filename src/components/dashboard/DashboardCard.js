@@ -6,7 +6,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import DashboardSingleView from './DashboardSingleView';
+//import DashboardSingleView from './DashboardSingleView';
 
 const styles = () => ({
   card: { minWidth: 100, margin: 12 },
@@ -14,11 +14,11 @@ const styles = () => ({
   interval: { fontSize: 10,}
 })
 
-const showDashboard = (dashboard) => {
-  return (
-    <DashboardSingleView dashboad={dashboard} />
-  );
-}
+// const showDashboard = (dashboard) => {
+//   return (
+//     <DashboardSingleView dashboad={dashboard} />
+//   );
+// }
 
 /**
  * Card component for displaying created dashboards.

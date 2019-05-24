@@ -3,7 +3,6 @@ import { FormControl, InputLabel, Button, Input } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { Mutation } from 'react-apollo';
 import { GRAPH_MUTATION } from '../../mutations/dashboardMutations';
-import { UID } from '../../constants';
 
 const rand = () => {
    return Math.round(Math.random() * 20) - 10;

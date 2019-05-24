@@ -23,7 +23,7 @@ class DashboardList extends React.Component {
   render() {
     const { classes, user } = this.props;
     return (
-      <Grid className={classes.root} spacing={16}>
+      <Grid container className={classes.root} spacing={16}>
         <Grid >
           <Query query={DASHBOARDS_QUERY} variables={{uid:user}}>
             {({ loading, error, data }) => {

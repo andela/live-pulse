@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import { Card, CardHeader, IconButton, Menu, MenuItem, Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions, Button } from '@material-ui/core';
+import { Card, CardHeader, IconButton, Menu, MenuItem, Dialog } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import PreferenceDialog from './PreferenceDialog';
@@ -85,9 +85,8 @@ const BasicChart = ({data}) => {
         onClose={closeMenu}
         anchorEl={anchorEl}
         >
-        <MenuItem onClick={() => MenuAction()}>Edit</MenuItem>
         <MenuItem onClick={() => MenuAction()}>Settings</MenuItem>
-        <MenuItem onClick={() => MenuAction()}>Delete</MenuItem>
+        <MenuItem>Delete</MenuItem>
       </Menu>
       {/* Preference Dialog JSX */}
       <div>

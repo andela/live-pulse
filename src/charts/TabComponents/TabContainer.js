@@ -10,15 +10,11 @@ class TabContainer extends Component {
     this.state = {
       value: 0
     }
-
-    //this.handleChange.bind = this.bind.handleChange;
   }
 
   handleChange = (event, value) => {
     this.setState({ value })
   }
-
-  
 
   render() {
     const { value } = this.state;
