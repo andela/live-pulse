@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import { Card, CardHeader, IconButton, Menu, MenuItem } from '@material-ui/core';
+import { Card, CardHeader, IconButton, Menu, MenuItem, Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions, Button } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+
+import PreferenceDialog from './PreferenceDialog';
 
 const BasicChart = ({data}) => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
 
   if(data === null ){
     return (
@@ -56,6 +59,13 @@ const BasicChart = ({data}) => {
     setAnchorEl(null);
   }
 
+  const MenuAction = () => {
+    setOpenDialog(true);
+    setAnchorEl(null);
+  }
+
+  
+
   const open = Boolean(anchorEl);
   return (
     <Card>
@@ -75,10 +85,20 @@ const BasicChart = ({data}) => {
         onClose={closeMenu}
         anchorEl={anchorEl}
         >
-        <MenuItem onClick={closeMenu}>Edit</MenuItem>
-        <MenuItem onClick={closeMenu}>Settings</MenuItem>
-        <MenuItem onClick={closeMenu}>Delete</MenuItem>
+        <MenuItem onClick={() => MenuAction()}>Edit</MenuItem>
+        <MenuItem onClick={() => MenuAction()}>Settings</MenuItem>
+        <MenuItem onClick={() => MenuAction()}>Delete</MenuItem>
       </Menu>
+      {/* Preference Dialog JSX */}
+      <div>
+        <Dialog
+          open={openDialog}
+          onClose={() => setOpenDialog(false)}
+          aria-labelledby="preference dialog"
+        >
+          <PreferenceDialog />
+        </Dialog>
+      </div>
       <HighchartsReact highcharts={Highcharts} options={chartOptions} />
     </Card>
   )
