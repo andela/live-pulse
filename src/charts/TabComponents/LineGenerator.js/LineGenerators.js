@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { FormControl, InputLabel, Button, Input, Select, MenuItem, List, ListItem, ListItemText, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Paper, Button, Input, Select, MenuItem, List, ListItem, ListItemText, Typography, Grid } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 
 export default () => {
   const [color, setColor] = useState('');
@@ -8,11 +8,12 @@ export default () => {
   const [lgState, setLGState] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(1);
 
-  const useStyles = makeStyles => ({
+  const useStyles = () => ({
     root: {
+      flexGrow: 1,
       width: '100%',
       maxWidth: 360,
-      backgroundColor: 'grey',
+      backgroundColor: 'red',
     },
   });
   
@@ -24,29 +25,61 @@ export default () => {
 
   return (
     <div className={classes.root}>
-      <List>
-        <ListItem 
-          button
-          selected={selectedIndex === 0}
-          onClick={event => handleListItemClick(event, 0)}
-        >
-          <ListItemText primary="A line" />
-        </ListItem>
-        <ListItem 
-          button
-          selected={selectedIndex === 1}
-          onClick={event => handleListItemClick(event, 1)}
-        >
-          <ListItemText primary="A line" />
-        </ListItem>
-        <ListItem 
-          button
-          selected={selectedIndex === 2}
-          onClick={event => handleListItemClick(event, 2)}
-        >
-          <ListItemText primary="A line" />
-        </ListItem>
-      </List>
+      <Grid container item xs={12} spacing={16}>
+        <Grid item xs={4}>
+          <List>
+            <ListItem 
+              button
+              selected={selectedIndex === 0}
+              onClick={event => handleListItemClick(event, 0)}
+            >
+              <ListItemText primary="A line" />
+            </ListItem>
+            <ListItem 
+              button
+              selected={selectedIndex === 1}
+              onClick={event => handleListItemClick(event, 1)}
+            >
+              <ListItemText primary="A line" />
+            </ListItem>
+            <ListItem 
+              button
+              selected={selectedIndex === 2}
+              onClick={event => handleListItemClick(event, 2)}
+            >
+              <ListItemText primary="A line" />
+            </ListItem>
+        </List>
+        <Button >
+          <AddIcon /> Add Line
+        </Button>
+        </Grid>
+        <Grid item xs={4}>
+          <Typography>Data source</Typography>
+          <Select>
+            <MenuItem>gitprime</MenuItem>
+            <MenuItem>github</MenuItem>
+            <MenuItem>slack</MenuItem>
+          </Select>
+        </Grid>
+        <Grid item xs={4}>
+          <Typography>Hooks</Typography>
+          <Paper>
+            <Select>
+              <MenuItem>hook</MenuItem>
+              <MenuItem>github</MenuItem>
+              <MenuItem>slack</MenuItem>
+            </Select>
+          </Paper>
+          <Paper>
+            <Select>
+              <MenuItem>gitprime</MenuItem>
+              <MenuItem>github</MenuItem>
+              <MenuItem>slack</MenuItem>
+            </Select>
+          </Paper>
+        </Grid>
+      </Grid>
       {/* <FormControl margin="normal" required fullWidth>
         <InputLabel htmlFor="title">Color</InputLabel>
         <Input type="text" id="color" name="color" autoFocus required 
