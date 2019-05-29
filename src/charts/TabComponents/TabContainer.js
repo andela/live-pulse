@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { AppBar, Tabs, Tab, Typography } from '@material-ui/core';
 import General from './General';
 import Variables from './Variables';
-import LineGenerators from './LineGenerators';
+import LineGenerators from './LineGenerator.js/LineGenerators';
 
 class TabContainer extends Component {
   constructor(props) {
@@ -27,7 +27,6 @@ class TabContainer extends Component {
             value={value} onChange={this.handleChange}>
             <Tab label="General" />
             <Tab label="Variables" />
-            <Tab label="Line Generators" />
             <Tab label="Lines" />
             <Tab label="DataSource" />
             <Tab label="Hooks" />
@@ -36,9 +35,8 @@ class TabContainer extends Component {
         {value === 0 && <General />}
         {value === 1 && <Variables />}
         {value === 2 && <LineGenerators />}
-        {value === 3 && <Typography>Lines</Typography>}
-        {value === 4 && <Typography>DataSource</Typography>}
-        {value === 5 && <Typography>Hooks</Typography>}
+        {value === 3 && <Typography>DataSource</Typography>}
+        {value === 4 && <Typography>Hooks</Typography>}
       </div>
     )
   }
