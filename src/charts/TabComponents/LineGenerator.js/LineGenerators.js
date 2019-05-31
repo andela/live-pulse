@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
-import { Paper, Button, Input, Select, MenuItem, List, ListItem, ListItemText, Typography, Grid } from '@material-ui/core';
+import { Paper, TextField, Button, Select, MenuItem, List, ListItem, ListItemText, Typography, Grid } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
 export default () => {
-  const [color, setColor] = useState('');
-  const [lgName, setLGName] = useState();
-  const [lgState, setLGState] = useState('');
-  const [selectedIndex, setSelectedIndex] = useState(1);
+  const [showLineText, setShowLineText] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [showDataSource, setShowDataSource] = useState(false);
+  const [DataSourceProps, setDataSourceProps] = useState({});
 
-  const useStyles = () => ({
+  const useStyles = () =>  ({ 
     root: {
       flexGrow: 1,
       width: '100%',
@@ -19,50 +19,31 @@ export default () => {
   
     const classes = useStyles();
   
-    const handleListItemClick = (event, index) => {
+    const handleListItemClick = (event, index, dataValue) => {
       setSelectedIndex(index);
+      setDataSourceProps(dataValue);
+      setShowDataSource(true);
     }
 
-  return (
-    <div className={classes.root}>
-      <Grid container item xs={12} spacing={16}>
-        <Grid item xs={4}>
-          <List>
-            <ListItem 
-              button
-              selected={selectedIndex === 0}
-              onClick={event => handleListItemClick(event, 0)}
-            >
-              <ListItemText primary="A line" />
-            </ListItem>
-            <ListItem 
-              button
-              selected={selectedIndex === 1}
-              onClick={event => handleListItemClick(event, 1)}
-            >
-              <ListItemText primary="A line" />
-            </ListItem>
-            <ListItem 
-              button
-              selected={selectedIndex === 2}
-              onClick={event => handleListItemClick(event, 2)}
-            >
-              <ListItemText primary="A line" />
-            </ListItem>
-        </List>
-        <Button >
-          <AddIcon /> Add Line
-        </Button>
-        </Grid>
+    const DatasourceComponent = () => (
+      <React.Fragment>
         <Grid item xs={4}>
           <Typography>Data source</Typography>
-          <Select>
-            <MenuItem>gitprime</MenuItem>
+          <Select
+            value={DataSourceProps.name}
+            onChange={() => console.log(DataSourceProps.name)}
+          >
+            <MenuItem>{DataSourceProps.name}</MenuItem>
             <MenuItem>github</MenuItem>
             <MenuItem>slack</MenuItem>
           </Select>
         </Grid>
-        <Grid item xs={4}>
+        <HooksComponent />
+        </React.Fragment>
+    );
+
+    const HooksComponent = () => (
+      <Grid item xs={4}>
           <Typography>Hooks</Typography>
           <Paper>
             <Select>
@@ -79,6 +60,52 @@ export default () => {
             </Select>
           </Paper>
         </Grid>
+    );
+
+    const AddNewLine = () => (
+      <form onSubmit={() => (console.log('line added'), setShowLineText(false))}>
+        <TextField
+        label="Line Text"
+      />
+      </form>
+      
+    );
+
+  return (
+    <div className={classes.root}>
+      <Grid container item xs={12} spacing={16}>
+        <Grid item xs={4}>
+          <List>
+            <ListItem 
+              button
+              selected={selectedIndex === 1}
+              onClick={
+                event => handleListItemClick(
+                event, 1, {name: 'second line'}
+                )
+              }
+            >
+              <ListItemText primary="A line" />
+            </ListItem>
+            <ListItem 
+              button
+              selected={selectedIndex === 2}
+              onClick={event => handleListItemClick(event, 2, {name: '3rd line'})}
+            >
+              <ListItemText primary="A line" />
+            </ListItem>
+            { showLineText ? <AddNewLine /> : null }
+        </List>
+        <Button onClick={() => setShowLineText(true)}>
+          <AddIcon /> Add Line
+        </Button>
+        </Grid>
+        { showDataSource ? (
+            <DatasourceComponent />
+          ) : 
+          null 
+        }
+        
       </Grid>
       {/* <FormControl margin="normal" required fullWidth>
         <InputLabel htmlFor="title">Color</InputLabel>
