@@ -13,20 +13,18 @@ import { DASHBOARD_QUERY } from '../../queries';
 import BasicChart from '../../charts/BasicChart';
 
 const history = createBrowserHistory();
-let graphData = null;
 
 const DashboardSingleView = (props) => {
   const { match, classes } = props;
   const [graph, setGraph] = useState('Non selected');
+  const [graphData, setGraphData] = useState(null);
   
   /**
   * handle select change
   */
   const handleChange = (e) => {
     const { value } = e.target;
-    graphData = {
-      title: value
-    };  
+    setGraphData({ title: value });  
     setGraph(value);
   }
 
