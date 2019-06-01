@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { AppBar, Tabs, Tab, Typography } from '@material-ui/core';
 import General from './General';
 import Variables from './Variables';
-import LineGenerators from './LineGenerators';
+import LineGenerators from './LineGenerator.js/LineGenerators';
 
 class TabContainer extends Component {
   constructor(props) {
@@ -22,23 +22,18 @@ class TabContainer extends Component {
       <div>
         <AppBar position="static" style={{ flexGrow:1 }}>
           <Tabs 
-            variant="scrollable"
+            variant="fullWidth"
             scrollButtons="auto"
-            value={value} onChange={this.handleChange}>
+            value={value} onChange={this.handleChange}
+            centered>
             <Tab label="General" />
             <Tab label="Variables" />
-            <Tab label="Line Generators" />
             <Tab label="Lines" />
-            <Tab label="DataSource" />
-            <Tab label="Hooks" />
           </Tabs>
         </AppBar>
         {value === 0 && <General />}
         {value === 1 && <Variables />}
         {value === 2 && <LineGenerators />}
-        {value === 3 && <Typography>Lines</Typography>}
-        {value === 4 && <Typography>DataSource</Typography>}
-        {value === 5 && <Typography>Hooks</Typography>}
       </div>
     )
   }
