@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Paper, TextField, Button, Select, MenuItem, List, ListItem, ListItemText, Typography, Grid } from '@material-ui/core';
+import { TextField, Button, Select, MenuItem, List, ListItem, ListItemText, Typography, Grid } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
 export default () => {
@@ -33,9 +33,9 @@ export default () => {
             value={DataSourceProps.name}
             onChange={() => console.log(DataSourceProps.name)}
           >
-            <MenuItem>{DataSourceProps.name}</MenuItem>
-            <MenuItem>github</MenuItem>
-            <MenuItem>slack</MenuItem>
+            <MenuItem value={DataSourceProps.name}>{DataSourceProps.name}</MenuItem>
+            <MenuItem value="github">github</MenuItem>
+            <MenuItem value="slack">slack</MenuItem>
           </Select>
         </Grid>
         <HooksComponent />
@@ -44,31 +44,30 @@ export default () => {
 
     const HooksComponent = () => (
       <Grid item xs={4}>
-          <Typography>Hooks</Typography>
-          <Paper>
-            <Select>
-              <MenuItem>hook</MenuItem>
-              <MenuItem>github</MenuItem>
-              <MenuItem>slack</MenuItem>
-            </Select>
-          </Paper>
-          <Paper>
-            <Select>
-              <MenuItem>gitprime</MenuItem>
-              <MenuItem>github</MenuItem>
-              <MenuItem>slack</MenuItem>
-            </Select>
-          </Paper>
-        </Grid>
+        <Typography>Hooks</Typography>
+        <div>
+          <Select value="value">
+            <MenuItem value="hook">hook</MenuItem>
+            <MenuItem value="github">github</MenuItem>
+            <MenuItem value="slack">slack</MenuItem>
+          </Select>
+        </div>
+        <div>
+          <Select value="value">
+            <MenuItem value="gitprime">gitprime</MenuItem>
+            <MenuItem value="github">github</MenuItem>
+            <MenuItem value="slack">slack</MenuItem>
+          </Select>
+        </div>
+      </Grid>
     );
 
     const AddNewLine = () => (
-      <form onSubmit={() => (console.log('line added'), setShowLineText(false))}>
+      <form onSubmit={() => (setShowLineText(false))}>
         <TextField
         label="Line Text"
       />
       </form>
-      
     );
 
   return (

@@ -22,21 +22,18 @@ class TabContainer extends Component {
       <div>
         <AppBar position="static" style={{ flexGrow:1 }}>
           <Tabs 
-            variant="scrollable"
+            variant="fullWidth"
             scrollButtons="auto"
-            value={value} onChange={this.handleChange}>
+            value={value} onChange={this.handleChange}
+            centered>
             <Tab label="General" />
             <Tab label="Variables" />
             <Tab label="Lines" />
-            <Tab label="DataSource" />
-            <Tab label="Hooks" />
           </Tabs>
         </AppBar>
         {value === 0 && <General />}
         {value === 1 && <Variables />}
         {value === 2 && <LineGenerators />}
-        {value === 3 && <Typography>DataSource</Typography>}
-        {value === 4 && <Typography>Hooks</Typography>}
       </div>
     )
   }
