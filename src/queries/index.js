@@ -15,7 +15,12 @@ query dashboards ($uid: ID!) {
 }
 `;
 
-export const DASHBOARD_QUERY = gql`
+/**
+ * Get a single dashboard data.
+ * @param $id
+ * @returns Dashboard data.
+ */
+export const GET_DASHBOARD_QUERY = gql`
 query dashboard ($id: ID!) {
   dashboard (id:  $id) {
     id,
@@ -45,4 +50,51 @@ query dashboard ($id: ID!) {
     }
   }
 }
+`;
+
+/**
+ * Get a single graph data from the 
+ * @param $id - graph ID
+ * @returns - Complete Graph data with [Lines, dataSource, Hooks]
+ */
+export const GET_GRAPH_QUERY = gql`
+  query graph ($id: ID!) {
+    graph(id: $id) {
+      id,
+      title,
+      icon,
+      publicUrl,
+      xAxisLabel,
+      yAxisLabel,
+      updateInterval,
+      updateTime,
+      variables,
+      lineGenerators {
+        id,
+        color,
+        name,
+        state,
+        dataSource {
+          id,
+          func {
+            id,
+            name,
+            description,
+            source,
+            type
+          }
+        },
+        hooks {
+          id,
+          func {
+            id,
+            name,
+            description,
+            source,
+            type
+          }
+        }
+      }
+    }
+  }
 `;

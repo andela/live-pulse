@@ -20,7 +20,7 @@ const BasicChart = ({data}) => {
   
   const chartOptions = {
     title: {
-      text: data.title || 'No graph selected yet'
+      text: data.data.graph.title
     },
     yAxis: {
       title: {
