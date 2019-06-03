@@ -18,6 +18,7 @@ const DashboardSingleView = (props) => {
   const { match, classes, client } = props;
   const [graph, setGraph] = useState('Non selected');
   const [showGraph, setShowGraph] = useState(false);
+  const [showGraphRes, setShowGraphRes] = useState('no graph selected');
   const [graphData, setGraphData] = useState(null);
   
   /**
@@ -25,13 +26,23 @@ const DashboardSingleView = (props) => {
   * to get all the necessary attributes.
   */
   async function handleChange(e) {
-    const data = await client.query({
+    const { loading, error, data } = await client.query({
       query: GET_GRAPH_QUERY,
       variables: {id: e.target.value}
     });
-    await setGraph(e.target.value);
-    await setGraphData(data);
-    await setShowGraph(true);
+    if (loading) {
+      setShowGraph(false);
+      setShowGraphRes('fetching graph chart...');
+    }
+    if (error) {
+      setShowGraph(false);
+      setShowGraphRes('error fetching chart please check your internet...');
+      return;
+    }
+    console.log(error)
+    setGraph(e.target.value);
+    setGraphData(data);
+    setShowGraph(true);
 
   }
 
@@ -96,7 +107,7 @@ const DashboardSingleView = (props) => {
             </Query>
               {/* List of Graphs attached to this dashboard */}
               {/* <HighChartsReact highcharts={Highcharts} options={employmentOption} /> */}
-              {showGraph ? <BasicChart data={graphData} /> : null}
+              {showGraph ? <BasicChart data={graphData} /> : <div>{showGraphRes}</div>}
           </Grid>
         </main>
     </div>

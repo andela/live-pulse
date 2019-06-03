@@ -18,6 +18,7 @@ class TabContainer extends Component {
 
   render() {
     const { value } = this.state;
+    const { graphData } = this.props;
     return (
       <div>
         <AppBar position="static" style={{ flexGrow:1 }}>
@@ -31,9 +32,9 @@ class TabContainer extends Component {
             <Tab label="Lines" />
           </Tabs>
         </AppBar>
-        {value === 0 && <General />}
-        {value === 1 && <Variables />}
-        {value === 2 && <LineGenerators />}
+        {value === 0 && <General graphData={graphData.graph}/>}
+        {value === 1 && <Variables graphData={graphData.graph.variables} />}
+        {value === 2 && <LineGenerators graphData={graphData.graph.lineGenerators} />}
       </div>
     )
   }

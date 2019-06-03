@@ -1,40 +1,48 @@
 import React, { useState } from 'react'
 import { FormControl, InputLabel, Button, Input } from '@material-ui/core';
 
-export default () => {
-  const [title, setTitle] = useState('');
-  const [interval, setInterval] = useState();
-  const [icon, setIcon] = useState('');
-  const [publicUrl, setPublicUrl] = useState('');
-  const [xaxis, setXAxis] = useState('');
-  const [yaxis, setYAxis] = useState('');
+export default (graphData) => {
+  const { 
+    title,
+    icon,
+    publicUrl,
+    xAxisLabel,
+    yAxisLabel,
+    updateInterval,
+  } = graphData.graphData;
+  const [newTitle, setTitle] = useState(title);
+  const [newInterval, setInterval] = useState(updateInterval || '');
+  const [newIcon, setIcon] = useState(icon || '');
+  const [newPublicUrl, setPublicUrl] = useState(publicUrl || '');
+  const [xaxis, setXAxis] = useState(xAxisLabel || '');
+  const [yaxis, setYAxis] = useState(yAxisLabel || '');
   return (
     <div>
       <FormControl margin="normal" required fullWidth>
         <InputLabel htmlFor="title">title</InputLabel>
         <Input type="text" id="title" name="title" autoFocus required 
-          value={title}
+          value={newTitle}
           onChange={e => setTitle(e.target.value)}
         />
       </FormControl>
       <FormControl margin="normal" required fullWidth>
         <InputLabel htmlFor="interval">Interval in minutes</InputLabel>
         <Input type="number" id="interval" name="interval" autoFocus required 
-          value={interval}
+          value={newInterval}
           onChange={e => setInterval(Number(e.target.value))}
         />
       </FormControl>
       <FormControl margin="normal" required fullWidth>
         <InputLabel htmlFor="icon">Uplaod Icon</InputLabel>
         <Input type="file" id="icon" name="icon" autoFocus 
-          value={icon}
+          value={newIcon}
           onChange={e => setIcon(e.target.value)}
         />
       </FormControl>
       <FormControl margin="normal" required fullWidth>
         <InputLabel htmlFor="url">Public Url</InputLabel>
         <Input type="text" id="setPublicUrl" name="setPublicUrl" autoFocus 
-          value={publicUrl}
+          value={newPublicUrl}
           onChange={e => setPublicUrl(e.target.value)}
         />
       </FormControl>
