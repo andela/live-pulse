@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { FormControl, InputLabel, Button, Input, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
 
-export default () => {
+export default (graphData) => {
   const [title, setTitle] = useState('');
   return (
     <div>

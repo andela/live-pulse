@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 import { TextField, Button, Select, MenuItem, List, ListItem, ListItemText, Typography, Grid } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
-export default () => {
+export default (graphData) => {
   const [showLineText, setShowLineText] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showDataSource, setShowDataSource] = useState(false);
   const [DataSourceProps, setDataSourceProps] = useState({});
 
-  const useStyles = () =>  ({ 
+  const useStyles = () =>  ({
     root: {
       flexGrow: 1,
       width: '100%',
@@ -75,24 +75,19 @@ export default () => {
       <Grid container item xs={12} spacing={16}>
         <Grid item xs={4}>
           <List>
-            <ListItem 
-              button
-              selected={selectedIndex === 1}
-              onClick={
-                event => handleListItemClick(
-                event, 1, {name: 'second line'}
-                )
-              }
-            >
-              <ListItemText primary="A line" />
+            {graphData.graphData.map(line => (
+              <ListItem 
+                button
+                selected={selectedIndex === line.id}
+                onClick={
+                  event => handleListItemClick(
+                  event, line.id, {name: line.name, id: line.id}
+                  )
+                }
+              >
+              <ListItemText primary={line.name} />
             </ListItem>
-            <ListItem 
-              button
-              selected={selectedIndex === 2}
-              onClick={event => handleListItemClick(event, 2, {name: '3rd line'})}
-            >
-              <ListItemText primary="A line" />
-            </ListItem>
+            ))}
             { showLineText ? <AddNewLine /> : null }
         </List>
         <Button onClick={() => setShowLineText(true)}>

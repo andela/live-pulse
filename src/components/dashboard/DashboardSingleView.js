@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createBrowserHistory } from 'history';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -8,24 +8,42 @@ import Typography from '@material-ui/core/Typography';
 import { styles } from '../../appStyle';
 import GraphModal from '../graph/GraphModal';
 import { Paper, Grid, Select, OutlinedInput, MenuItem, Button } from '@material-ui/core';
-import { Query } from 'react-apollo';
-import { DASHBOARD_QUERY } from '../../queries';
+import { Query, withApollo } from 'react-apollo';
+import { GET_DASHBOARD_QUERY, GET_GRAPH_QUERY } from '../../queries';
 import BasicChart from '../../charts/BasicChart';
 
 const history = createBrowserHistory();
 
 const DashboardSingleView = (props) => {
-  const { match, classes } = props;
+  const { match, classes, client } = props;
   const [graph, setGraph] = useState('Non selected');
+  const [showGraph, setShowGraph] = useState(false);
+  const [showGraphRes, setShowGraphRes] = useState('no graph selected');
   const [graphData, setGraphData] = useState(null);
   
   /**
-  * handle select change
+  * handle selection of graph, run a graph query
+  * to get all the necessary attributes.
   */
-  const handleChange = (e) => {
-    const { value } = e.target;
-    setGraphData({ title: value });  
-    setGraph(value);
+  async function handleChange(e) {
+    const { loading, error, data } = await client.query({
+      query: GET_GRAPH_QUERY,
+      variables: {id: e.target.value}
+    });
+    if (loading) {
+      setShowGraph(false);
+      setShowGraphRes('fetching graph chart...');
+    }
+    if (error) {
+      setShowGraph(false);
+      setShowGraphRes('error fetching chart please check your internet...');
+      return;
+    }
+    console.log(error)
+    setGraph(e.target.value);
+    setGraphData(data);
+    setShowGraph(true);
+
   }
 
   return (
@@ -62,7 +80,7 @@ const DashboardSingleView = (props) => {
             <Typography style={{ marginTop:20}} variant="h3" color="textSecondary">Graphs</Typography>
           </div>
           <Grid item xs="auto">
-            <Query query={DASHBOARD_QUERY} variables={{id: match.params.id}}>
+            <Query query={GET_DASHBOARD_QUERY} variables={{id: match.params.id}}>
               {({ loading, error, data }) => {
                 if (loading) return <Typography>Fetching dashboard details...</Typography>
                 if (error) return <Typography>Can't fetch graphs at this time, try again!</Typography>
@@ -89,11 +107,12 @@ const DashboardSingleView = (props) => {
             </Query>
               {/* List of Graphs attached to this dashboard */}
               {/* <HighChartsReact highcharts={Highcharts} options={employmentOption} /> */}
-              <BasicChart data={graphData} />
+              {showGraph ? <BasicChart data={graphData} /> : <div>{showGraphRes}</div>}
           </Grid>
         </main>
     </div>
   )
+  
 }
 
-export default withStyles(styles)(DashboardSingleView);
+export default withApollo(withStyles(styles)(DashboardSingleView));

@@ -20,7 +20,7 @@ const BasicChart = ({data}) => {
   
   const chartOptions = {
     title: {
-      text: data.title || 'No graph selected yet'
+      text: data.graph.title
     },
     yAxis: {
       title: {
@@ -95,7 +95,7 @@ const BasicChart = ({data}) => {
           onClose={() => setOpenDialog(false)}
           aria-labelledby="preference dialog"
         >
-          <PreferenceDialog />
+          <PreferenceDialog graphData={data} />
         </Dialog>
       </div>
       <HighchartsReact highcharts={Highcharts} options={chartOptions} />
