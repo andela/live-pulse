@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
 import { FormControl, InputLabel, Button, Input } from '@material-ui/core';
+import { Mutation } from 'react-apollo';
+import { UPDATE_GRAPH_GENERAL_MUTATION } from '../../mutations/graphMutation';
 
 export default (graphData) => {
-  const { 
+  const {
+    id, 
     title,
     icon,
     publicUrl,
@@ -12,10 +15,9 @@ export default (graphData) => {
   } = graphData.graphData;
   const [newTitle, setTitle] = useState(title);
   const [newInterval, setInterval] = useState(updateInterval || '');
-  const [newIcon, setIcon] = useState(icon || '');
-  const [newPublicUrl, setPublicUrl] = useState(publicUrl || '');
   const [xaxis, setXAxis] = useState(xAxisLabel || '');
   const [yaxis, setYAxis] = useState(yAxisLabel || '');
+  
   return (
     <div>
       <FormControl margin="normal" required fullWidth>
@@ -33,20 +35,6 @@ export default (graphData) => {
         />
       </FormControl>
       <FormControl margin="normal" required fullWidth>
-        <InputLabel htmlFor="icon">Uplaod Icon</InputLabel>
-        <Input type="file" id="icon" name="icon" autoFocus 
-          value={newIcon}
-          onChange={e => setIcon(e.target.value)}
-        />
-      </FormControl>
-      <FormControl margin="normal" required fullWidth>
-        <InputLabel htmlFor="url">Public Url</InputLabel>
-        <Input type="text" id="setPublicUrl" name="setPublicUrl" autoFocus 
-          value={newPublicUrl}
-          onChange={e => setPublicUrl(e.target.value)}
-        />
-      </FormControl>
-      <FormControl margin="normal" required fullWidth>
         <InputLabel htmlFor="xaxis">xAxisLabel</InputLabel>
         <Input type="text" id="xaxis" name="xaxis" autoFocus 
           value={xaxis}
@@ -60,9 +48,28 @@ export default (graphData) => {
           onChange={e => setYAxis(e.target.value)}
         />
       </FormControl>
-      <Button color="primary">
-        Update
-      </Button>
+      <Mutation
+        mutation={UPDATE_GRAPH_GENERAL_MUTATION}
+        variables={{
+          id,
+          data: {
+            title: newTitle,
+            updateInterval: newInterval,
+            xAxisLabel: xaxis,
+            yAxisLabel: yaxis
+          }
+        }}
+        onCompleted={() => window.alert('updated successful')}
+        onError={error => console.log(error)}
+      >
+        {updateGeneral => (
+          <Button color="primary"
+            onClick={updateGeneral}
+          >
+            Update
+          </Button>
+        )}
+      </Mutation>
     </div>
   )
 }
