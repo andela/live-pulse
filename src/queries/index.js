@@ -74,6 +74,12 @@ export const GET_GRAPH_QUERY = gql`
         color,
         name,
         state,
+        line {
+          points {
+            x
+            y
+          }
+        }
         dataSource {
           id,
           func {

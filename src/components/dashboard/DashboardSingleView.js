@@ -39,11 +39,9 @@ const DashboardSingleView = (props) => {
       setShowGraphRes('error fetching chart please check your internet...');
       return;
     }
-    console.log(error)
     setGraph(e.target.value);
     setGraphData(data);
     setShowGraph(true);
-
   }
 
   return (

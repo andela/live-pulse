@@ -18,24 +18,36 @@ const BasicChart = ({data}) => {
     )
   }else {
   
+  const { lineGenerators } = data.graph;
+  const { line } = lineGenerators;
+  
   const chartOptions = {
     title: {
       text: data.graph.title
     },
     yAxis: {
       title: {
-        text: 'Number of Employees'
+        text: data.graph.yAxisLabel
       }
     },
-    legend: {
-      layout: 'vertical',
-      align: 'right',
-      verticalAlign: 'middle'
+    xAxis: {
+      title: {
+        text: data.graph.xAxisLabel
+      }
     },
-  
-    series: [{
-      name: 'Installation',
-      data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
+
+  //   series:
+  //   lineGenerators.map(lineGenerator => (
+  //   `name: ${lineGenerator.name}`,
+  //   lineGenerator.line.map(line => (
+  //     `data: ${line.points.y}`
+  //   ))
+  // ))
+   
+    series: [
+    {
+      name: 'data.graph.lineGenerators.name',
+      data: [945, 264, 292, 51, 490, 3282, 321, 44]
     }, {
       name: 'Manufacturing',
       data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]

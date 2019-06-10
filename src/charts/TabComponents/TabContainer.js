@@ -33,8 +33,8 @@ class TabContainer extends Component {
           </Tabs>
         </AppBar>
         {value === 0 && <General graphData={graphData.graph}/>}
-        {value === 1 && <Variables graphData={graphData.graph.variables} />}
-        {value === 2 && <LineGenerators graphData={graphData.graph.lineGenerators} />}
+        {value === 1 && <Variables graphData={graphData.graph} />}
+        {value === 2 && <LineGenerators graphData={graphData.graph} />}
       </div>
     )
   }

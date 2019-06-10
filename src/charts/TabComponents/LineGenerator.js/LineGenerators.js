@@ -3,6 +3,8 @@ import { TextField, Button, Select, MenuItem, List, ListItem, ListItemText, Typo
 import AddIcon from '@material-ui/icons/Add';
 
 export default (graphData) => {
+  const { lineGenerators } = graphData.graphData;
+  
   const [showLineText, setShowLineText] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showDataSource, setShowDataSource] = useState(false);
@@ -75,7 +77,7 @@ export default (graphData) => {
       <Grid container item xs={12} spacing={16}>
         <Grid item xs={4}>
           <List>
-            {graphData.graphData.map(line => (
+            {lineGenerators && lineGenerators.map(line => (
               <ListItem 
                 button
                 selected={selectedIndex === line.id}
