@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
-import { TextField, Button, Select, MenuItem, List, ListItem, ListItemText, Typography, Grid } from '@material-ui/core';
+import { Input, Button, Select, MenuItem, List, ListItem, ListItemText, Typography, Grid } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import { CREATE_GRAPH_LINE_G_MUTATION } from '../../../mutations/graphMutation';
+import { Mutation } from 'react-apollo';
 
 export default (graphData) => {
-  const { lineGenerators } = graphData.graphData;
-  
+  const { id, lineGenerators } = graphData.graphData;
+
   const [showLineText, setShowLineText] = useState(false);
+  const [newLineText, setNewLineText] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showDataSource, setShowDataSource] = useState(false);
   const [DataSourceProps, setDataSourceProps] = useState({});
@@ -63,13 +66,32 @@ export default (graphData) => {
         </div>
       </Grid>
     );
-
-    const AddNewLine = () => (
-      <form onSubmit={() => (setShowLineText(false))}>
-        <TextField
-        label="Line Text"
-      />
-      </form>
+    
+    const AddNewLineComponent = () => (
+      <Mutation mutation={CREATE_GRAPH_LINE_G_MUTATION}
+        variables={{
+          graphId: id,
+          data: {
+            name: newLineText,
+            color: '#000000'
+          }
+        }}
+      >
+        {(lineGenerator, {data, loading, error}) => (
+          <form onSubmit={e => {
+            e.preventDefault();
+            lineGenerator();
+          }}>
+            <Input type="text" id="newline" name="newline" autoFocus 
+              value={newLineText}
+              onChange={e => setNewLineText(e.target.value)}
+            />
+            {loading && console.log('loading')}
+            {data &&  setShowLineText(false)}
+            {error && console.log(error)}
+          </form>
+        )}
+      </Mutation>
     );
 
   return (
@@ -90,7 +112,7 @@ export default (graphData) => {
               <ListItemText primary={line.name} />
             </ListItem>
             ))}
-            { showLineText ? <AddNewLine /> : null }
+            { showLineText ? <AddNewLineComponent /> : null }
         </List>
         <Button onClick={() => setShowLineText(true)}>
           <AddIcon /> Add Line
