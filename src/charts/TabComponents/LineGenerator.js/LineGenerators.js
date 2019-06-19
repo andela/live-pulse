@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Input, Button, Select, MenuItem, List, ListItem, ListItemText, Typography, Grid } from '@material-ui/core';
+import { Input, Button, Select, MenuItem, List, ListItem, ListItemText, Typography, Grid, } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { CREATE_GRAPH_LINE_G_MUTATION } from '../../../mutations/graphMutation';
 import { Mutation } from 'react-apollo';
@@ -108,6 +108,7 @@ export default (graphData) => {
                   event, line.id, {name: line.name, id: line.id}
                   )
                 }
+                key={line.id}
               >
               <ListItemText primary={line.name} />
             </ListItem>
