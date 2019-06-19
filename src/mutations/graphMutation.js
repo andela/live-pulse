@@ -27,6 +27,20 @@ mutation updateVariables($id:ID!, $data:GraphUpdateInput!) {
 `;
 
 /**
+ * Create graph's LineGenerator properties
+ */
+export const CREATE_GRAPH_LINE_G_MUTATION = gql`
+  mutation lineGenerator ($graphId:ID!, $data:LineGeneratorUpdateInput!) {
+  createLineGenerator(graphId:$graphId, data:$data) {
+    id
+    name
+    color
+    state
+  }
+}
+`;
+
+/**
  * Update graph's LineGenerator properties
  */
 // export const UPDATE_GRAPH_LINE_G_MUTATION = gql`

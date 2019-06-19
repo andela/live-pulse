@@ -7,8 +7,6 @@ export default (graphData) => {
   const {
     id, 
     title,
-    icon,
-    publicUrl,
     xAxisLabel,
     yAxisLabel,
     updateInterval,
@@ -62,7 +60,7 @@ export default (graphData) => {
         onCompleted={() => window.alert('updated successful')}
         onError={error => console.log(error)}
       >
-        {updateGeneral => (
+        {(updateGeneral, {data, loading, error}) => (
           <Button color="primary"
             onClick={updateGeneral}
           >

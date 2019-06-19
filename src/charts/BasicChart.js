@@ -36,31 +36,12 @@ const BasicChart = ({data}) => {
       }
     },
 
-  //   series:
-  //   lineGenerators.map(lineGenerator => (
-  //   `name: ${lineGenerator.name}`,
-  //   lineGenerator.line.map(line => (
-  //     `data: ${line.points.y}`
-  //   ))
-  // ))
-   
-    series: [
-    {
-      name: 'data.graph.lineGenerators.name',
-      data: [945, 264, 292, 51, 490, 3282, 321, 44]
-    }, {
-      name: 'Manufacturing',
-      data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
-    }, {
-      name: 'Sales & Distribution',
-      data: [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387]
-    }, {
-      name: 'Project Development',
-      data: [null, null, 7988, 12169, 15112, 22452, 34400, 34227]
-    }, {
-      name: 'Other',
-      data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
-    }],
+    series: lineGenerators.map(lineGenerator => (
+      {
+        name: lineGenerator.name,
+        data: [945, 264, 292, 51, 490, 3282, 321, 44]
+      }
+    )),
   }
 
   const showMenu = (e) => {
