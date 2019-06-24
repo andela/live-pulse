@@ -61,4 +61,7 @@ describe('Signin/SignUp Component ', () => {
     expect(compInstance.findByProps({type: 'submit'})
       .props.children).toEqual('Create account');
   });
+  it('Authenticate function should setItems in localStorage', () => {
+    
+  });
 });
