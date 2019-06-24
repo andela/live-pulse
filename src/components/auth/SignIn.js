@@ -27,7 +27,7 @@ const SignIn = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmEmail, setConfirmEmail] = useState('');
-
+  const [err, setErr] = useState('');
   //bruteforce fix for authentication redirecting
   if (authToken && uid && uemail) {
     window.location.href = '/dashboard'
@@ -41,6 +41,7 @@ const SignIn = (props) => {
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
+        <p id="errorMsg">{err}</p>
         <Typography component="h1" variant="h5">
           {login ? 'Log In' : 'Create a live pulse account'}
         </Typography>
@@ -73,7 +74,7 @@ const SignIn = (props) => {
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
-          <p onClick={() => setLogin(!login)} >
+          <p id="acct-auth" style={{cursor: "pointer"}} onClick={() => setLogin(!login)} >
             {login
               ? `Don't have an account? create one`
               : `Already have an account? log in`
@@ -84,21 +85,24 @@ const SignIn = (props) => {
             <Mutation
               mutation={login ? SIGNIN_MUTATION : SIGNUP_MUTATION}
               variables={{ email, password, data:{ email: confirmEmail}}}
-              onCompleted={data => authenticate(data, login)}
+              onCompleted={data => { authenticate(data, login)}}
               onError={error => handleError(error)}
             >
-              {authMutation => (
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                  onClick={authMutation}
-                >
-                  {login ? 'Log in' : 'Create account'}
-                </Button>
-              )}
+              {(authMutation, {loading, error, data}) => {
+                if(loading) setErr('.');
+                return (
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                    onClick={() => authMutation()}
+                  >
+                    {login ? 'Log in' : 'Create account'}
+                  </Button>
+                );
+              }}
             </Mutation>
           </div>
         </div>
@@ -111,7 +115,6 @@ const SignIn = (props) => {
  * authenticate function to handle signup & signin mutation
  */
 const authenticate = async (data, login) => {
-  console.log(data);
   const { token, user:{ id, email} } = (login ? data.signIn : data.signUp);
   localStorage.setItem(AUTH_TOKEN, token);
   localStorage.setItem(UID, id);
@@ -125,7 +128,7 @@ const authenticate = async (data, login) => {
  * for debugging purposes.
  */
 const handleError = async error => {
-  console.log(error);
+  //console.log(error);
 }
 
 SignIn.propTypes = {
