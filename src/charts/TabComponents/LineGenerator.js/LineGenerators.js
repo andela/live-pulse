@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import { Input, Button, Select, MenuItem, List, ListItem, ListItemText, Typography, Grid, } from '@material-ui/core';
+import { Input, Button, Select, MenuItem, List, ListItem, ListItemText, Typography, Grid, OutlinedInput, } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { CREATE_GRAPH_LINE_G_MUTATION } from '../../../mutations/graphMutation';
-import { Mutation } from 'react-apollo';
+import { Mutation, Query } from 'react-apollo';
+import { GET_FUNCTIONS } from '../../../queries';
 
 export default (graphData) => {
   const { id, lineGenerators } = graphData.graphData;
@@ -11,7 +12,8 @@ export default (graphData) => {
   const [newLineText, setNewLineText] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showDataSource, setShowDataSource] = useState(false);
-  const [DataSourceProps, setDataSourceProps] = useState({});
+  const [DataSourceProps, setDataSourceProps] = useState(lineGenerators.dataSource ? lineGenerators.dataSource.func.id : 'None');
+  const [HooksProps, setHooksProps] = useState(lineGenerators.dataSource ? lineGenerators.dataSource.func.id : 'None');
 
   const useStyles = () =>  ({
     root: {
@@ -30,40 +32,62 @@ export default (graphData) => {
       setShowDataSource(true);
     }
 
-    const DatasourceComponent = () => (
-      <React.Fragment>
+    const DatasourceComponent = () => {
+      return (
+        <React.Fragment>
         <Grid item xs={4}>
           <Typography>Data source</Typography>
-          <Select
-            value={DataSourceProps.name}
-            onChange={() => console.log(DataSourceProps.name)}
-          >
-            <MenuItem value={DataSourceProps.name}>{DataSourceProps.name}</MenuItem>
-            <MenuItem value="github">github</MenuItem>
-            <MenuItem value="slack">slack</MenuItem>
-          </Select>
+          <em> {lineGenerators.dataSource ? lineGenerators.dataSource.func.name : 'no datasource' } </em>
+          <Query query={GET_FUNCTIONS}>
+              {({ loading, error, data}) => {
+                if(data.funcs) return (
+                  <Select
+                    value={DataSourceProps}
+                    onChange={e => setDataSourceProps(e.target.value)}
+                  >
+                    {data.funcs.map(func => (
+                      <MenuItem key={func.id} value={func.id}>{func.name}</MenuItem>
+                    ))}
+                  </Select>
+                )
+                return ( <MenuItem value={DataSourceProps}></MenuItem> )
+              }}
+            </Query>
         </Grid>
         <HooksComponent />
         </React.Fragment>
-    );
+      );
+    };
 
     const HooksComponent = () => (
       <Grid item xs={4}>
         <Typography>Hooks</Typography>
-        <div>
-          <Select value="value">
-            <MenuItem value="hook">hook</MenuItem>
-            <MenuItem value="github">github</MenuItem>
-            <MenuItem value="slack">slack</MenuItem>
-          </Select>
-        </div>
-        <div>
-          <Select value="value">
-            <MenuItem value="gitprime">gitprime</MenuItem>
-            <MenuItem value="github">github</MenuItem>
-            <MenuItem value="slack">slack</MenuItem>
-          </Select>
-        </div>
+        <em> {lineGenerators.dataSource ? lineGenerators.dataSource.func.name : 'no hooks' } </em>
+          <Query query={GET_FUNCTIONS}>
+              {({ loading, error, data}) => {
+                if(data.funcs) return (
+                  <div>
+                    <Select
+                    value={HooksProps}
+                    onChange={e => setHooksProps(e.target.value)}
+                    >
+                      {data.funcs.map(func => (
+                        <MenuItem key={func.id} value={func.id}>{func.name}</MenuItem>
+                      ))}
+                    </Select>
+                    <Select
+                      value={HooksProps}
+                      onChange={e => setHooksProps(e.target.value)}
+                    >
+                      {data.funcs.map(func => (
+                        <MenuItem key={func.id} value={func.id}>{func.name}</MenuItem>
+                      ))}
+                    </Select>
+                  </div>
+                )
+                return ( <MenuItem value={HooksProps}></MenuItem> )
+              }}
+            </Query>
       </Grid>
     );
     

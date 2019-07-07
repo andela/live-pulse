@@ -104,3 +104,17 @@ export const GET_GRAPH_QUERY = gql`
     }
   }
 `;
+
+/**
+ * fetches existing functions in the system
+ * returns id, name & source
+ */
+export const GET_FUNCTIONS = gql`
+  query getFunctions {
+    funcs(where: {}) {
+      id
+      name
+      source
+    }
+  }
+`;
