@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { AppBar, Tabs, Tab, Typography } from '@material-ui/core';
+import { AppBar, Tabs, Tab } from '@material-ui/core';
 import General from './General';
 import Variables from './Variables';
 import LineGenerators from './LineGenerator.js/LineGenerators';

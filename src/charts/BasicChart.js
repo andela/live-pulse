@@ -19,7 +19,7 @@ const BasicChart = ({data}) => {
   }else {
   
   const { lineGenerators } = data.graph;
-  const { line } = lineGenerators;
+  //const { line } = lineGenerators;
   
   const chartOptions = {
     title: {

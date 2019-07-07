@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Input, Button, Select, MenuItem, List, ListItem, ListItemText, Typography, Grid, OutlinedInput, } from '@material-ui/core';
+import { Input, Button, Select, MenuItem, List, ListItem, ListItemText, Typography, Grid, } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { CREATE_GRAPH_LINE_G_MUTATION } from '../../../mutations/graphMutation';
 import { Mutation, Query } from 'react-apollo';
